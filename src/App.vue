@@ -1,12 +1,13 @@
-<script setup lang="ts"></script>
+<script setup>
+import Categories from './components/Categories.vue';
+import Header from './components/Header.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation 
-  </p>
-  <h1>hello world</h1>
+  <div class="">
+    <Header/>
+    <Categories/>
+  </div>
 </template>
 
 <style scoped></style>
