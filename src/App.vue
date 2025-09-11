@@ -13,6 +13,7 @@ import Header from './components/Header.vue';
     <Categories/>
 
   </div>
+  </div>
 </template>
 
 <style scoped></style>
