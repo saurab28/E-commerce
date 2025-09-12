@@ -3,7 +3,7 @@
     <!-- Top Row -->
     <div class="flex items-center justify-between px-6 py-3">
       <!-- Left: Logo -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2" @click="handleLogo">
         <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
         <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
       </div>
@@ -50,6 +50,9 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const handleLogin = () => {
   router.push("/login")
+}
+const handleLogo = () => {
+  router.push("/")
 }
 </script>
 
