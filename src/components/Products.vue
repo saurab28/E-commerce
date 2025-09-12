@@ -12,7 +12,7 @@ onMounted(async () => {
   Category.value = Productstore.productList.categories
   const cartProducts = Category.value.flatMap(category => category.products ?? [])
   allProducts.value = cartProducts.slice(0,30)
-  console.log(allProducts)
+  console.log(Category.value)
 })
 </script>
 
