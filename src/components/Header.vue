@@ -20,32 +20,21 @@
           />
 
           <!-- Icon inside input -->
-          <i
-            class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"
-          ></i>
+          <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
         </div>
       </div>
 
       <!-- Right: Login + Cart -->
       <div class="flex items-center gap-6">
-        <button class="text-sm font-medium">Login</button>
+        <div class="flex flex-col items-center cursor-pointer">
+          <i class="ri-account-circle-line text-2xl"></i>
+          <button class="text-sm font-medium">Login</button>
+        </div>
+
         <div class="relative">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 cursor-pointer"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21h4"
-            />
-          </svg>
+          <i class="ri-shopping-cart-line text-2xl"></i>
           <span
-            class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs px-1.5 py-0.5 rounded-full"
+            class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
           >
             0
           </span>
