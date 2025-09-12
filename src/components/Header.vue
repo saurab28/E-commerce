@@ -28,7 +28,7 @@
       <div class="flex items-center gap-6">
         <div class="flex flex-col items-center cursor-pointer">
           <i class="ri-account-circle-line text-2xl"></i>
-          <button class="text-sm font-medium">Login</button>
+          <button class="text-sm font-medium" @click="handleLogin">Login</button>
         </div>
 
         <div class="relative">
@@ -46,6 +46,11 @@
 
 <script setup>
 // No script needed yet; can later connect props or API
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const handleLogin = () => {
+  router.push("/login")
+}
 </script>
 
 <style scoped>
