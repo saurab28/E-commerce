@@ -1,21 +1,11 @@
-<script setup>
-import Categories from './components/Categories.vue';
-import Header from './components/Header.vue';
-import Products from './components/Products.vue';
+<script setup lang="ts">
+ import { RouterView } from 'vue-router';
 </script>
 
 <template>
 
-  <div>
 
-  <div class="">
-    <Header/>
-    <Categories/>
-    <Products/>
-
-
-  </div>
-  </div>
+  <RouterView/>
 
 </template>
 
