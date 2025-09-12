@@ -2,12 +2,15 @@
 import Categories from '../components/Categories.vue';
 import Header from '@/components/Header.vue';
 import Products from '@/components/Products.vue';
+import BannerView from '@/components/BannerView.vue';
+import Cart from '@/components/Cart.vue';
 </script>
 
 <template>
     <Header/>
+    <BannerView/>
     <Categories/>
     <Products/>
-
+    <Cart/>
 
 </template>
