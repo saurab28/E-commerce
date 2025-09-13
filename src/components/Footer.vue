@@ -2,54 +2,42 @@
 import openTheApp from '@/assets/opentheapp2.png'
 import placeOrder from '@/assets/placeorder2.png'
 import freeDelivery from '@/assets/getfreedelivery2.png'
+import {ref} from 'vue'
 import getit from '@/assets/getit.png'
+const categoryList = ref([
+   "Fruits & Vegetables",
+   "Cold Drinks & Juices",
+   "Beverages",
+   "Foodgrains, Oil & Masala",
+   "Bakery, Cakes & Dairy",
+   "Snacks & Branded Foods",
+   "Eggs, Meat & Fish",
+   "Gourmet & World Food",
+   "Baby Care",
+   "Cleaning & Household",
+   "Beauty & Hygiene",
+   "Kitchen, Garden & Pets",
+   "Chocolates & Candies",
+   "Dry Fruits",
+   "Indian Mithai",
+])
 </script>
 
 <template>
 <footer class="footer-root">
-  <section class="how-it-works">
-    <div class="container">
-      <h2>How it Works</h2>
-      <div class="how-it-works-cards">
-        <div class="how-card">
-          <img :src="openTheApp" alt="Open the app icon" class="how-icon" />
-          <h3>Open the app</h3>
-          <p>Choose from over 7000 products across groceries, fresh fruits & veggies, meat, pet care, beauty items & more</p>
-        </div>
-        <div class="how-card">
-          <img :src="placeOrder" alt="Place an order icon" class="how-icon" />
-          <h3>Place an order</h3>
-          <p>Add your favourite items to the cart & avail the best offers</p>
-        </div>
-        <div class="how-card">
-          <img :src="freeDelivery" alt="Get free delivery icon" class="how-icon" />
-          <h3>Get free delivery</h3>
-          <p>Experience lightning-fast speed & get all your items delivered in 10 minutes</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  
   <div class="footer-main">
     <div class="container">
       <div class="footer-cols">
         <div class="footer-col">
           <h4 class="footer-heading">Categories</h4>
           <ul>
-            <li>Fruits & Vegetables</li>
-            <li>Cold Drinks & Juices</li>
-            <li>Beverages</li>
-            <li>Foodgrains, Oil & Masala</li>
-            <li>Bakery, Cakes & Dairy</li>
-            <li>Snacks & Branded Foods</li>
-            <li>Eggs, Meat & Fish</li>
-            <li>Gourmet & World Food</li>
-            <li>Baby Care</li>
-            <li>Cleaning & Household</li>
-            <li>Beauty & Hygiene</li>
-            <li>Kitchen, Garden & Pets</li>
-            <li>Chocolates & Candies</li>
-            <li>Dry Fruits</li>
-            <li>Indian Mithai</li>
+            <li v-for="category in categoryList">
+              <RouterLink :to="{ name: 'products', params: { title: category } }">
+                    {{ category }}
+              </RouterLink>
+            </li>
+            
           </ul>
         </div>
         <div class="footer-col">
@@ -123,13 +111,14 @@ import getit from '@/assets/getit.png'
 <style scoped>
 .footer-root {
   background: #fff;
-  border-top: 1px solid #eee;
+  border-top: 2px solid #eee;
   color: #222;
   font-family: 'Inter', Arial, sans-serif;
   font-size: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top:30px;
 }
 .container {
   width: 100%;

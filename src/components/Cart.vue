@@ -7,7 +7,8 @@
         <h1 class="text-4xl font-extrabold tracking-tight">My Cart</h1>
         <button
           class="px-4 py-2 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
-          @click="$emit('continue')"
+          @click="handleProductcartpath"
+
         >
           ← Continue shopping
         </button>
@@ -147,8 +148,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useCart } from '@/stores/cart'
+import { useRouter } from 'vue-router'
 
 const cart = useCart()
+const route = useRouter()
 
 const shipping = ref<'pickup' | 'delivery'>('pickup')
 const shippingCost = computed(() => (shipping.value === 'delivery' ? 9.9 : 0))
@@ -169,5 +172,10 @@ function removeItem(id: string | number) {
 }
 function money(n: number) {
   return `₹${n.toFixed(2)}`
+}
+
+const handleProductcartpath = () => {
+  route.go(-1)
+
 }
 </script>

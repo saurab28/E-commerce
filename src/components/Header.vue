@@ -1,9 +1,9 @@
 <template>
-  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0">
+  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0 ">
     <!-- Top Row -->
     <div class="flex items-center justify-between px-6 py-3">
       <!-- Left: Logo -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2" @click="handleLogo">
         <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
         <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
       </div>
@@ -11,12 +11,13 @@
       <!-- Center: Location + Search -->
       <div class="flex-1 flex items-center justify-center gap-4">
         <!-- Search -->
-        <div class="w-1/2 relative">
+        <div class="w-1/2 relative" v-if="!props.param">
           <!-- Input -->
           <input
             type="text"
             placeholder="Search what you want"
             class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
+            v-model="filterCategory"
           />
 
           <!-- Icon inside input -->
@@ -31,12 +32,13 @@
           <button class="text-sm font-medium" @click="handleLogin">Login</button>
         </div>
 
-        <div class="relative">
+        <div class="relative" @click="handleCart">
           <i class="ri-shopping-cart-line text-2xl"></i>
-          <span  v-show="cartCount"
+          <span
+            v-show="cartCount"
             class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
             :class="badgeSizeClass"
-  :aria-label="`Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}`"
+            :aria-label="`Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}`"
           >
             {{ badgeText }}
           </span>
@@ -46,25 +48,45 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { useRouter } from 'vue-router';
-const router = useRouter()
-const handleLogin = () => {
-  router.push("/login")
-}
-
-import { computed } from 'vue'
+import { watchEffect, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
+import filter from '@/composables/filter.ts'
+
+
+
+const router = useRouter()
+const props = defineProps<{ param?: string }>()
 
 const cart = useCart()
+const {filterCategory} = filter()
+
+// console.log(useFilter.filterCategory.value)
+
+
+
+const handleLogin = () => {
+  router.push('/login')
+}
+
+const handleLogo = () => {
+  router.push('/')
+}
+
+
+
 // use whichever your store exposes: itemCount or count
-const cartCount = computed(() => (cart.itemCount ?? cart.count ?? 0))
+const cartCount = computed(() => cart.itemCount ?? cart.count ?? 0)
 const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
 const badgeSizeClass = computed(() =>
-  cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]'
+  cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]',
 )
 
+const handleCart = () => {
+  router.push("/cart")
+}
 </script>
 
 <style scoped>
@@ -77,8 +99,15 @@ const badgeSizeClass = computed(() =>
   border-radius: 10px;
 }
 
-@keyframes pop { 0% { transform: scale(.8); } 100% { transform: scale(1); } }
-.badge-pop { animation: pop .15s ease-out; }
-
-
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.badge-pop {
+  animation: pop 0.15s ease-out;
+}
 </style>
