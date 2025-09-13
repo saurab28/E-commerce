@@ -1,37 +1,45 @@
 <template>
-  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0">
+  <nav
+    class="w-full shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
+  >
     <!-- Top Row -->
-    <div class="flex items-center justify-between px-6 py-3">
+    <div class="flex items-center justify-between px-4 md:px-6 py-3">
       <!-- Left: Logo -->
       <div class="flex items-center gap-2">
-        <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
-        <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
+        <img
+          src="./../assets/logo.png"
+          alt="Zepto"
+          class="h-12 w-12 border-0 rounded-full object-cover"
+        />
+        <span
+          class="text-lg md:text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg"
+        >
+          pickzy
+        </span>
       </div>
 
-      <!-- Center: Location + Search -->
-      <div class="flex-1 flex items-center justify-center gap-4">
-        <!-- Search -->
+      <!-- Center: Search (hidden on small screens) -->
+      <div class="hidden md:flex flex-1 items-center justify-center gap-4">
         <div class="w-1/2 relative">
-          <!-- Input -->
           <input
             type="text"
             placeholder="Search what you want"
-            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none text-sm md:text-base"
           />
-
-          <!-- Icon inside input -->
-          <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
+          <i
+            class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"
+          ></i>
         </div>
       </div>
 
       <!-- Right: Login + Cart -->
-      <div class="flex items-center gap-6">
-        <div class="flex flex-col items-center cursor-pointer">
+      <div class="flex items-center gap-4 md:gap-6">
+        <div class="hidden sm:flex flex-col items-center cursor-pointer">
           <i class="ri-account-circle-line text-2xl"></i>
-          <button class="text-sm font-medium">Login</button>
+          <button class="text-xs md:text-sm font-medium">Login</button>
         </div>
 
-        <div class="relative">
+        <div class="relative cursor-pointer">
           <i class="ri-shopping-cart-line text-2xl"></i>
           <span
             class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
@@ -39,17 +47,37 @@
             0
           </span>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          class="sm:hidden flex items-center justify-center p-2 rounded-md bg-white shadow"
+        >
+          <i class="ri-menu-line text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Search (only visible on small screens) -->
+    <div class="block md:hidden px-4 pb-3">
+      <div class="w-full relative">
+        <input
+          type="text"
+          placeholder="Search what you want"
+          class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none text-sm"
+        />
+        <i
+          class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"
+        ></i>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-// No script needed yet; can later connect props or API
+// Future: you can add mobile menu toggle here
 </script>
 
 <style scoped>
-/* Optional scroll styling */
 ::-webkit-scrollbar {
   height: 6px;
 }
