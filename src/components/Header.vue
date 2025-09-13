@@ -32,12 +32,13 @@
           <button class="text-sm font-medium" @click="handleLogin">Login</button>
         </div>
 
-        <div class="relative">
+        <div class="relative" @click="handleCart">
           <i class="ri-shopping-cart-line text-2xl"></i>
-          <span  v-show="cartCount"
+          <span
+            v-show="cartCount"
             class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
             :class="badgeSizeClass"
-  :aria-label="`Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}`"
+            :aria-label="`Cart: ${cartCount} item${cartCount === 1 ? '' : 's'}`"
           >
             {{ badgeText }}
           </span>
@@ -49,38 +50,37 @@
 
 <script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { watchEffect, ref, computed} from 'vue';
-import { useRouter } from 'vue-router';
+import { watchEffect, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 
 const router = useRouter()
+const props = defineProps<{ param?: string }>()
+const filterProducts = ref<string>('')
+const cart = useCart()
+
 const handleLogin = () => {
-  router.push("/login")
+  router.push('/login')
 }
 
 const handleLogo = () => {
-  router.push("/")
+  router.push('/')
 }
 
-const props = defineProps<{param ?: string}>()
-watchEffect( () => {
+watchEffect(() => {
   console.log(props.param)
-
 })
-const filterProducts = ref<string>("")
 
-
-
-
-const cart = useCart()
 // use whichever your store exposes: itemCount or count
-const cartCount = computed(() => (cart.itemCount ?? cart.count ?? 0))
+const cartCount = computed(() => cart.itemCount ?? cart.count ?? 0)
 const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
 const badgeSizeClass = computed(() =>
-  cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]'
+  cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]',
 )
 
-
+const handleCart = () => {
+  router.push("/cart")
+}
 </script>
 
 <style scoped>
@@ -93,8 +93,15 @@ const badgeSizeClass = computed(() =>
   border-radius: 10px;
 }
 
-@keyframes pop { 0% { transform: scale(.8); } 100% { transform: scale(1); } }
-.badge-pop { animation: pop .15s ease-out; }
-
-
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.badge-pop {
+  animation: pop 0.15s ease-out;
+}
 </style>

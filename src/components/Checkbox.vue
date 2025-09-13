@@ -39,7 +39,7 @@ const selected = ref<string | null>();
             :checked="model === category.name"
             @change="model = category.name"
             />
-            {{ category.name }}
+            {{ category.name }} 
             </label>
           </div>
           

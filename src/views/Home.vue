@@ -3,7 +3,7 @@ import Categories from '../components/Categories.vue';
 import Products from '@/components/Products.vue';
 import Header from '@/components/Header.vue';
 import BannerView from '@/components/BannerView.vue';
-import Cart from '@/components/Cart.vue';
+
 </script>
 
 <template>
@@ -12,7 +12,6 @@ import Cart from '@/components/Cart.vue';
     <BannerView/>
     <Categories/>
     <Products/>
-    <Cart/>
 
 </template>
 

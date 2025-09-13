@@ -26,8 +26,7 @@ watch(selectedCategory,()=>{
       <Products :selectedCategory="selectedCategory"/>
     </div>
   </div>
-  <!-- Footer -->
-  <footer class="mt-10 border-t pt-5">{{ selectedCategory }}</footer>
+  
 
   
 </template>
