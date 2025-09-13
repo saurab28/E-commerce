@@ -1,5 +1,5 @@
 <template>
-  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0">
+  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0 ">
     <!-- Top Row -->
     <div class="flex items-center justify-between px-6 py-3">
       <!-- Left: Logo -->
@@ -17,7 +17,7 @@
             type="text"
             placeholder="Search what you want"
             class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
-            v-model="filterProducts"
+            v-model="filterCategory"
           />
 
           <!-- Icon inside input -->
@@ -53,11 +53,19 @@
 import { watchEffect, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
+import filter from '@/composables/filter.ts'
+
+
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
-const filterProducts = ref<string>('')
+
 const cart = useCart()
+const {filterCategory} = filter()
+
+// console.log(useFilter.filterCategory.value)
+
+
 
 const handleLogin = () => {
   router.push('/login')
@@ -67,9 +75,7 @@ const handleLogo = () => {
   router.push('/')
 }
 
-watchEffect(() => {
-  console.log(props.param)
-})
+
 
 // use whichever your store exposes: itemCount or count
 const cartCount = computed(() => cart.itemCount ?? cart.count ?? 0)

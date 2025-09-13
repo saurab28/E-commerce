@@ -3,6 +3,8 @@ import type { ICategorycard } from '@/models/Categorycard'
 import { useProductStore } from '@/stores/products'
 import { ref, onMounted, watch } from 'vue'
 import ProductCard from './ProductCard.vue'
+import filter from '@/composables/filter.ts'
+const {filterCategory} = filter()
 import type { ICard } from '@/models/Card'
 const Productstore = useProductStore()
 const Category = ref<ICategorycard[]>([])
@@ -21,6 +23,15 @@ watch(
     allProducts.value = filterProducts.flatMap((category) => category.products ?? [])
   },
 )
+watch(filterCategory,()=>{
+  const cartProducts = Category.value.flatMap((category) => category.products ?? [])
+  const query = filterCategory.value.trim().toLowerCase()
+  const filterhomeProducts = cartProducts.filter(eachcategory =>
+  !query || eachcategory.name?.toLowerCase().includes(query)
+)
+  allProducts.value = filterhomeProducts
+  
+})
 onMounted(async () => {
   await Productstore.fetchProductList()
   Category.value = Productstore.productList.categories

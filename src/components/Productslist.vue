@@ -13,7 +13,7 @@ watch(selectedCategory,()=>{
 })
 </script>
 <template>
-  <Header :param="params.title" />
+  <Header :param="params.title as string" />
   <div class="flex relative p-5">
     <div class="w-64 flex-shrink-0">
       <div class="sticky top-0 p-4 bg-amber-50 shadow">
