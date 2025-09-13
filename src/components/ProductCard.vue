@@ -18,6 +18,18 @@ function parsePrice(p: unknown): number {
   return 0
 }
 
+const inCartQty = computed(() => {
+  const item = cart.cartItems.find(i => i.id === props.products.id)
+  return item ? item.qty : 0
+})
+
+function incrementQty() {
+  cart.incrementQuantity(props.products.id)
+}
+function decrementQty() {
+  cart.decrementQuantity(props.products.id)
+}
+
 const priceNumber = computed(() => parsePrice(props.products.price))
 const priceDisplay = computed(() =>
   priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—'
@@ -36,7 +48,8 @@ function addToCart() {
       id,
       name: props.products.name ?? 'Unnamed',
       price: priceNumber.value,
-      image: imageSrc.value || undefined
+      image: imageSrc.value || undefined,
+      weight: props.products.weight || undefined
     },
     1
   )
@@ -68,13 +81,21 @@ function addToCart() {
 
       <div class="flex items-center justify-between mt-3">
         <span class="text-sm font-bold text-gray-900">{{ priceDisplay }}</span>
+        <div v-if="inCartQty > 0" class="flex items-center bg-green-600 text-white rounded-md  py-1 ">
+        <button @click="decrementQty" class="px-2 cursor-pointer">−</button>
+        <span class="px-1">{{ inCartQty }}</span>
+        <button @click="incrementQty" class="px-2 cursor-pointer">+</button>
+        </div>
+
         <button
-          class="px-3 py-1 text-sm font-medium text-green-700 border border-green-700 rounded-md hover:bg-green-700 hover:text-white transition"
+          v-else
+          class="px-3 py-1 text-sm font-medium text-green-700 border border-green-700 rounded-md cursor-pointer transition"
           @click="addToCart"
         >
           ADD
         </button>
       </div>
     </div>
-  </div>
-</template>
+    </div>
+  </template>
+

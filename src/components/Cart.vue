@@ -23,92 +23,89 @@
 
       <!-- Main card -->
       <div v-else class="rounded-2xl bg-white shadow-lg overflow-hidden">
-        <!-- Table head -->
-        <div
-          class="grid grid-cols-[1fr_160px_140px_160px_32px] items-center px-8 pt-8 pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-        >
-          <div>Product</div>
-          <div class="text-right pr-4">Price</div>
-          <div class="text-center">Qty</div>
-          <div class="text-right pr-2">Total</div>
-          <div></div>
-        </div>
-        <div class="h-px bg-gray-200 mx-8"></div>
-
-        <!-- Rows -->
-        <div
-          v-for="line in cart.cartItems"
-          :key="line.id"
-          class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center px-8 py-6"
-        >
-          <!-- product cell -->
-          <div class="flex items-center gap-4">
-            <img
-              v-if="line.image"
-              class="w-16 h-16 rounded-md object-contain bg-gray-50"
-              :src="line.image"
-              :alt="line.name"
-            />
-            <div v-else class="w-16 h-16 rounded-md bg-gray-100"></div>
-
-            <div>
-              <div class="text-gray-900 font-semibold">{{ line.name }}</div>
-              <div class="text-gray-400 text-sm">#{{ line.id }}</div>
-              <!-- Optional second line if you later store more metadata (color/extras) -->
-            </div>
-          </div>
-
-          <!-- price cell -->
-          <div class="text-right text-sm leading-5 pr-4">
-            <div class="font-semibold text-gray-900 text-base">
-              {{ money(line.price) }}
-            </div>
-          </div>
-
-          <!-- qty cell -->
-          <div class="flex items-center justify-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 px-8 py-8">
+          <!-- Left: Items -->
+          <div class="lg:col-span-8">
+            <!-- Table head -->
             <div
-              class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden"
+              class="grid grid-cols-[1fr_160px_140px_160px_32px] items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
             >
+              <div>Product</div>
+              <div class="text-right pr-19">Price</div>
+              <div class="text-center pr-15">Qty</div>
+              <div class="text-right pr-8">Total</div>
+              <div></div>
+            </div>
+
+            <!-- Rows -->
+            <div
+              v-for="line in cart.cartItems"
+              :key="line.id"
+              class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center py-6 border-b border-gray-200"
+            >
+              <!-- product cell -->
+              <div class="flex items-center gap-4">
+                <img
+                  v-if="line.image"
+                  class="w-16 h-16 rounded-md object-contain bg-gray-50"
+                  :src="line.image"
+                  :alt="line.name"
+                />
+                <div v-else class="w-16 h-16 rounded-md bg-gray-100"></div>
+
+                <div>
+                  <div class="text-gray-900 font-semibold">{{ line.name }}</div>
+                  <div class="text-gray-400 text-sm">{{ line.weight }}</div>
+                </div>
+              </div>
+
+              <!-- price -->
+              <div class="text-right font-semibold text-gray-900 text-base">
+                {{ money(line.price) }}
+              </div>
+
+              <!-- qty -->
+              <div class="flex items-center justify-center">
+                <div
+                  class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden"
+                >
+                  <button
+                    class="px-3 py-1 text-lg cursor-pointer"
+                    @click="decrementQuantity(line.id)"
+                  >
+                    −
+                  </button>
+                  <div class="w-10 text-center font-semibold">
+                    {{ line.qty }}
+                  </div>
+                  <button
+                    class="px-3 py-1 text-lg cursor-pointer"
+                    @click="incrementQuantity(line.id)"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- total -->
+              <div class="text-right font-semibold text-gray-900">
+                {{ money(line.price * line.qty) }}
+              </div>
+
+              <!-- remove -->
               <button
-                class="px-3 py-1 text-lg"
-                @click="decrementQuantity(line.id)"
+                class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
+                @click="removeItem(line.id)"
               >
-                −
-              </button>
-              <div class="w-10 text-center font-semibold">{{ line.qty }}</div>
-              <button
-                class="px-3 py-1 text-lg"
-                @click="incrementQuantity(line.id)"
-              >
-                +
+                ×
               </button>
             </div>
           </div>
 
-          <!-- total cell -->
-          <div class="text-right pr-2 font-semibold text-gray-900">
-            {{ money(line.price * line.qty) }}
-          </div>
-
-          <!-- remove -->
-          <button
-            class="text-gray-400 hover:text-gray-600 text-xl"
-            @click="removeItem(line.id)"
-          >
-            ×
-          </button>
-        </div>
-
-        <!-- shipping + summary row -->
-        <div class="grid grid-cols-12 gap-6 px-8 pb-10 pt-4">
-          <!-- shipping card -->
-          
-
-          <!-- summary -->
-          <div class="col-span-12 lg:col-span-4">
+          <!-- Right: Summary -->
+          <div class="lg:col-span-4 flex lg:justify-end items-start">
             <div
-              class="rounded-2xl bg-white border border-gray-200 px-6 py-5 shadow-md"
+              class="w-full lg:w-[300px] ml-auto rounded-2xl bg-white border border-gray-200 px-8 py-5 shadow-md"
             >
               <div class="flex justify-between text-gray-600">
                 <span>SUBTOTAL TTC</span>
@@ -116,7 +113,7 @@
                   {{ money(subtotal) }}
                 </span>
               </div>
-              <div class="flex justify-between text-gray-600 mt-2">
+              <div class="flex justify-between py-2 text-gray-600 mt-2">
                 <span>SHIPPING</span>
                 <span class="font-semibold text-gray-900">
                   {{ shipping === 'pickup' ? 'Free' : money(9.9) }}
@@ -134,7 +131,7 @@
               >
                 <span>Checkout</span>
                 <span
-                  class="bg-rose-600/80 rounded-full px-3 py-1 text-sm"
+                  class="rounded-full px-3 py-1 text-sm"
                   >{{ money(total) }}</span
                 >
               </button>
@@ -171,7 +168,6 @@ function removeItem(id: string | number) {
   cart.removeItem(id)
 }
 function money(n: number) {
-  // prints like "484.99€"
-  return `${n.toFixed(2)}€`
+  return `₹${n.toFixed(2)}`
 }
 </script>
