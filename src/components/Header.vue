@@ -49,13 +49,15 @@
 
 <script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { watchEffect, ref} from 'vue';
+import { watchEffect, ref, computed} from 'vue';
 import { useRouter } from 'vue-router';
+import { useCart } from '@/stores/cart'
+
 const router = useRouter()
 const handleLogin = () => {
   router.push("/login")
 }
-<<<<<<< HEAD
+
 const handleLogo = () => {
   router.push("/")
 }
@@ -66,10 +68,9 @@ watchEffect( () => {
 
 })
 const filterProducts = ref<string>("")
-=======
 
-import { computed } from 'vue'
-import { useCart } from '@/stores/cart'
+
+
 
 const cart = useCart()
 // use whichever your store exposes: itemCount or count
@@ -79,7 +80,7 @@ const badgeSizeClass = computed(() =>
   cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]'
 )
 
->>>>>>> main
+
 </script>
 
 <style scoped>
