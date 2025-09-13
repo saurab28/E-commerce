@@ -19,7 +19,8 @@ const router = createRouter({
     {
       path:'/product/:title',
       name:"products",
-      component:Productslist
+      component:Productslist,
+      props : true
     }
   ],
 })

@@ -11,12 +11,13 @@
       <!-- Center: Location + Search -->
       <div class="flex-1 flex items-center justify-center gap-4">
         <!-- Search -->
-        <div class="w-1/2 relative">
+        <div class="w-1/2 relative" v-if="!props.param">
           <!-- Input -->
           <input
             type="text"
             placeholder="Search what you want"
             class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
+            v-model="filterProducts"
           />
 
           <!-- Icon inside input -->
@@ -44,8 +45,9 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // No script needed yet; can later connect props or API
+import { watchEffect, ref} from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const handleLogin = () => {
@@ -54,6 +56,13 @@ const handleLogin = () => {
 const handleLogo = () => {
   router.push("/")
 }
+
+const props = defineProps<{param ?: string}>()
+watchEffect( () => {
+  console.log(props.param)
+
+})
+const filterProducts = ref<string>("")
 </script>
 
 <style scoped>

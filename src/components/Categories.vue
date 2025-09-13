@@ -19,12 +19,12 @@
       <!-- Scrollable Carousel -->
       <div
         ref="carousel"
-        class="flex gap-12 overflow-x-auto  scroll-smooth no-scrollbar px-12"
+        class="flex gap-12 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 "
       >
         <div
           v-for="(item, index) in items"
           :key="index"
-          class="flex-shrink-0 w-37 flex flex-col items-center text-center cursor-pointer group"
+          class="flex-shrink-0 w-37 flex flex-col items-center text-center cursor-pointer group "
         >
           
            <RouterLink  :to="{ name: 'products', params: { title: item.title } }">
@@ -32,7 +32,7 @@
              <img
                :src="item.image"
                :alt="item.title"
-               class="w-52 h-55 object-contain group-hover:scale-110 transition-transform duration-300  object-bottom"
+               class="w-52 h-50 object-contain group-hover:scale-110 transition-transform duration-300  object-bottom"
              />
            </RouterLink>
 
@@ -58,7 +58,7 @@ import { RouterLink } from "vue-router"
 const items = [
   { title: "Fruits & Vegetables", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,w=270/layout-engine/2022-11/Slice-3_9.png" },
   {title: "Cold Drinks & Juices", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/layout-engine/2022-11/Slice-4_9.png"},
-  { title: "Bakery, Cakes & Diary", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,w=270/layout-engine/2022-11/Slice-2_10.png" },
+  { title: "Bakery, Cakes & Dairy", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,w=270/layout-engine/2022-11/Slice-2_10.png" },
   { title: "Eggs, Meat & Fish", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,w=270/layout-engine/2022-11/Slice-13.png" },
   { title: "Foodgrains, Oil & Masala", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,w=270/layout-engine/2022-11/Slice-11.png" },
   { title: "Beauty & Hygiene", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/layout-engine/2022-11/Slice-19.png" },
@@ -70,13 +70,6 @@ const items = [
   { title: "Baby Care", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/layout-engine/2022-11/Slice-15.png" },
   { title: "Dry Fruits", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/layout-engine/2022-11/Slice-14.png" },
   { title: "Kitchen, Garden & Pets", image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/layout-engine/2022-11/Slice-20.png" },
-
-
-
-
-
-
-
 ]
 
 const carousel = ref(null)
