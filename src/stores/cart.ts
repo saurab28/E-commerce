@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 export interface CartItem {
   id: string | number
@@ -7,6 +7,7 @@ export interface CartItem {
   price: number
   qty: number
   image?: string
+  weight?: string | number
 }
 
 // A product you want to add, without the qty yet
@@ -14,6 +15,25 @@ type ProductForCart = Omit<CartItem, 'qty'>
 
 export const useCart = defineStore('cart', () => {
   const cartItems = ref<CartItem[]>([])
+
+  // ✅ Load saved cart from localStorage on init
+  const savedCart = localStorage.getItem('cart')
+  if (savedCart) {
+    try {
+      cartItems.value = JSON.parse(savedCart)
+    } catch {
+      cartItems.value = []
+    }
+  }
+
+  // ✅ Persist cart to localStorage whenever it changes
+  watch(
+    cartItems,
+    (newCart) => {
+      localStorage.setItem('cart', JSON.stringify(newCart))
+    },
+    { deep: true }
+  )
 
   function addItem(product: ProductForCart, quantity = 1) {
     const existingItem = cartItems.value.find((line) => line.id === product.id)
@@ -50,14 +70,16 @@ export const useCart = defineStore('cart', () => {
   function clearCart() {
     cartItems.value = []
   }
-  const add = addItem
 
   const itemCount = computed(() =>
     cartItems.value.reduce((totalUnits, line) => totalUnits + line.qty, 0)
   )
 
   const cartTotal = computed(() =>
-    cartItems.value.reduce((totalAmount, line) => totalAmount + line.price * line.qty, 0)
+    cartItems.value.reduce(
+      (totalAmount, line) => totalAmount + line.price * line.qty,
+      0
+    )
   )
 
   return {
