@@ -31,10 +31,10 @@
             <div
               class="grid grid-cols-[1fr_160px_140px_160px_32px] items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
             >
-              <div>Product</div>
-              <div class="text-right pr-19">Price</div>
-              <div class="text-center pr-15">Qty</div>
-              <div class="text-right pr-8">Total</div>
+              <div class="text-left">Product</div>
+              <div class="text-right pr-3 ">Price</div>
+              <div class="text-center">Qty</div>
+              <div class="text-right pl-3">Total</div>
               <div></div>
             </div>
 
@@ -54,9 +54,9 @@
                 />
                 <div v-else class="w-16 h-16 rounded-md bg-gray-100"></div>
 
-                <div>
-                  <div class="text-gray-900 font-semibold">{{ line.name }}</div>
-                  <div class="text-gray-400 text-sm">{{ line.weight }}</div>
+                <div class="flex items-center gap-2 max-w-[220px] truncate">
+                  <div class="text-gray-900 font-semibold truncate">{{ line.name }}</div>
+                  <div class="text-gray-400 text-sm ">{{ line.weight }}</div>
                 </div>
               </div>
 
