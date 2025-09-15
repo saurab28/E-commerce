@@ -64,7 +64,7 @@ function addToCart() {
       :src="imageSrc"
       :alt="props.products.name"
       class="w-full h-60 object-cover bg-gray-50"
-    />
+    /> 
     <div v-else class="w-full h-60 bg-gray-100"></div>
 
     <div class="p-3">

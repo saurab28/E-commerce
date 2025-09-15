@@ -16,13 +16,28 @@
           <input
             type="text"
             placeholder="Search what you want"
-            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
-            v-model="filterCategory"
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none "
+            readonly
+            @click="handleSearch"
           />
 
           <!-- Icon inside input -->
           <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
         </div>
+        <div class="w-1/2 relative " v-else-if="props.param === '/search'">
+          <!-- Input -->
+          <input
+            type="text"
+            placeholder="Search what you want"
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none "
+            v-model="filterCategory"
+            @click="handleSearch"
+          />
+
+          <!-- Icon inside input -->
+          <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
+        </div>
+
       </div>
 
       <!-- Right: Login + Cart -->
@@ -86,6 +101,10 @@ const badgeSizeClass = computed(() =>
 
 const handleCart = () => {
   router.push("/cart")
+}
+
+const handleSearch = () => {
+  router.push("/search")
 }
 </script>
 
