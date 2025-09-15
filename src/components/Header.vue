@@ -39,7 +39,7 @@
 
         <div class="relative" @click="handleCart">
 
-          <i class="ri-shopping-cart-line text-2xl"></i>
+          <i class="ri-shopping-cart-line text-2xl cursor-pointer"></i>
           <span
             v-show="cartCount"
             class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
