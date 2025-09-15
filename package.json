@@ -19,7 +19,11 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^5.1.0",
     "pinia": "^3.0.3",
+    "razorpay": "^2.9.6",
     "remixicon": "^4.6.0",
     "tailwindcss": "^4.1.13",
     "vue": "^3.5.18",
@@ -44,5 +48,18 @@
     "vite": "npm:rolldown-vite@latest",
     "vite-plugin-vue-devtools": "^8.0.0",
     "vue-tsc": "^3.0.4"
-  }
+  },
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saurab28/E-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saurab28/E-commerce/issues"
+  },
+  "homepage": "https://github.com/saurab28/E-commerce#readme"
 }

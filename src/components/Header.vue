@@ -1,8 +1,9 @@
 <template>
-  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0 ">
+  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0">
     <!-- Top Row -->
-    <div class="flex items-center justify-between px-6 py-3">
+    <div class="flex items-center justify-between px-4 md:px-6 py-3">
       <!-- Left: Logo -->
+
       <div class="flex items-center gap-2" @click="handleLogo">
         <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
         <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
@@ -16,20 +17,17 @@
           <input
             type="text"
             placeholder="Search what you want"
-            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none "
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
             readonly
-            @click="handleSearch"
           />
-
-          <!-- Icon inside input -->
-          <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
+          <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
         </div>
-        <div class="w-1/2 relative " v-else-if="props.param === '/search'">
+        <div class="w-1/2 relative" v-else-if="props.param === '/search'">
           <!-- Input -->
           <input
             type="text"
             placeholder="Search what you want"
-            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none "
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
             v-model="filterCategory"
             @click="handleSearch"
           />
@@ -37,18 +35,18 @@
           <!-- Icon inside input -->
           <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-xl"></i>
         </div>
-
       </div>
 
       <!-- Right: Login + Cart -->
-      <div class="flex items-center gap-6">
-        <div class="flex flex-col items-center cursor-pointer">
+      <div class="flex items-center gap-4 md:gap-6">
+        <div class="hidden sm:flex flex-col items-center cursor-pointer">
           <i class="ri-account-circle-line text-2xl"></i>
+
           <button class="text-sm font-medium" @click="handleLogin">Login</button>
         </div>
 
         <div class="relative" @click="handleCart">
-          <i class="ri-shopping-cart-line text-2xl"></i>
+          <i class="ri-shopping-cart-line text-2xl cursor-pointer"></i>
           <span
             v-show="cartCount"
             class="absolute -top-2 -right-2 bg-white text-black font-bold text-xs px-1.5 py-0.5 rounded-full"
@@ -58,6 +56,23 @@
             {{ badgeText }}
           </span>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="sm:hidden flex items-center justify-center p-2 rounded-md bg-white shadow">
+          <i class="ri-menu-line text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Search (only visible on small screens) -->
+    <div class="block md:hidden px-4 pb-3">
+      <div class="w-full relative">
+        <input
+          type="text"
+          placeholder="Search what you want"
+          class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none text-sm"
+        />
+        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div>
   </nav>
@@ -70,17 +85,13 @@ import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
 
-
-
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
 
 const cart = useCart()
-const {filterCategory} = filter()
+const { filterCategory } = filter()
 
 // console.log(useFilter.filterCategory.value)
-
-
 
 const handleLogin = () => {
   router.push('/login')
@@ -90,8 +101,6 @@ const handleLogo = () => {
   router.push('/')
 }
 
-
-
 // use whichever your store exposes: itemCount or count
 const cartCount = computed(() => cart.itemCount ?? cart.count ?? 0)
 const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
@@ -100,16 +109,15 @@ const badgeSizeClass = computed(() =>
 )
 
 const handleCart = () => {
-  router.push("/cart")
+  router.push('/cart')
 }
 
 const handleSearch = () => {
-  router.push("/search")
+  router.push('/search')
 }
 </script>
 
 <style scoped>
-/* Optional scroll styling */
 ::-webkit-scrollbar {
   height: 6px;
 }
