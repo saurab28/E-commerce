@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCart } from '@/stores/cart'          // ← IMPORT the store
@@ -96,6 +97,8 @@ function addToCart() {
         </button>
       </div>
     </div>
+
     </div>
   </template>
+
 

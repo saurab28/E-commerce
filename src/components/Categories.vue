@@ -2,7 +2,7 @@
   <div class="relative w-full bg-white py-6">
     <!-- Title -->
     <div class="text-center pb-5">
-      <h1 class="font-bold text-3xl">Our Categories</h1>
+      <h1 class="font-bold text-2xl sm:text-3xl">Our Categories</h1>
     </div>
 
     <!-- Wrapper with arrows -->
@@ -10,20 +10,22 @@
       <!-- Left Arrow -->
       <button
         @click="scrollLeft"
-        
-        class="absolute left-0 z-10 bg-white shadow-xl rounded-full hover:bg-gray-100 ml-3 pl-3 pt-2 pb-2 pr-3"
+        class="absolute left-0 z-10 bg-white shadow-xl rounded-full hover:bg-gray-100 ml-2 sm:ml-3 p-2 sm:p-3"
       >
-        <i class="ri-arrow-left-s-line text-2xl"></i>
+        <i class="ri-arrow-left-s-line text-lg sm:text-2xl"></i>
       </button>
 
       <!-- Scrollable Carousel -->
       <div
         ref="carousel"
+
         class="flex gap-12 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 "
+
       >
         <div
           v-for="(item, index) in items"
           :key="index"
+
           class="flex-shrink-0 w-37 flex flex-col items-center text-center cursor-pointer group "
         >
           
@@ -37,15 +39,16 @@
            </RouterLink>
 
           
+
         </div>
       </div>
 
       <!-- Right Arrow -->
       <button
         @click="scrollRight"
-        class="absolute right-0 z-10 rounded-full bg-white shadow-xl hover:bg-gray-100 mr-3 pl-3 pt-2 pb-2 pr-3"
+        class="absolute right-0 z-10 bg-white shadow-xl rounded-full hover:bg-gray-100 mr-2 sm:mr-3 p-2 sm:p-3"
       >
-        <i class="ri-arrow-right-s-line text-2xl"></i>
+        <i class="ri-arrow-right-s-line text-lg sm:text-2xl"></i>
       </button>
     </div>
   </div>
@@ -75,11 +78,11 @@ const items = [
 const carousel = ref(null)
 
 const scrollLeft = () => {
-  carousel.value.scrollBy({ left: -300, behavior: "smooth" })
+  carousel.value.scrollBy({ left: -250, behavior: "smooth" })
 }
 
 const scrollRight = () => {
-  carousel.value.scrollBy({ left: 300, behavior: "smooth" })
+  carousel.value.scrollBy({ left: 250, behavior: "smooth" })
 }
 </script>
 

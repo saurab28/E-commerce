@@ -6,7 +6,7 @@
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-4xl font-extrabold tracking-tight">My Cart</h1>
         <button
-          class="px-4 py-2 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
+          class="px-4 py-2 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer"
           @click="handleProductcartpath"
 
         >
@@ -128,7 +128,8 @@
 
               <button
                 class="mt-4 w-full rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 flex items-center justify-between px-4"
-                @click="$emit('checkout', total)"
+                
+                @click="startPayment"
               >
                 <span>Checkout</span>
                 <span
@@ -177,5 +178,67 @@ function money(n: number) {
 const handleProductcartpath = () => {
   route.go(-1)
 
+}
+
+const startPayment = async () => {
+  try {
+    // 1. Create order on backend with cart items
+    const res = await fetch('http://localhost:5000/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cartItems: cart.cartItems }),
+    })
+
+    const order = await res.json()
+    console.log('✅ Order:', order)
+
+    // 2. Razorpay checkout options
+    const options = {
+      key: 'rzp_test_RGeGMOEnLzUqYw', // Your Razorpay Key ID
+      amount: order.amount, // from backend
+      currency: order.currency,
+      name: 'Grocery Store',
+      description: 'Cart Checkout',
+      order_id: order.id, // order id from backend
+      handler: function (response: any) {
+        // 3. Verify payment with backend
+        verifyPayment(response)
+      },
+      prefill: {
+        name: 'B.Sri.Lalithadhitya',
+        email: 'bompallysrilalithadhitya@example.com',
+        contact: '6301168711',
+      },
+      theme: {
+        color: '#F43F5E', // rose-500
+      },
+    }
+
+    const rzp = new (window as any).Razorpay(options)
+    rzp.open()
+  } catch (err) {
+    console.error('Payment failed', err)
+  }
+}
+
+// Verify payment
+const verifyPayment = async (response: any) => {
+  const res = await fetch('http://localhost:5000/verify-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      razorpay_order_id: response.razorpay_order_id,
+      razorpay_payment_id: response.razorpay_payment_id,
+      razorpay_signature: response.razorpay_signature,
+    }),
+  })
+
+  const data = await res.json()
+  if (data.success) {
+    alert('✅ Payment Verified! Thank you for shopping 🛒')
+    cart.clearCart() // optional: empty cart after payment
+  } else {
+    alert(' Payment Verification Failed')
+  }
 }
 </script>
