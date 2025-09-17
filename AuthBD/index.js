@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 let db;
-const JWT_SECRET = 'supersecret'; // ⚠️ Move to process.env.JWT_SECRET in prod
+const JWT_SECRET = 'supersecret';
 
 const initializeDB = async () => {
   db = await open({
@@ -28,7 +28,6 @@ const initializeDB = async () => {
 
 initializeDB();
 
-// 📝 Register
 app.post('/register', async (req, res) => {
   const { name, username, password } = req.body;
   try {
@@ -42,7 +41,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// 🔑 Login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await db.get(
@@ -59,7 +57,6 @@ app.post('/login', async (req, res) => {
   res.json({ message: 'Login successful 🎉', token });
 });
 
-// 🛡️ Middleware for token validation
 const checkValidity = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(401).json({ error: 'No token provided' });
@@ -67,14 +64,13 @@ const checkValidity = (req, res, next) => {
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // store user info in req
+    req.user = decoded;
     next();
   } catch (err) {
     res.status(403).json({ error: 'Invalid or expired token' });
   }
 };
 
-// 👥 Protected Route
 app.get('/users', checkValidity, async (req, res) => {
   const dbRes = await db.all(`SELECT name, username FROM Auth`);
   res.status(200).json({ users: dbRes, status: 200 });

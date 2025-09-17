@@ -1,10 +1,10 @@
-
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useCart } from '@/stores/cart'          // ← IMPORT the store
+import { computed, ref } from 'vue'
+import { useCart } from '@/stores/cart' // ← IMPORT the store
 import type { ICard } from '@/models/Card'
+import gsap from 'gsap'
 
-const cart = useCart()                            // ← CREATE the store instance
+const cart = useCart() // ← CREATE the store instance
 const props = defineProps<{ products: ICard }>()
 
 // Robustly parse prices like "₹507.63", "507,63", etc.
@@ -20,7 +20,7 @@ function parsePrice(p: unknown): number {
 }
 
 const inCartQty = computed(() => {
-  const item = cart.cartItems.find(i => i.id === props.products.id)
+  const item = cart.cartItems.find((i) => i.id === props.products.id)
   return item ? item.qty : 0
 })
 
@@ -33,13 +33,38 @@ function decrementQty() {
 
 const priceNumber = computed(() => parsePrice(props.products.price))
 const priceDisplay = computed(() =>
-  priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—'
+  priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—',
 )
 
 // prefer image → image_url; blank if none
-const imageSrc = computed(
-  () => props.products.image ?? (props as any).products?.image_url ?? ''
-)
+const imageSrc = computed(() => props.products.image ?? (props as any).products?.image_url ?? '')
+
+// ✅ Popup logic
+const popup = ref<HTMLElement | null>(null)
+
+function showPopup(message: string) {
+  if (!popup.value) return
+
+  popup.value.innerText = message
+
+  // Animate IN
+  gsap.fromTo(
+    popup.value,
+    { y: 50, opacity: 0, pointerEvents: 'none' },
+    { y: 0, opacity: 1, pointerEvents: 'auto', duration: 0.5, ease: 'power3.out' },
+  )
+
+  // Animate OUT after 2.5s
+  setTimeout(() => {
+    gsap.to(popup.value, {
+      y: 50,
+      opacity: 0,
+      pointerEvents: 'none',
+      duration: 0.5,
+      ease: 'power3.in',
+    })
+  }, 2500)
+}
 
 function addToCart() {
   // Ensure you have an id; if your API lacks it, generate one
@@ -50,10 +75,13 @@ function addToCart() {
       name: props.products.name ?? 'Unnamed',
       price: priceNumber.value,
       image: imageSrc.value || undefined,
-      weight: props.products.weight || undefined
+      weight: props.products.weight || undefined,
     },
-    1
+    1,
   )
+
+  // 🎉 Trigger popup after adding
+  showPopup('Product added to cart!')
 }
 </script>
 
@@ -82,10 +110,10 @@ function addToCart() {
 
       <div class="flex items-center justify-between mt-3">
         <span class="text-sm font-bold text-gray-900">{{ priceDisplay }}</span>
-        <div v-if="inCartQty > 0" class="flex items-center bg-green-600 text-white rounded-md  py-1 ">
-        <button @click="decrementQty" class="px-2 cursor-pointer">−</button>
-        <span class="px-1">{{ inCartQty }}</span>
-        <button @click="incrementQty" class="px-2 cursor-pointer">+</button>
+        <div v-if="inCartQty > 0" class="flex items-center bg-green-600 text-white rounded-md py-1">
+          <button @click="decrementQty" class="px-2 cursor-pointer">−</button>
+          <span class="px-1">{{ inCartQty }}</span>
+          <button @click="incrementQty" class="px-2 cursor-pointer">+</button>
         </div>
 
         <button
@@ -97,8 +125,13 @@ function addToCart() {
         </button>
       </div>
     </div>
+  </div>
 
-    </div>
-  </template>
-
-
+  <!-- ✅ Popup Notification -->
+  <div
+    ref="popup"
+    class="fixed bottom-6 right-6 bg-black shadow-xl rounded-xl px-6 py-4 text-md  text-white font-bold opacity-0 pointer-events-none z-50"
+  >
+    ✅ Item added to cart!
+  </div>
+</template>

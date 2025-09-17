@@ -1,5 +1,8 @@
 <template>
-  <nav class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0">
+  <nav
+    :class="$attrs.class"
+    class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
+  >
     <!-- Top Row -->
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
       <!-- Left: Logo -->
@@ -82,7 +85,6 @@
   <!-- Modal -->
   <Teleport to="body">
     <LoginRegister v-if="isModalOpen" />
-    
   </Teleport>
 </template>
 
