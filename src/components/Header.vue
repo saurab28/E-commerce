@@ -19,6 +19,7 @@
             placeholder="Search what you want"
             class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
             readonly
+            @click="handleSearch"
           />
           <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
         </div>
@@ -29,7 +30,6 @@
             placeholder="Search what you want"
             class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
             v-model="filterCategory"
-            @click="handleSearch"
           />
 
           <!-- Icon inside input -->
@@ -39,10 +39,12 @@
 
       <!-- Right: Login + Cart -->
       <div class="flex items-center gap-4 md:gap-6">
-        <div class="hidden sm:flex flex-col items-center cursor-pointer">
+        <div
+          class="hidden sm:flex flex-col items-center cursor-pointer"
+          @click="isModalOpen = true"
+        >
           <i class="ri-account-circle-line text-2xl"></i>
-
-          <button class="text-sm font-medium" @click="handleLogin">Login</button>
+          <button class="text-sm font-medium">Login</button>
         </div>
 
         <div class="relative" @click="handleCart">
@@ -76,18 +78,27 @@
       </div>
     </div>
   </nav>
+
+  <!-- Modal -->
+  <Teleport to="body">
+    <LoginRegister v-if="isModalOpen" />
+    
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { watchEffect, ref, computed } from 'vue'
+import { watchEffect, ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
+import Login from '@/views/Login.vue'
+import LoginRegister from './LoginRegister.vue'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
-
+const isModalOpen = ref(false)
+const scrollY = ref(0)
 const cart = useCart()
 const { filterCategory } = filter()
 
@@ -102,7 +113,7 @@ const handleLogo = () => {
 }
 
 // use whichever your store exposes: itemCount or count
-const cartCount = computed(() => cart.itemCount ?? cart.count ?? 0)
+const cartCount = computed(() => cart.itemCount)
 const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
 const badgeSizeClass = computed(() =>
   cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]',
@@ -115,6 +126,32 @@ const handleCart = () => {
 const handleSearch = () => {
   router.push('/search')
 }
+
+watch(isModalOpen, (newVal) => {
+  if (newVal) {
+    // Save current scroll
+    scrollY.value = window.scrollY
+
+    // Lock body
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.overflow = 'hidden'
+    document.body.style.width = '100%' // prevent content shift
+  } else {
+    // Unlock body
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.left = ''
+    document.body.style.right = ''
+    document.body.style.overflow = ''
+    document.body.style.width = ''
+
+    // Restore scroll
+    window.scrollTo(0, scrollY.value)
+  }
+})
 </script>
 
 <style scoped>

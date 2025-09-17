@@ -38,45 +38,43 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "BannerView",
-  data() {
-    return {
-      currentSlide: 1,          // start on first *real* slide
-      totalSlides: 4,           // real slides count
-      isTransitioning: true     // controls smooth/instant jumps
-    };
-  },
-  methods: {
-    nextSlide() {
-      this.isTransitioning = true;
-      this.currentSlide++;
-    },
-    prevSlide() {
-      this.isTransitioning = true;
-      this.currentSlide--;
-    },
-    handleTransitionEnd() {
-      // if we moved past the last clone, reset to first real
-      if (this.currentSlide === this.totalSlides + 1) {
-        this.isTransitioning = false;
-        this.currentSlide = 1;
-      }
-      // if we moved before the first clone, reset to last real
-      if (this.currentSlide === 0) {
-        this.isTransitioning = false;
-        this.currentSlide = this.totalSlides;
-      }
-    }
-  },
-  mounted() {
-    setInterval(() => {
-      this.nextSlide();
-    }, 4000);
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+
+const currentSlide = ref<number>(1);      // start on first *real* slide
+const totalSlides = ref<number>(4);       // real slides count
+const isTransitioning = ref<boolean>(true); // controls smooth/instant jumps
+
+const nextSlide = (): void => {
+  isTransitioning.value = true;
+  currentSlide.value++;
+};
+
+const prevSlide = (): void => {
+  isTransitioning.value = true;
+  currentSlide.value--;
+};
+
+const handleTransitionEnd = (): void => {
+  // if we moved past the last clone, reset to first real
+  if (currentSlide.value === totalSlides.value + 1) {
+    isTransitioning.value = false;
+    currentSlide.value = 1;
+  }
+  // if we moved before the first clone, reset to last real
+  if (currentSlide.value === 0) {
+    isTransitioning.value = false;
+    currentSlide.value = totalSlides.value;
   }
 };
+
+onMounted(() => {
+  setInterval(() => {
+    nextSlide();
+  }, 4000);
+});
 </script>
+
 
 <style scoped>
 .carousel {
