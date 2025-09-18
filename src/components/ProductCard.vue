@@ -3,9 +3,10 @@ import { computed, ref } from 'vue'
 import { useCart } from '@/stores/cart' // ← IMPORT the store
 import type { ICard } from '@/models/Card'
 import gsap from 'gsap'
-
+import authorization from '@/composables/auth'
 const cart = useCart() // ← CREATE the store instance
 const props = defineProps<{ products: ICard }>()
+const auth = authorization()
 
 // Robustly parse prices like "₹507.63", "507,63", etc.
 function parsePrice(p: unknown): number {
@@ -93,7 +94,7 @@ function addToCart() {
       :src="imageSrc"
       :alt="props.products.name"
       class="w-full h-60 object-cover bg-gray-50"
-    /> 
+    />
     <div v-else class="w-full h-60 bg-gray-100"></div>
 
     <div class="p-3">

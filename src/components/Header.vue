@@ -7,7 +7,7 @@
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
       <!-- Left: Logo -->
 
-      <div class="flex items-center gap-2" @click="handleLogo">
+      <div class="flex items-center gap-2 cursor-pointer" @click="handleLogo">
         <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
         <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
       </div>
@@ -41,13 +41,17 @@
       </div>
 
       <!-- Right: Login + Cart -->
-      <div class="flex items-center gap-4 md:gap-6">
-        <div
+      <div class="flex items-center gap-4 md:gap-6 ">
+        <div v-if="!isLoggedIn"
           class="hidden sm:flex flex-col items-center cursor-pointer"
-          @click="isModalOpen = true"
+          @click="toogleModal"
         >
           <i class="ri-account-circle-line text-2xl"></i>
           <button class="text-sm font-medium">Login</button>
+        </div>
+        <div v-else>
+          <button @click="handleLogout" class="cursor-pointer">Logout</button>
+
         </div>
 
         <div class="relative" @click="handleCart">
@@ -84,18 +88,21 @@
 
   <!-- Modal -->
   <Teleport to="body">
-    <LoginRegister v-if="isModalOpen" />
+    <LoginRegister v-if="isModal" />
   </Teleport>
 </template>
 
 <script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { watchEffect, ref, computed, watch } from 'vue'
+import { watchEffect, ref, computed, watch, toRefs, toRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
 import Login from '@/views/Login.vue'
 import LoginRegister from './LoginRegister.vue'
+import authorization from '@/composables/auth'
+import Cookies from "js-cookie"
+import loginModal from '@/composables/loginmodal'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
@@ -103,6 +110,10 @@ const isModalOpen = ref(false)
 const scrollY = ref(0)
 const cart = useCart()
 const { filterCategory } = filter()
+const {isLoggedIn,checkAuthorization} = authorization()
+const {isModal,toogleModal} = loginModal()
+
+
 
 // console.log(useFilter.filterCategory.value)
 
@@ -127,6 +138,13 @@ const handleCart = () => {
 
 const handleSearch = () => {
   router.push('/search')
+}
+
+const handleLogout = () => {
+
+   Cookies.remove('token')
+   checkAuthorization()
+   router.push('/')
 }
 
 watch(isModalOpen, (newVal) => {
