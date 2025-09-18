@@ -21,7 +21,7 @@ const categories = ref([
 ]);
 
 // keep track of selected categories
-const selected = ref<string | null>();
+
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const selected = ref<string | null>();
       <li v-for="(category, index) in categories" :key="index" class="mb-2">
           <!-- checkbox -->
           <!-- router link -->
-          
+
           <div class="flex items-center gap-2">
             <label>
             <input
@@ -39,15 +39,15 @@ const selected = ref<string | null>();
             :checked="model === category.name"
             @change="model = category.name"
             />
-            {{ category.name }} 
+            {{ category.name }}
             </label>
           </div>
-          
-        
+
+
       </li>
     </ul>
 
-    
+
   </div>
 </template>
 
