@@ -1,7 +1,7 @@
 <template>
   <nav
     :class="$attrs.class"
-    class="w-full h-25 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
+    class="w-full sticky top-0 z-[999]  bg-white p-2 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
   >
     <!-- Top Row -->
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
@@ -9,7 +9,7 @@
 
       <div class="flex items-center gap-2 cursor-pointer" @click="handleLogo">
         <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-[50%]" />
-        <span class="text-xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
+        <span class="text-2xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
       </div>
 
       <!-- Center: Location + Search -->
@@ -20,7 +20,7 @@
           <input
             type="text"
             placeholder="Search what you want"
-            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2 focus:outline-none"
+            class="w-full bg-white border-0 rounded-md pl-10 pr-4 py-2  focus:outline-none"
             readonly
             @click="handleSearch"
           />
@@ -106,7 +106,6 @@ import loginModal from '@/composables/loginmodal'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
-const isModalOpen = ref(false)
 const scrollY = ref(0)
 const cart = useCart()
 const { filterCategory } = filter()
@@ -147,7 +146,7 @@ const handleLogout = () => {
    router.push('/')
 }
 
-watch(isModalOpen, (newVal) => {
+watch(isModal, (newVal) => {
   if (newVal) {
     // Save current scroll
     scrollY.value = window.scrollY

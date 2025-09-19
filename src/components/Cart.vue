@@ -141,15 +141,12 @@
                     >
                   </button>
                   <button
-                    class="mt-4 w-full rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 flex items-center justify-between px-4 cursor-pointer"
+                    class="mt-4 w-full text-center rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600  px-4 cursor-pointer"
                     v-else
                     @click="toogleModal"
                   >
-                    <span>Login to Proceed</span>
-                    <span
-                      class="rounded-full px-3 py-1 text-sm"
-                      >{{ money(total) }}</span
-                    >
+                    Login to Proceed
+
                   </button>
 
                 </div>
@@ -217,7 +214,7 @@ const handleProductcartpath = () => {
 const startPayment = async () => {
   try {
     // 1. Create order on backend with cart items
-    const res = await fetch('http://localhost:5000/create-order', {
+    const res = await fetch('http://localhost:5002/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cartItems: cart.cartItems }),
@@ -257,7 +254,7 @@ const startPayment = async () => {
 
 // Verify payment
 const verifyPayment = async (response: any) => {
-  const res = await fetch('http://localhost:5000/verify-payment', {
+  const res = await fetch('http://localhost:5002/verify-payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

@@ -7,8 +7,8 @@ import BannerView from '@/components/BannerView.vue';
 </script>
 
 <template>
-    
-    <Header/>
+
+    <Header />
     <BannerView/>
     <Categories/>
     <Products/>

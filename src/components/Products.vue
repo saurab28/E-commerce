@@ -30,7 +30,7 @@ watch(filterCategory,()=>{
   !query || eachcategory.name?.toLowerCase().includes(query)
 )
   allProducts.value = filterhomeProducts
-  
+
 })
 onMounted(async () => {
   await Productstore.fetchProductList()
@@ -49,7 +49,7 @@ onMounted(async () => {
     const cartProducts = Category.value.flatMap((category) => category.products ?? [])
     allProducts.value = cartProducts.slice(0, 30)
   }
- 
+
 })
 const loading = ref(true);
 </script>
@@ -65,7 +65,7 @@ const loading = ref(true);
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
   <div class="container mx-auto px-[104px]">
 
-    <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+    <div class="grid gap-6 grid-cols-5">
 
       <ProductCard
         v-for="eachProductcard in allProducts"

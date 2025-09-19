@@ -20,6 +20,7 @@ function parsePrice(p: unknown): number {
   return 0
 }
 
+console.log(props.products)
 const inCartQty = computed(() => {
   const item = cart.cartItems.find((i) => i.id === props.products.id)
   return item ? item.qty : 0
@@ -33,12 +34,11 @@ function decrementQty() {
 }
 
 const priceNumber = computed(() => parsePrice(props.products.price))
-const priceDisplay = computed(() =>
-  priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—',
-)
+// const priceDisplay = computed(() =>
+//   priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—',
+// )
 
 // prefer image → image_url; blank if none
-const imageSrc = computed(() => props.products.image ?? (props as any).products?.image_url ?? '')
 
 // ✅ Popup logic
 const popup = ref<HTMLElement | null>(null)
@@ -69,14 +69,13 @@ function showPopup(message: string) {
 
 function addToCart() {
   // Ensure you have an id; if your API lacks it, generate one
-  const id = (props.products.id ?? props.products.name) as string | number
   cart.addItem(
     {
-      id,
-      name: props.products.name ?? 'Unnamed',
-      price: priceNumber.value,
-      image: imageSrc.value || undefined,
-      weight: props.products.weight || undefined,
+      id : props.products.id,
+      name: props.products.name,
+      price: Number(priceNumber.value),
+      image: props.products.image,
+      weight: props.products.weight,
     },
     1,
   )
@@ -90,12 +89,11 @@ function addToCart() {
   <div class="w-56 rounded-lg bg-white shadow-xl overflow-hidden">
     <!-- Image (blank area if missing) -->
     <img
-      v-if="imageSrc"
-      :src="imageSrc"
+      :src="props.products.image"
       :alt="props.products.name"
       class="w-full h-60 object-cover bg-gray-50"
     />
-    <div v-else class="w-full h-60 bg-gray-100"></div>
+
 
     <div class="p-3">
       <p class="text-xs text-green-600 font-medium mb-1">⏱ 8 MINS</p>
@@ -110,7 +108,7 @@ function addToCart() {
       </div>
 
       <div class="flex items-center justify-between mt-3">
-        <span class="text-sm font-bold text-gray-900">{{ priceDisplay }}</span>
+        <span class="text-sm font-bold text-gray-900">{{ props.products.price }} </span>
         <div v-if="inCartQty > 0" class="flex items-center bg-green-600 text-white rounded-md py-1">
           <button @click="decrementQty" class="px-2 cursor-pointer">−</button>
           <span class="px-1">{{ inCartQty }}</span>
