@@ -3,6 +3,7 @@ import { ref } from "vue";
 const model = defineModel<string>()
 
 const categories = ref([
+  { name : "All Categories"},
   { name: "Fruits & Vegetables"},
   { name: "Cold Drinks & Juices"},
   { name: "Beverages"},
@@ -26,13 +27,13 @@ const categories = ref([
 
 <template>
   <div >
-    <h2 class="font-bold mb-2">Categories</h2>
+    <h2 class="font-bold mb-2 text-lg">Categories</h2>
     <ul>
       <li v-for="(category, index) in categories" :key="index" class="mb-2">
           <!-- checkbox -->
           <!-- router link -->
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 font-sans text-lg">
             <label>
             <input
             type="checkbox"

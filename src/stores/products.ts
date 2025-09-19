@@ -8,7 +8,7 @@ type ProductCard = {
 
 export const useProductStore = defineStore('product', () => {
   const productList = ref<ProductCard>({categories : [] , title : "" })
-  const loading = ref<Boolean>(true)
+  const loading = ref<boolean>(true)
   const error = ref<string | null>(null)
   async function fetchProductList() {
     try {

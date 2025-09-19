@@ -32,7 +32,7 @@
               <div class="lg:col-span-8">
                 <!-- Table head -->
                 <div
-                  class="grid grid-cols-[1fr_160px_140px_160px_32px] items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
+                  class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4  items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
                 >
                   <div class="text-left">Product</div>
                   <div class="text-right pr-3 ">Price</div>
@@ -43,29 +43,29 @@
 
                 <!-- Rows -->
                 <div
-                  v-for="line in cart.cartItems"
-                  :key="line.id"
-                  class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center py-6 border-b border-gray-200"
+                  v-for="eachItem in cart.cartItems"
+                  :key="eachItem.id"
+                  class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4  items-center py-6 border-b border-gray-200 tracking-wider"
                 >
                   <!-- product cell -->
                   <div class="flex items-center gap-4">
                     <img
-                      v-if="line.image"
+                      v-if="eachItem.image"
                       class="w-16 h-16 rounded-md object-contain bg-gray-50"
-                      :src="line.image"
-                      :alt="line.name"
+                      :src="eachItem.image"
+                      :alt="eachItem.name"
                     />
                     <div v-else class="w-16 h-16 rounded-md bg-gray-100"></div>
 
                     <div class="flex items-center gap-2 max-w-[220px] truncate">
-                      <div class="text-gray-900 font-semibold truncate">{{ line.name }}</div>
-                      <div class="text-gray-400 text-sm ">{{ line.weight }}</div>
+                      <div class="text-gray-900 font-semibold truncate">{{eachItem.name }}</div>
+                      <div class="text-gray-400 text-sm ">{{eachItem.weight }}</div>
                     </div>
                   </div>
 
                   <!-- price -->
-                  <div class="text-right font-semibold text-gray-900 text-base">
-                    {{ money(line.price) }}
+                  <div class="text-right font-semibold text-gray-900 text-base pr-3">
+                    {{ money(eachItem.price as number) }}
                   </div>
 
                   <!-- qty -->
@@ -75,16 +75,16 @@
                     >
                       <button
                         class="px-3 py-1 text-lg cursor-pointer"
-                        @click="decrementQuantity(line.id)"
+                        @click="decrementQuantity(eachItem.id)"
                       >
                         −
                       </button>
                       <div class="w-10 text-center font-semibold">
-                        {{ line.qty }}
+                        {{eachItem.qty }}
                       </div>
                       <button
                         class="px-3 py-1 text-lg cursor-pointer"
-                        @click="incrementQuantity(line.id)"
+                        @click="incrementQuantity(eachItem.id)"
                       >
                         +
                       </button>
@@ -93,13 +93,13 @@
 
                   <!-- total -->
                   <div class="text-right font-semibold text-gray-900">
-                    {{ money(line.price * line.qty) }}
+                    {{ money((eachItem.price as number) * (eachItem.qty)) }}
                   </div>
 
                   <!-- remove -->
                   <button
                     class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
-                    @click="removeItem(line.id)"
+                    @click="removeItem(eachItem.id)"
                   >
                     ×
                   </button>
