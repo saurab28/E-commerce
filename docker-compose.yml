@@ -1,23 +1,27 @@
 services:
+  services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.backend
-    container_name: backend_${BUILD_NUMBER}
+    container_name: backend
     ports:
-      - "5000:5000"
+      - "5000:3000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health" ]
+      test: ["CMD-SHELL", "curl -f http://35.208.188.12:3000/ || exit 1"]
       interval: 10s
       retries: 5
+      start_period: 5s
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: frontend_${BUILD_NUMBER}
-    depends_on:
-      backend:
-        condition: service_healthy
-    ports:
-      - "3000:80"
+
+ frontend:
+  build:
+    context: .
+    dockerfile: Dockerfile.frontend
+  container_name: frontend
+  depends_on:
+    backend:
+      condition: service_healthy
+  ports:
+    - "3000:80"
+
