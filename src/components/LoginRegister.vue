@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="toogleModal"
+    @click.self="toogleModal"
     class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
   >
     <div class="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 relative">

@@ -8,8 +8,8 @@ import Products from './Products.vue'
 
 const route = useRoute<'products'>()
 const selectedCategory = ref<string>(route.params.title as string)
-console.log(selectedCategory.value)
-watch(selectedCategory,()=>{
+watch(()=>route.params.title,(newVal)=>{
+  selectedCategory.value = newVal as string
     // console.log(selectedCategory.value)
 })
 </script>
@@ -24,7 +24,7 @@ watch(selectedCategory,()=>{
 
     <!-- Products Section -->
     <div class="flex-1 p-5">
-      <Products :selectedCategory="route.params.title as string"/>
+      <Products :selectedCategory="selectedCategory as string"/>
     </div>
   </div>
 

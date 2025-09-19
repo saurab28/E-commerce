@@ -72,6 +72,6 @@ app.post('/verify-payment', (req, res) => {
   }
 });
 
-app.listen(5000, () =>
-  console.log('✅ Backend running on http://localhost:5000')
+app.listen(5002, () =>
+  console.log('✅ Backend running on http://localhost:5002')
 );
