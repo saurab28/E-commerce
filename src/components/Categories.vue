@@ -86,13 +86,43 @@ const scrollRight = () => {
 }
 </script>
 
-<style scoped>
-/* Hide scrollbar but keep scroll functionality */
+
+
+
+ <style scoped>
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 20px;
+  }
+  img {
+    width: 120px;
+    height: auto;
+  }
+  .flex.gap-12 {
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 18px;
+  }
+  img {
+    width: 100px;
+  }
+  .flex.gap-12 {
+    gap: 1.2rem;
+    padding: 0 1rem;
+  }
 }
 </style>

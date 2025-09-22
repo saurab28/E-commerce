@@ -63,7 +63,7 @@ const loading = ref(true);
     </div>
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
-  <div class="container mx-auto px-[104px]">
+  <div class="container mx-auto">
 
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
 
@@ -75,4 +75,57 @@ const loading = ref(true);
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns for laptop/desktop */
+  box-sizing: border-box;
+}
+
+/* Tablets: 3 columns */
+@media (max-width: 1024px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Phones: 2 columns */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+</style>
 

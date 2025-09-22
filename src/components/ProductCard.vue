@@ -135,3 +135,118 @@ function addToCart() {
     ✅ Item added to cart!
   </div>
 </template>
+
+<style scoped>
+.w-56 {
+  max-width: 224px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-60 {
+  height: 240px;
+  object-fit: cover;
+  background-color: #f9fafb;
+}
+
+.text-xs {
+  font-size: 12px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-gray-800 {
+  color: #1f2937;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bg-green-600 {
+  background-color: #16a34a;
+}
+
+.text-white {
+  color: white;
+}
+
+.rounded-md {
+  border-radius: 8px;
+}
+
+.px-2 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.mt-3 {
+  margin-top: 12px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .w-56 {
+    max-width: 192px;
+  }
+  .h-60 {
+    height: 208px;
+  }
+  .text-sm {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .w-56 {
+    max-width: 160px;
+  }
+  .h-60 {
+    height: 176px;
+  }
+  .text-sm {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .w-56 {
+    max-width: 128px;
+  }
+  .h-60 {
+    height: 144px;
+  }
+  .text-sm {
+    font-size: 11px;
+  }
+   button {
+    /* min-width: 14px;
+    padding: 3px 5px;
+    font-size: 8px; */
+    min-width: 12px;      /* smallest */
+    padding: 1px 4px;
+    font-size: 7px;
+  }
+}
+</style>

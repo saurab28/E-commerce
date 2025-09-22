@@ -174,3 +174,107 @@ async function handleGoogleLogin() {
 // Auto-fetch user on reload (for backend)
 fetchUser()
 </script>
+<style scoped>
+.fixed {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.w-full {
+  width: 100%;
+}
+.max-w-md {
+  max-width: 400px;
+}
+.bg-white {
+  background: white;
+}
+.shadow-2xl {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+.rounded-2xl {
+  border-radius: 16px;
+}
+.p-8 {
+  padding: 32px;
+}
+
+.text-center {
+  text-align: center;
+}
+.mb-6 {
+  margin-bottom: 24px;
+}
+
+.text-3xl {
+  font-size: 24px;
+  font-weight: 800;
+  color: #16a34a;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px 16px;
+  margin-top: 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  background-color: #16a34a;
+  color: white;
+  font-weight: 600;
+  padding: 10px 0;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #15803d;
+}
+
+@media (max-width: 768px) {
+  .max-w-md {
+    max-width: 350px;
+  }
+  .text-3xl {
+    font-size: 20px;
+  }
+  input[type="text"],
+  input[type="password"] {
+    font-size: 14px;
+  }
+  button {
+    font-size: 14px;
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .max-w-md {
+    max-width: 100%;
+    padding: 20px;
+  }
+  .text-3xl {
+    font-size: 18px;
+  }
+  button {
+    font-size: 13px;
+  }
+}
+</style>

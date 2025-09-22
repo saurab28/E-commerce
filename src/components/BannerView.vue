@@ -76,11 +76,12 @@ onMounted(() => {
 </script>
 
 
+
 <style scoped>
 .carousel {
   position: relative;
   width: 100%;
-  height: 60vh;
+  height: 360px;
   overflow: hidden;
 }
 
@@ -109,7 +110,7 @@ onMounted(() => {
   transform: translateY(-50%);
   color: #fff;
   border: none;
-  font-size: 2rem;
+  font-size: 32px;
   padding: 5px 12px;
   cursor: pointer;
   z-index: 5;
@@ -122,4 +123,35 @@ onMounted(() => {
 .control.next {
   right: 10px;
 }
+
+@media (max-width: 1024px) {
+  .carousel {
+    height: 300px;
+  }
+  .control {
+    font-size: 28px;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    height: 240px;
+  }
+  .control {
+    font-size: 24px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    height: 180px;
+  }
+  .control {
+    font-size: 20px;
+    padding: 2px 6px;
+  }
+}
 </style>
+
