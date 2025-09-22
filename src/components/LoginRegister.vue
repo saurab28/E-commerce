@@ -4,18 +4,22 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
   >
     <div class="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 relative">
-      <button
-        @click.stop="toogleModal"
-        class="absolute top-2 size-[30px] right-2 text-black bg-gray-50 rounded-full p-1 hover:text-gray-700"
-      >
-        ✕
-      </button>
 
-      <div class="text-center mb-6">
-        <h1 class="text-3xl font-extrabold text-green-600">FreshCart 🥦</h1>
-        <p class="text-gray-500">
-          {{ isLogin ? 'Login to your account' : 'Create a new account' }}
-        </p>
+      <!-- Logo / Title -->
+      <div>
+        <button
+          @click.stop="toogleModal"
+          class="absolute top-2 size-[30px] right-2 text-black bg-gray-50 rounded-[50%] p-1 hover:text-gray-700"
+        >
+          ✕
+        </button>
+        <div class="text-center mb-6">
+          <h1 class="text-3xl font-extrabold text-green-600">Pickzy 🥦</h1>
+          <p class="text-gray-500">
+            {{ isLogin ? 'Login to your account' : 'Create a new account' }}
+          </p>
+        </div>
+
       </div>
 
       <!-- Form -->

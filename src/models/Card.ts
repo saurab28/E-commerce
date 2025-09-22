@@ -1,8 +1,7 @@
 export interface ICard {
   id: string | number
   name: string
-  price: number | string
+  price:  string | number
   image?: string
-  image_url?: string
   weight?: string
 }
