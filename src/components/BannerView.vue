@@ -1,10 +1,10 @@
 <template>
-  <div class="carousel">
+  <div class="carousel container mx-auto ">
     <div
       class="carousel-track"
       :style="{
         transform: `translateX(-${currentSlide * 100}%)`,
-        transition: isTransitioning ? 'transform 0.6s ease-in-out' : 'none'
+        transition: isTransitioning ? 'transform 0.8s ease-in-out' : 'none'
       }"
       @transitionend="handleTransitionEnd"
     >
@@ -46,25 +46,25 @@ const totalSlides = ref<number>(4);       // real slides count
 const isTransitioning = ref<boolean>(true); // controls smooth/instant jumps
 
 const nextSlide = (): void => {
-  isTransitioning.value = true;
+  // isTransitioning.value = true;
   currentSlide.value++;
 };
 
 const prevSlide = (): void => {
-  isTransitioning.value = true;
+  // isTransitioning.value = true;
   currentSlide.value--;
 };
 
 const handleTransitionEnd = (): void => {
   // if we moved past the last clone, reset to first real
   if (currentSlide.value === totalSlides.value + 1) {
-    isTransitioning.value = false;
     currentSlide.value = 1;
+    isTransitioning.value = false;
   }
   // if we moved before the first clone, reset to last real
   if (currentSlide.value === 0) {
-    isTransitioning.value = false;
     currentSlide.value = totalSlides.value;
+    isTransitioning.value = false;
   }
 };
 
@@ -80,9 +80,11 @@ onMounted(() => {
 <style scoped>
 .carousel {
   position: relative;
-  width: 100%;
-  height: 360px;
+
+  width: 85%;
+  height: 60vh;
   overflow: hidden;
+  border-radius:40px;
 }
 
 .carousel-track {
@@ -101,7 +103,7 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  /* display: block; */
 }
 
 .control {

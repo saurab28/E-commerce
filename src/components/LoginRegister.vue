@@ -1,12 +1,23 @@
 <template>
-  <div class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm ">
-    <div class="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8">
+  <div
+    @click.self="toogleModal"
+    class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
+  >
+    <div class="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 relative">
       <!-- Logo / Title -->
-      <div class="text-center mb-6">
-        <h1 class="text-3xl font-extrabold text-green-600">FreshCart 🥦</h1>
-        <p class="text-gray-500">
-          {{ isLogin ? "Login to your account" : "Create a new account" }}
-        </p>
+      <div>
+        <button
+          @click.stop="toogleModal"
+          class="absolute top-2 size-[30px] right-2 text-black bg-gray-50 rounded-[50%] p-1 hover:text-gray-700"
+        >
+          ✕
+        </button>
+        <div class="text-center mb-6">
+          <h1 class="text-3xl font-extrabold text-green-600">Pickzy 🥦</h1>
+          <p class="text-gray-500">
+            {{ isLogin ? 'Login to your account' : 'Create a new account' }}
+          </p>
+        </div>
       </div>
 
       <!-- Form -->
@@ -49,69 +60,66 @@
           type="submit"
           class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
         >
-          {{ isLogin ? "Login" : "Register" }}
+          {{ isLogin ? 'Login' : 'Register' }}
         </button>
       </form>
+
+      <p class="text-center text-lg mt-3 mb-3">---------------or---------------</p>
 
       <!-- Google Login -->
       <button
         @click="handleGoogleLogin"
-        class="w-full flex items-center justify-center gap-2 bg-gray-400  text-white font-semibold py-2 px-4 rounded-lg transition mt-3"
+        class="w-full flex items-center justify-center gap-2 bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg transition mt-3"
       >
-        <img
-          src="https://www.svgrepo.com/show/475656/google-color.svg"
-          class="w-5 h-5"
-        />
-        Sign in  with Google
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
+        Sign in with Google
       </button>
 
       <!-- Switch -->
       <p class="text-center mt-6 text-sm text-gray-600">
-        {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+        {{ isLogin ? "Don't have an account?" : 'Already have an account?' }}
         <button @click="isLogin = !isLogin" class="text-green-600 font-semibold hover:underline">
-          {{ isLogin ? "Register" : "Login" }}
+          {{ isLogin ? 'Register' : 'Login' }}
         </button>
       </p>
 
       <!-- User Info -->
-      <div v-if="user" class="mt-6 p-4 bg-green-50 rounded-lg text-center">
-        <img
-          v-if="user.photo"
-          :src="user.photo"
-          class="w-16 h-16 rounded-full mx-auto mb-2"
-        />
-        <p class="font-semibold text-green-700">Welcome, {{ user.username }} 🎉</p>
-        <p class="text-gray-600 text-sm">{{ user.email }}</p>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
-import { auth, googleProvider } from "@/firebase"
-import { signInWithPopup } from "firebase/auth"
+import { ref, toRefs } from 'vue'
+import { auth, googleProvider } from '@/firebase'
+import { signInWithPopup } from 'firebase/auth'
+import Cookies from 'js-cookie'
+import authorization from '@/composables/auth'
+import loginModal from '@/composables/loginmodal'
+
+const { checkAuthorization } = authorization()
+const Modal = loginModal()
+const { isModal, toogleModal } = Modal
 
 const isLogin = ref(true)
-const form = ref({ name: "", username: "", password: "" })
+const form = ref({ name: '', username: '', password: '' })
 const user = ref(null)
 
 // API base URL (for your custom backend)
-const API_URL = "http://localhost:5001"
+const API_URL = 'http://localhost:5001'
 
 // 📌 Register (custom backend)
 async function handleRegister() {
   try {
     const res = await fetch(`${API_URL}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value),
     })
     if (!res.ok) throw new Error(await res.text())
-    alert("✅ Registered successfully! Now login.")
+    alert('✅ Registered successfully! Now login.')
     isLogin.value = true
   } catch (err) {
-    alert("❌ " + err.message)
+    alert('❌ ' + err.message)
   }
 }
 
@@ -119,60 +127,67 @@ async function handleRegister() {
 async function handleLogin() {
   try {
     const res = await fetch(`${API_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value),
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.error || "Login failed")
-    localStorage.setItem("token", data.token)
-    await fetchUser()
+    if (!res.ok) throw new Error(data.error || 'Login failed')
+    // localStorage.removeItem("token", data.token)
+    Cookies.set('token', data.token, { expires: 1, secure: true, sameSite: 'Strict' })
+    toogleModal()
+    checkAuthorization()
+
+    // await fetchUser()
   } catch (err) {
-    alert("❌ " + err.message)
+    alert('❌ ' + err.message)
   }
 }
 
 // 📌 Fetch User (protected route from backend)
-async function fetchUser() {
-  const token = localStorage.getItem("token")
-  if (!token) return
-  try {
-    const res = await fetch(`${API_URL}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || "Failed to fetch user")
-    user.value = data.user || data
-  } catch (err) {
-    console.error(err.message)
-  }
-}
+// async function fetchUser() {
+//   const token = localStorage.getItem("token")
+//   if (!token) return
+//   try {
+//     const res = await fetch(`${API_URL}/me`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     })
+//     const data = await res.json()
+//     if (!res.ok) throw new Error(data.error || "Failed to fetch user")
+//     user.value = data.user || data
+//   } catch (err) {
+//     console.error(err.message)
+//   }
+// }
 
 // 📌 Google Login (Firebase)
 async function handleGoogleLogin() {
   try {
     const result = await signInWithPopup(auth, googleProvider)
+    console.log('result', result)
     const userData = result.user
+    console.log('result', userData)
 
     // Get Firebase token
     const token = await userData.getIdToken()
-    localStorage.setItem("token", token)
+    // localStorage.setItem("token", token)
 
     // Save user details
     user.value = {
       username: userData.displayName,
       email: userData.email,
-      photo: userData.photoURL,
     }
 
-    alert(`🎉 Welcome ${userData.displayName}`)
+    Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
+    toogleModal()
+    checkAuthorization()
   } catch (err) {
-    alert("❌ Google Login Failed: " + err.message)
+    alert('❌ Google Login Failed: ' + err.message)
   }
 }
 
 // Auto-fetch user on reload (for backend)
-fetchUser()
+// fetchUser()
 </script>
 <style scoped>
 .fixed {

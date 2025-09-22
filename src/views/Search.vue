@@ -8,7 +8,7 @@ const path = ref<string>(route.path)
 </script>
 
 <template>
-  <Header :param="path" class="sticky top-0 w-full bg-white shadow-md z-50" />
+  <Header :param="path" class=" mb-5" />
   <div class="p-5">
     <Products />
   </div>

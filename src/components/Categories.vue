@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full bg-white py-6">
+  <div class="relative  bg-white py-6 container mx-auto px-[104px]">
     <!-- Title -->
     <div class="text-center pb-5">
       <h1 class="font-bold text-2xl sm:text-3xl">Our Categories</h1>
@@ -19,7 +19,7 @@
       <div
         ref="carousel"
 
-        class="flex gap-12 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 "
+        class="flex  gap-6 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 pt-3 "
 
       >
         <div
@@ -28,7 +28,7 @@
 
           class="flex-shrink-0 w-37 flex flex-col items-center text-center cursor-pointer group "
         >
-          
+
            <RouterLink  :to="{ name: 'products', params: { title: item.title } }">
 
              <img
@@ -38,7 +38,7 @@
              />
            </RouterLink>
 
-          
+
 
         </div>
       </div>

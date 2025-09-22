@@ -1,6 +1,6 @@
 import Productslist from '@/components/Productslist.vue'
 import Home from '@/views/Home.vue'
-import Login from '@/views/Login.vue'
+
 import Cart from '@/components/Cart.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 import Search from '@/views/Search.vue';
@@ -14,15 +14,10 @@ const router = createRouter({
       component:Home
     },
     {
-      path:"/login",
-      name:"Login",
-      component: Login
-    },
-    {
       path:'/product/:title',
       name:"products",
       component:Productslist,
-      props : true
+
     },
     {
       path:'/cart',
