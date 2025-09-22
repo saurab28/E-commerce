@@ -4,20 +4,18 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
   >
     <div class="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 relative">
-      <!-- Logo / Title -->
-      <div>
-        <button
-          @click.stop="toogleModal"
-          class="absolute top-2 size-[30px] right-2 text-black bg-gray-50 rounded-[50%] p-1 hover:text-gray-700"
-        >
-          ✕
-        </button>
-        <div class="text-center mb-6">
-          <h1 class="text-3xl font-extrabold text-green-600">FreshCart 🥦</h1>
-          <p class="text-gray-500">
-            {{ isLogin ? 'Login to your account' : 'Create a new account' }}
-          </p>
-        </div>
+      <button
+        @click.stop="toogleModal"
+        class="absolute top-2 size-[30px] right-2 text-black bg-gray-50 rounded-full p-1 hover:text-gray-700"
+      >
+        ✕
+      </button>
+
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-extrabold text-green-600">FreshCart 🥦</h1>
+        <p class="text-gray-500">
+          {{ isLogin ? 'Login to your account' : 'Create a new account' }}
+        </p>
       </div>
 
       <!-- Form -->
@@ -29,7 +27,7 @@
             v-model="form.name"
             type="text"
             required
-            class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+            class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
@@ -40,7 +38,18 @@
             v-model="form.username"
             type="text"
             required
-            class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+            class="mt-1 w-full px-4 py-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- Email (only for register) -->
+        <div v-if="!isLogin">
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            v-model="form.email"
+            type="email"
+            required
+            class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
@@ -51,14 +60,13 @@
             v-model="form.password"
             type="password"
             required
-            class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+            class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
-        <!-- Submit -->
         <button
           type="submit"
-          class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+          class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg"
         >
           {{ isLogin ? 'Login' : 'Register' }}
         </button>
@@ -69,7 +77,7 @@
       <!-- Google Login -->
       <button
         @click="handleGoogleLogin"
-        class="w-full flex items-center justify-center gap-2 bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg transition mt-3"
+        class="w-full flex items-center justify-center gap-2 bg-gray-400 text-white py-2 px-4 rounded-lg mt-3"
       >
         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
         Sign in with Google
@@ -82,16 +90,14 @@
           {{ isLogin ? 'Register' : 'Login' }}
         </button>
       </p>
-
-      <!-- User Info -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, toRefs } from 'vue'
+import { ref } from 'vue'
 import { auth, googleProvider } from '@/firebase'
-import { signInWithPopup } from 'firebase/auth'
+import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
 import Cookies from 'js-cookie'
 import authorization from '@/composables/auth'
 import loginModal from '@/composables/loginmodal'
@@ -101,13 +107,12 @@ const Modal = loginModal()
 const { isModal, toogleModal } = Modal
 
 const isLogin = ref(true)
-const form = ref({ name: '', username: '', password: '' })
+const form = ref({ name: '', username: '', email: '', password: '' })
 const user = ref(null)
 
-// API base URL (for your custom backend)
 const API_URL = 'http://localhost:5001'
 
-// 📌 Register (custom backend)
+// 📌 Register
 async function handleRegister() {
   try {
     const res = await fetch(`${API_URL}/register`, {
@@ -123,69 +128,30 @@ async function handleRegister() {
   }
 }
 
-// 📌 Login (custom backend)
+// 📌 Login (via Firebase SDK)
 async function handleLogin() {
   try {
-    const res = await fetch(`${API_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value),
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Login failed')
-    // localStorage.removeItem("token", data.token)
-    Cookies.set('token', data.token, { expires: 1, secure: true, sameSite: 'Strict' })
+    const userCred = await signInWithEmailAndPassword(auth, form.value.email, form.value.password)
+    const token = await userCred.user.getIdToken()
+    Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
     toogleModal()
     checkAuthorization()
-
-    // await fetchUser()
   } catch (err) {
     alert('❌ ' + err.message)
   }
 }
 
-// 📌 Fetch User (protected route from backend)
-// async function fetchUser() {
-//   const token = localStorage.getItem("token")
-//   if (!token) return
-//   try {
-//     const res = await fetch(`${API_URL}/me`, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     })
-//     const data = await res.json()
-//     if (!res.ok) throw new Error(data.error || "Failed to fetch user")
-//     user.value = data.user || data
-//   } catch (err) {
-//     console.error(err.message)
-//   }
-// }
-
-// 📌 Google Login (Firebase)
+// 📌 Google Login
 async function handleGoogleLogin() {
   try {
     const result = await signInWithPopup(auth, googleProvider)
-    console.log('result', result)
-    const userData = result.user
-    console.log('result', userData)
-
-    // Get Firebase token
-    const token = await userData.getIdToken()
-    // localStorage.setItem("token", token)
-
-    // Save user details
-    user.value = {
-      username: userData.displayName,
-      email: userData.email,
-    }
-
+    const token = await result.user.getIdToken()
     Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
+    user.value = { username: result.user.displayName, email: result.user.email }
     toogleModal()
     checkAuthorization()
   } catch (err) {
     alert('❌ Google Login Failed: ' + err.message)
   }
 }
-
-// Auto-fetch user on reload (for backend)
-// fetchUser()
 </script>

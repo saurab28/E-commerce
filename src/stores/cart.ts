@@ -32,7 +32,7 @@ export const useCart = defineStore('cart', () => {
     (newCart) => {
       localStorage.setItem('cart', JSON.stringify(newCart))
     },
-    { deep: true }
+    { deep: true },
   )
 
   function addItem(product: ProductForCart, quantity = 1) {
@@ -71,15 +71,17 @@ export const useCart = defineStore('cart', () => {
     cartItems.value = []
   }
 
+  // 🔥 NEW: Replace entire cart (used when syncing from Firestore)
+  function setCart(newCart: CartItem[]) {
+    cartItems.value = [...newCart]
+  }
+
   const itemCount = computed(() =>
-    cartItems.value.reduce((totalUnits, line) => totalUnits + line.qty, 0)
+    cartItems.value.reduce((totalUnits, line) => totalUnits + line.qty, 0),
   )
 
   const cartTotal = computed(() =>
-    cartItems.value.reduce(
-      (totalAmount, line) => totalAmount + line.price * line.qty,
-      0
-    )
+    cartItems.value.reduce((totalAmount, line) => totalAmount + line.price * line.qty, 0),
   )
 
   return {
@@ -90,6 +92,7 @@ export const useCart = defineStore('cart', () => {
     decrementQuantity,
     removeItem,
     clearCart,
+    setCart, // ✅ exposed here
     itemCount,
     cartTotal,
   }
