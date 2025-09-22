@@ -13,7 +13,7 @@
           ✕
         </button>
         <div class="text-center mb-6">
-          <h1 class="text-3xl font-extrabold text-green-600">FreshCart 🥦</h1>
+          <h1 class="text-3xl font-extrabold text-green-600">Pickzy 🥦</h1>
           <p class="text-gray-500">
             {{ isLogin ? 'Login to your account' : 'Create a new account' }}
           </p>

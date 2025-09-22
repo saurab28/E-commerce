@@ -9,18 +9,18 @@ const props = defineProps<{ products: ICard }>()
 const auth = authorization()
 
 // Robustly parse prices like "₹507.63", "507,63", etc.
-function parsePrice(p: unknown): number {
+function parsePrice(p: string): number {
   if (typeof p === 'number') return p
   if (typeof p === 'string') {
     // keep digits, dots and commas, then unify commas to dots
-    const cleaned = p.replace(/[^\d.,-]/g, '').replace(/,/g, '.')
+    const cleaned = p.replace(/[^\d.,]/g, '').replace(/,/g, '.')
     const n = Number(cleaned)
-    return Number.isFinite(n) ? n : 0
+    return n
   }
   return 0
 }
 
-console.log(props.products)
+// console.log(props.products)
 const inCartQty = computed(() => {
   const item = cart.cartItems.find((i) => i.id === props.products.id)
   return item ? item.qty : 0
@@ -33,7 +33,7 @@ function decrementQty() {
   cart.decrementQuantity(props.products.id)
 }
 
-const priceNumber = computed(() => parsePrice(props.products.price))
+// const priceNumber = computed(() => parsePrice(props.products.price as string))
 // const priceDisplay = computed(() =>
 //   priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—',
 // )
@@ -73,7 +73,7 @@ function addToCart() {
     {
       id : props.products.id,
       name: props.products.name,
-      price: Number(priceNumber.value),
+      price: parsePrice(props.products.price as string),
       image: props.products.image,
       weight: props.products.weight,
     },
