@@ -132,9 +132,9 @@
                   <button
                     class="mt-4 w-full rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 flex items-center justify-between px-4 cursor-pointer"
                     v-if="isLoggedIn"
-                    @click="startPayment"
+                    @click="toogleAdressModal"
                   >
-                    <span>Checkout</span>
+                    <span>Procceed</span>
                     <span
                       class="rounded-full px-3 py-1 text-sm"
                       >{{ money(total) }}</span
@@ -164,6 +164,8 @@
     </div>
   </div>
 
+  <Address v-if="isChecked"/>
+
 </template>
 
 <script setup lang="ts">
@@ -173,6 +175,7 @@ import { useCart } from '@/stores/cart'
 import { useRouter, useRoute } from 'vue-router'
 import authorization from '@/composables/auth'
 import loginModal from '@/composables/loginmodal'
+import Address from './Address.vue'
 
 const cart = useCart()
 const route = useRouter()
@@ -180,7 +183,8 @@ const routepath = useRoute()
 const auth = authorization()
 const {isLoggedIn,checkAuthorization} = auth
 const {toogleModal} = loginModal()
-
+const isChecked = ref<boolean>(false)
+const scrollY = ref(0)
 
 
 const shipping = ref<'pickup' | 'delivery'>('pickup')
@@ -209,67 +213,34 @@ const handleProductcartpath = () => {
 
 }
 
-
-
-const startPayment = async () => {
-  try {
-    // 1. Create order on backend with cart items
-    const res = await fetch('http://localhost:5002/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cartItems: cart.cartItems }),
-    })
-
-    const order = await res.json()
-    console.log('✅ Order:', order)
-
-    // 2. Razorpay checkout options
-    const options = {
-      key: 'rzp_test_RGeGMOEnLzUqYw', // Your Razorpay Key ID
-      amount: order.amount, // from backend
-      currency: order.currency,
-      name: 'Grocery Store',
-      description: 'Cart Checkout',
-      order_id: order.id, // order id from backend
-      handler: function (response: any) {
-        // 3. Verify payment with backend
-        verifyPayment(response)
-      },
-      prefill: {
-        name: 'B.Sri.Lalithadhitya',
-        email: 'bompallysrilalithadhitya@example.com',
-        contact: '6301168711',
-      },
-      theme: {
-        color: '#F43F5E', // rose-500
-      },
-    }
-
-    const rzp = new (window as any).Razorpay(options)
-    rzp.open()
-  } catch (err) {
-    console.error('Payment failed', err)
-  }
+const toogleAdressModal = (): void => {
+  isChecked.value = ! isChecked.value
 }
 
-// Verify payment
-const verifyPayment = async (response: any) => {
-  const res = await fetch('http://localhost:5002/verify-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      razorpay_order_id: response.razorpay_order_id,
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature,
-    }),
-  })
+watch(isChecked, (newVal) => {
+  if (newVal) {
+    // Save current scroll
+    scrollY.value = window.scrollY
 
-  const data = await res.json()
-  if (data.success) {
-    alert('✅ Payment Verified! Thank you for shopping 🛒')
-    cart.clearCart() // optional: empty cart after payment
+    // Lock body
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.overflow = 'hidden'
+    document.body.style.width = '100%' // prevent content shift
   } else {
-    alert(' Payment Verification Failed')
+    // Unlock body
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.left = ''
+    document.body.style.right = ''
+    document.body.style.overflow = ''
+    document.body.style.width = ''
+
+    // Restore scroll
+    window.scrollTo(0, scrollY.value)
   }
-}
+})
+
 </script>
