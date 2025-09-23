@@ -64,9 +64,10 @@ const loading = ref(true)
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
   <div class="container mx-auto px-[104px]">
-    <div class="grid gap-6 grid-cols-4">
+    <div class="grid gap-4 grid-cols-5 ">
       <ProductCard
         v-for="eachProductcard in allProducts"
+        class="grid gap-6 grid-cols-6"
         :key="eachProductcard.id"
         :products="eachProductcard"
       />

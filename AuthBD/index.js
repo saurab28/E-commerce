@@ -68,7 +68,7 @@ const checkValidity = async (req, res, next) => {
 }
 
 // ----------------------------
-// GET USERS (protected route)
+// GET ALL USERS (debug only)
 // ----------------------------
 app.get('/users', checkValidity, async (req, res) => {
   try {
@@ -81,58 +81,27 @@ app.get('/users', checkValidity, async (req, res) => {
 })
 
 // ----------------------------
-// ADD ITEM TO CART
+// GET CURRENT USER
 // ----------------------------
-// app.post('/cart', checkValidity, async (req, res) => {
-//   const { productId, name, price, quantity } = req.body
-//   const userId = req.user.uid
+app.get('/me', checkValidity, async (req, res) => {
+  try {
+    const userId = req.user.uid
+    const docSnap = await db.collection('users').doc(userId).get()
 
-//   try {
-//     await db
-//       .collection('users')
-//       .doc(userId)
-//       .collection('cart')
-//       .doc(productId) // use productId as doc ID (unique per product)
-//       .set({ name, price, quantity }, { merge: true })
+    if (!docSnap.exists) {
+      return res.status(404).json({ error: 'User not found' })
+    }
 
-//     res.status(201).json({ message: '🛒 Item added to cart' })
-//   } catch (err) {
-//     res.status(500).json({ error: err.message })
-//   }
-// })
-
-// // ----------------------------
-// // GET CART ITEMS
-// // ----------------------------
-// app.get('/cart', checkValidity, async (req, res) => {
-//   const userId = req.user.uid
-//   try {
-//     const snapshot = await db.collection('users').doc(userId).collection('cart').get()
-//     const items = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-//     res.status(200).json({ items })
-//   } catch (err) {
-//     res.status(500).json({ error: err.message })
-//   }
-// })
-
-// // ----------------------------
-// // REMOVE ITEM FROM CART
-// // ----------------------------
-// app.delete('/cart/:productId', checkValidity, async (req, res) => {
-//   const userId = req.user.uid
-//   const { productId } = req.params
-//   try {
-//     await db.collection('users').doc(userId).collection('cart').doc(productId).delete()
-//     res.status(200).json({ message: '❌ Item removed from cart' })
-//   } catch (err) {
-//     res.status(500).json({ error: err.message })
-//   }
-// })
+    res.status(200).json({ user: docSnap.data(), status: 200 })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
 
 // ----------------------------
 // PING (test route)
 // ----------------------------
-// app.get('/ping', (req, res) => res.send('Server alive ✅'))
+app.get('/ping', (req, res) => res.send('Server alive ✅'))
 
 app.listen(5001, () => {
   console.log('🔥 Firebase Auth Server running on 5001')

@@ -36,7 +36,7 @@
         </div>
 
         <!-- Username -->
-        <div>
+        <div v-if="!isLogin">
           <label class="block text-sm font-medium text-gray-700">Username</label>
           <input
             v-model="form.username"
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Email (only for register) -->
-        <div v-if="!isLogin">
+        <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
           <input
             v-model="form.email"
