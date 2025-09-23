@@ -189,107 +189,63 @@ async function handleGoogleLogin() {
 // Auto-fetch user on reload (for backend)
 // fetchUser()
 </script>
+
 <style scoped>
-.fixed {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.w-full {
-  width: 100%;
-}
-.max-w-md {
-  max-width: 400px;
-}
-.bg-white {
-  background: white;
-}
-.shadow-2xl {
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-}
-.rounded-2xl {
-  border-radius: 16px;
-}
-.p-8 {
-  padding: 32px;
-}
-
-.text-center {
-  text-align: center;
-}
-.mb-6 {
-  margin-bottom: 24px;
-}
-
-.text-3xl {
-  font-size: 24px;
-  font-weight: 800;
-  color: #16a34a;
-}
-
-.text-gray-500 {
-  color: #6b7280;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 8px 16px;
-  margin-top: 4px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-button {
-  width: 100%;
-  background-color: #16a34a;
-  color: white;
-  font-weight: 600;
-  padding: 10px 0;
-  border-radius: 8px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #15803d;
-}
-
-@media (max-width: 768px) {
+/* Tablet screens */
+@media (max-width: 800px) {
   .max-w-md {
-    max-width: 350px;
+    max-width: 96vw;
+  }
+  .p-8 {
+    padding: 1.2rem !important;
   }
   .text-3xl {
-    font-size: 20px;
-  }
-  input[type="text"],
-  input[type="password"] {
-    font-size: 14px;
-  }
-  button {
-    font-size: 14px;
-    padding: 8px 0;
+    font-size: 1.7rem !important;
   }
 }
 
-@media (max-width: 480px) {
+/* Phones */
+@media (max-width: 500px) {
   .max-w-md {
-    max-width: 100%;
-    padding: 20px;
+    max-width: 99vw !important;
+  }
+  .p-8 {
+    padding: 0.75rem !important;
+  }
+  .rounded-2xl {
+    border-radius: 11px !important;
   }
   .text-3xl {
-    font-size: 18px;
+    font-size: 1.2rem !important;
   }
-  button {
-    font-size: 13px;
+  .py-2 {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+  .px-4 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .gap-2 {
+    gap: 0.4rem !important;
+  }
+}
+
+/* Smallest phones */
+@media (max-width: 350px) {
+  .max-w-md {
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+  }
+  .p-8 {
+    padding: 0.35rem !important;
+  }
+  .text-3xl {
+    font-size: 1rem !important;
+  }
+  .rounded-2xl {
+    border-radius: 7px !important;
   }
 }
 </style>
+

@@ -27,36 +27,7 @@
       </div>
 
       <!-- Center: Location + Search -->
-      <div class="flex-1 flex items-center justify-center max-w-2xl mx-4">
-        <!-- Search -->
-        <div class="w-full relative" v-if="!props.param">
-          <!-- Input -->
-          <input
-            type="text"
-            placeholder="Search what you want"
-            class="w-full bg-gray-50 border-0 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition-all"
-            readonly
-            @click="handleSearch"
-          />
-          <i
-            class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
-          ></i>
-        </div>
-        <div class="w-full relative" v-else-if="props.param === '/search'">
-          <!-- Input -->
-          <input
-            type="text"
-            placeholder="Search what you want"
-            class="w-full bg-gray-50 border-0 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition-all"
-            v-model="filterCategory"
-          />
-
-          <!-- Icon inside input -->
-          <i
-            class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
-          ></i>
-        </div>
-      </div>
+      
 
       <!-- Right: Login + Cart -->
       <!-- Right: Profile + Cart -->
@@ -149,22 +120,22 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
+        <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
           <i class="ri-menu-line text-2xl text-gray-700"></i>
-        </button>
+        </button> -->
       </div>
     </div>
 
     <!-- Mobile Location (only visible on small screens) -->
-    <div class="block md:hidden px-4 pb-2">
+    <!-- <div class="block md:hidden px-4 pb-2">
       <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
         <i class="ri-map-pin-line text-green-600"></i>
         <span class="text-sm text-gray-600">Deliver to: Hyderbad</span>
       </div>
-    </div>
+    </div> -->
 
     <!-- Mobile Search (only visible on small screens) --> 
-    <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
+    <!-- <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
       <div class="w-full relative">
         <input
           type="text"
@@ -173,7 +144,7 @@
         />
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
-    </div>
+    </div> -->
   </nav>
 
   <!-- Modal -->
