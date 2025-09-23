@@ -11,7 +11,7 @@ const Category = ref<ICategorycard[]>([])
 const allProducts = ref<ICard[]>([])
 const props = defineProps<{ selectedCategory?: string }>()
 watch(
-  () => props.selectedCategory, // getter so Vue tracks reactivity
+  () => props.selectedCategory, 
   () => {
     const filterProducts = Category.value.filter((eachCategory: ICategorycard) => {
       if (props.selectedCategory === 'Sweet Tooth') {
@@ -64,7 +64,8 @@ const loading = ref(true)
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
   <div class="container mx-auto px-[104px]">
-    <div class="grid gap-6 grid-cols-5">
+    <div class="grid gap-6 grid-cols-4
+    ">
       <ProductCard
         v-for="eachProductcard in allProducts"
         :key="eachProductcard.id"

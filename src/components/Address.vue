@@ -13,14 +13,6 @@
         ✕
       </button>
 
-      <!-- Loading Overlay -->
-      <div
-        v-if="mapsStore.isLoading"
-        class="absolute inset-0 z-10 flex items-center justify-center bg-white/70 rounded-2xl"
-      >
-        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-
       <!-- Left Panel -->
       <div class="w-[350px] flex flex-col gap-3 z-20">
         <div class="flex items-center gap-2 mb-2">
@@ -29,16 +21,32 @@
             src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg"
             alt="icon"
           />
-          <span class="font-medium text-gray-800">Address Selection</span>
+          <span class="font-medium text-gray-800">Delivery Address Selection</span>
         </div>
 
         <input
-          id="location-input"
           v-model="form.location"
           type="text"
-          placeholder="Address"
+          placeholder="Search address"
           class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
+          @input="searchPlaces(form.location)"
         />
+
+        <!-- Suggestions -->
+        <ul
+          v-if="suggestions.length"
+          class="mt-1 border rounded-md max-h-40 overflow-y-auto bg-white shadow"
+        >
+          <li
+            v-for="s in suggestions"
+            :key="s.place_id"
+            class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+            @click="selectSuggestion(s)"
+          >
+            {{ s.description }}
+          </li>
+        </ul>
+
         <input
           v-model="form.apt"
           type="text"
@@ -46,7 +54,6 @@
           class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
         />
         <input
-          id="locality-input"
           v-model="form.locality"
           type="text"
           placeholder="City"
@@ -55,14 +62,12 @@
 
         <div class="flex gap-3">
           <input
-            id="administrative_area_level_1-input"
             v-model="form.state"
             type="text"
             placeholder="State/Province"
             class="flex-1 border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
           />
           <input
-            id="postal_code-input"
             v-model="form.postalCode"
             type="text"
             placeholder="Zip/Postal code"
@@ -71,7 +76,6 @@
         </div>
 
         <input
-          id="country-input"
           v-model="form.country"
           type="text"
           placeholder="Country"
@@ -103,14 +107,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { useGoogleMapsStore } from '@/stores/googleMaps'
-import { useCart } from '@/stores/cart'
+import { ref, reactive, watch, onMounted } from "vue"
+import { useCart } from "@/stores/cart"
 
-const mapsStore = useGoogleMapsStore()
+const isModal = ref(true)
 const cart = useCart()
-const isModal = ref<boolean>(true)
-
 interface AddressForm {
   location: string
   apt: string
@@ -121,123 +122,149 @@ interface AddressForm {
 }
 
 const form = reactive<AddressForm>({
-  location: '',
-  apt: '',
-  locality: '',
-  state: '',
-  postalCode: '',
-  country: '',
+  location: "",
+  apt: "",
+  locality: "",
+  state: "",
+  postalCode: "",
+  country: "",
 })
 
-const toggleModal = (): void => {
-  isModal.value = !isModal.value
-}
-
-// Google Maps objects
+const suggestions = ref<{ description: string; place_id: string }[]>([])
 const map = ref<google.maps.Map | null>(null)
 const marker = ref<google.maps.Marker | null>(null)
-const geocoder = ref<google.maps.Geocoder | null>(null)
-const autocomplete = ref<google.maps.places.Autocomplete | null>(null)
 const selectedLocation = ref<{ lat: number; lng: number } | null>(null)
 
-function initMap(): void {
-  const defaultCenter = { lat: 37.4221, lng: -122.0841 }
+let googleMapsLoaded = false
 
-  map.value = new google.maps.Map(document.getElementById('map') as HTMLElement, {
+// --- Load Google Maps dynamically ---
+const loadGoogleMaps = () => {
+  return new Promise<void>((resolve, reject) => {
+    if (googleMapsLoaded) return resolve()
+
+    const script = document.createElement("script")
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${
+      import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+    }&libraries=places`
+    script.async = true
+    script.defer = true
+
+    script.onload = () => {
+      googleMapsLoaded = true
+      resolve()
+    }
+    script.onerror = () => reject("Google Maps failed to load")
+    document.head.appendChild(script)
+  })
+}
+
+// --- Initialize map ---
+const initMap = () => {
+  const defaultCenter = { lat: 37.4221, lng: -122.0841 }
+  map.value = new google.maps.Map(document.getElementById("map") as HTMLElement, {
     center: defaultCenter,
     zoom: 14,
   })
-
-  geocoder.value = new google.maps.Geocoder()
   marker.value = new google.maps.Marker({
     map: map.value,
     position: defaultCenter,
   })
+}
 
-  const locationInput = document.getElementById('location-input') as HTMLInputElement
+// --- Search Autocomplete ---
+async function searchPlaces(input: string) {
+  if (!input) return (suggestions.value = [])
+  try {
+    const res = await fetch(
+      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(input)}`
+    )
+    const data = await res.json()
+    suggestions.value = data.predictions || []
+  } catch (err) {
+    console.error("Autocomplete failed:", err)
+    suggestions.value = []
+  }
+}
 
-  autocomplete.value = new google.maps.places.Autocomplete(locationInput, {
-    fields: ['address_components', 'geometry', 'name'],
-    types: ['address'],
-  })
+async function selectSuggestion(s: { description: string; place_id: string }) {
+  suggestions.value = []
+  try {
+    const res = await fetch(
+      `http://localhost:5003/api/place-details?placeId=${s.place_id}`
+    )
+    const data = await res.json()
 
-  autocomplete.value.addListener('place_changed', () => {
-    if (!autocomplete.value) return
-    const place = autocomplete.value.getPlace()
-    if (!place.geometry || !place.geometry.location) {
-      alert(`No details available for input: '${place.name}'`)
-      return
+    if (data.result?.geometry?.location) {
+      const { lat, lng } = data.result.geometry.location
+      selectedLocation.value = { lat, lng }
+      map.value?.setCenter(selectedLocation.value)
+      marker.value?.setPosition(selectedLocation.value)
     }
-    renderAddress(place)
-    fillInAddress(place)
+
+    if (data.result?.formatted_address) form.location = data.result.formatted_address
+    if (data.result?.address_components) fillAddressComponents(data.result.address_components)
+  } catch (err) {
+    console.error("Place details failed:", err)
+  }
+}
+
+// --- Current Location ---
+async function useCurrentLocation() {
+  if (!navigator.geolocation) return alert("Geolocation not supported.")
+
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+    selectedLocation.value = coords
+    map.value?.setCenter(coords)
+    marker.value?.setPosition(coords)
+
+    try {
+      const res = await fetch(
+        `http://localhost:5003/api/geocode?lat=${coords.lat}&lng=${coords.lng}`
+      )
+      const data = await res.json()
+      if (data.results && data.results[0]) {
+        form.location = data.results[0].formatted_address
+        fillAddressComponents(data.results[0].address_components)
+      }
+    } catch (err) {
+      console.error("Geocode failed:", err)
+    }
   })
 }
 
-function fillInAddress(place: google.maps.places.PlaceResult): void {
-  const shortNameTypes = new Set(['street_number', 'administrative_area_level_1', 'postal_code'])
+// --- Fill form ---
+function fillAddressComponents(components: any[]) {
+  const getComp = (type: string) =>
+    components.find((c: any) => c.types.includes(type))?.long_name || ""
 
-  const getComponent = (type: string): string => {
-    for (const comp of place.address_components || []) {
-      if (comp.types.includes(type)) {
-        return shortNameTypes.has(type) ? comp.short_name ?? '' : comp.long_name ?? ''
-      }
-    }
-    return ''
-  }
-
-  form.location = `${getComponent('street_number')} ${getComponent('route')}`.trim()
-  form.locality = getComponent('locality')
-  form.state = getComponent('administrative_area_level_1')
-  form.postalCode = getComponent('postal_code')
-  form.country = getComponent('country')
+  form.locality = getComp("locality")
+  form.state = getComp("administrative_area_level_1")
+  form.postalCode = getComp("postal_code")
+  form.country = getComp("country")
 }
 
-function renderAddress(place: google.maps.places.PlaceResult): void {
-  if (place.geometry?.location && map.value && marker.value) {
-    const loc = place.geometry.location
-    map.value.setCenter(loc)
-    marker.value.setPosition(loc)
-    selectedLocation.value = { lat: loc.lat(), lng: loc.lng() }
-  }
-}
-
-function useCurrentLocation(): void {
-  if (!navigator.geolocation) {
-    alert('Geolocation not supported.')
-    return
-  }
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
-      if (map.value && marker.value) {
-        map.value.setCenter(coords)
-        marker.value.setPosition(coords)
-        selectedLocation.value = coords
-      }
-
-      if (geocoder.value) {
-        geocoder.value.geocode({ location: coords }, (results, status) => {
-          if (status === 'OK' && results && results[0]) {
-            fillInAddress(results[0])
-            form.location = results[0].formatted_address ?? ''
-          }
-        })
-      }
-    },
-    () => alert('Unable to get your location.')
-  )
-}
-
-function checkout(): void {
+// --- Checkout ---
+function checkout() {
   if (!selectedLocation.value) {
-    alert('Please select a location first.')
+    alert("Please select a location first.")
     return
   }
-  console.log('Checkout with location:', selectedLocation.value, form)
+  console.log("Checkout with:", form, selectedLocation.value)
   toggleModal()
   startPayment()
 }
 
+// --- Modal toggle with map resize ---
+function toggleModal() {
+  isModal.value = !isModal.value
+  if (isModal.value && map.value) {
+    setTimeout(() => {
+      google.maps.event.trigger(map.value!, "resize")
+      if (selectedLocation.value) map.value?.setCenter(selectedLocation.value)
+    }, 300)
+  }
+}
 const startPayment = async () => {
   try {
     // 1. Create order on backend with cart items
@@ -299,9 +326,8 @@ const verifyPayment = async (response: any) => {
     alert(' Payment Verification Failed')
   }
 }
-
 onMounted(async () => {
-  await mapsStore.loadApi()
-  if (mapsStore.isLoaded) initMap()
+  await loadGoogleMaps()
+  initMap()
 })
 </script>
