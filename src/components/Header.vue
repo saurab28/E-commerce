@@ -1,7 +1,7 @@
 <template>
   <nav
     :class="$attrs.class"
-    class="w-full sticky h-[93px] top-0 z-[999] bg-white p-2 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0 "
+    class="w-full sticky h-[93px] top-0 z-[999] bg-white p-2 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
   >
     <!-- Top Row -->
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
@@ -14,23 +14,56 @@
 
         <div
           class="hidden md:flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-        @click="toggleLocationModal">
+          @click="toggleLocationModal"
+        >
           <i class="ri-map-pin-line text-green-600 text-lg"></i>
           <div class="flex flex-col">
             <span class="text-xs text-gray-500">Deliver to</span>
-            <span class="text-sm font-semibold text-gray-800 truncate max-w-32">{{
-              currentLocation
-            }}</span>
+            <span class="text-sm font-semibold text-gray-800 truncate max-w-32">
+              {{ currentLocation }}
+            </span>
           </div>
           <i class="ri-arrow-down-s-line text-gray-400"></i>
         </div>
-        <Location v-if="isLocationModal" class="absolute top-[96px]" @update:address="currentLocation = $event" @close="isLocationModal = false"/>
+        <Location
+          v-if="isLocationModal"
+          class="absolute top-[96px]"
+          @update:address="currentLocation = $event"
+          @close="isLocationModal = false"
+        />
+      </div>
+
+      <!-- Center: Search -->
+      <div class="flex-1 flex items-center justify-center max-w-2xl mx-4">
+        <div class="w-full relative" v-if="!props.param">
+          <input
+            type="text"
+            placeholder="Search what you want"
+            class="w-full bg-gray-50 border-0 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition-all"
+            readonly
+            @click="handleSearch"
+          />
+          <i
+            class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
+          ></i>
+        </div>
+        <div class="w-full relative" v-else-if="props.param === '/search'">
+          <input
+            type="text"
+            placeholder="Search what you want"
+            class="w-full bg-gray-50 border-0 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition-all"
+            v-model="filterCategory"
+          />
+          <i
+            class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
+          ></i>
+        </div>
       </div>
 
       <!-- Center: Location + Search -->
       
 
-      <!-- Right: Login + Cart -->
+
       <!-- Right: Profile + Cart -->
       <div class="flex items-center gap-4">
         <!-- Profile Section -->
@@ -56,7 +89,9 @@
               </div>
               <div class="hidden sm:flex flex-col">
                 <span class="text-xs text-gray-500">Hello</span>
-                <span class="text-sm font-semibold text-gray-800 truncate max-w-24">Saurab</span>
+                <span class="text-sm font-semibold text-gray-800 truncate max-w-24">
+                  {{ userDetails.name || 'User' }}
+                </span>
               </div>
               <i class="ri-arrow-down-s-line text-gray-400"></i>
             </div>
@@ -67,27 +102,9 @@
               class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
             >
               <div class="px-4 py-2 border-b border-gray-100">
-                <p class="font-semibold text-gray-800">Saurab</p>
-                <p class="text-xs text-gray-500">Saurab@gmail.com</p>
+                <p class="font-semibold text-gray-800">{{ userDetails.name || 'User' }}</p>
+                <p class="text-xs text-gray-500">{{ userDetails.email || 'example@mail.com' }}</p>
               </div>
-              <!-- <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700 flex items-center gap-2"
-              >
-                <i class="ri-user-line"></i>
-                My Profile
-              </button>
-              <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700 flex items-center gap-2"
-              >
-                <i class="ri-shopping-bag-line"></i>
-                My Orders
-              </button>
-              <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700 flex items-center gap-2"
-              >
-                <i class="ri-heart-line"></i>
-                Wishlist
-              </button> -->
               <hr class="my-2" />
               <button
                 @click="handleLogout"
@@ -128,6 +145,7 @@
       </div>
     </div>
 
+
     <!-- Mobile Location (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-2">
       <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
@@ -147,6 +165,7 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
+>
   </nav>
 
   <!-- Modal -->
@@ -156,8 +175,8 @@
 </template>
 
 <script setup lang="ts">
-// No script needed yet; can later connect props or API
-import { inject, ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
@@ -169,23 +188,46 @@ import Location from './Location.vue'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
-const scrollY = ref(0)
 const cart = useCart()
 const { filterCategory } = filter()
 const { isLoggedIn, checkAuthorization } = authorization()
 const { isModal, toogleModal } = loginModal()
-const currentLocation =  ref('Hyderabad, Telangana')
+
+const scrollY = ref(0)
+const isLoading = ref(false)
+
+const currentLocation = ref('Hyderabad, Telangana')
+
 const showProfileMenu = ref(false)
 const isLocationModal = ref(false)
 
 const userInitials = ref('S')
 
+const userDetails = ref<{ name?: string; email?: string }>({})
+
+// ✅ Fetch current user from backend
+async function fetchUserDetails() {
+  const token = Cookies.get('token')
+  if (!token) return
+  try {
+    const res = await fetch('http://localhost:5001/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const data = await res.json()
+    if (data.user) {
+      userDetails.value = data.user
+      userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
+    }
+  } catch (err) {
+    console.error('❌ Failed to fetch user:', err)
+  }
+}
 const toggleProfileMenu = () => {
   showProfileMenu.value = !showProfileMenu.value
 }
 
 const toggleLocationModal = () => {
-  isLocationModal.value = ! isLocationModal.value
+  isLocationModal.value = !isLocationModal.value
 }
 
 // console.log(useFilter.filterCategory.value)
@@ -211,12 +253,6 @@ const handleCart = () => {
 
 const handleSearch = () => {
   router.push('/search')
-}
-
-const handleLogout = () => {
-  Cookies.remove('token')
-  checkAuthorization()
-  router.push('/')
 }
 
 watch(isModal, (newVal) => {
@@ -252,7 +288,19 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
+const handleLogout = async () => {
+  isLoading.value = true
+  Cookies.remove('token')
+  checkAuthorization()
+
+  setTimeout(() => {
+    isLoading.value = false
+    router.push('/')
+  }, 1200)
+}
+
 onMounted(() => {
+  fetchUserDetails()
   document.addEventListener('click', handleClickOutside)
 })
 
@@ -260,6 +308,7 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+
 
 
 
@@ -498,3 +547,4 @@ onUnmounted(() => {
 
 
 </style>
+

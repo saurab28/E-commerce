@@ -56,7 +56,7 @@ const loading = ref(true)
 
 <template>
   <div v-if="Productstore.loading">
-    <div  class="flex justify-center items-center h-64">
+    <div class="flex justify-center items-center h-64">
       <div
         class="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"
       ></div>
@@ -64,13 +64,10 @@ const loading = ref(true)
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
   <div class="container mx-auto px-[104px]">
-
-
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-
-
       <ProductCard
         v-for="eachProductcard in allProducts"
+        class="grid gap-6 grid-cols-6"
         :key="eachProductcard.id"
         :products="eachProductcard"
       />
@@ -130,4 +127,3 @@ const loading = ref(true)
   }
 }
 </style>
-
