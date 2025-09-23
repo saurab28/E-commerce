@@ -229,6 +229,17 @@ const handleSearch = () => {
   router.push('/search')
 }
 
+watch(isLoggedIn, (newVal) => {
+  if (newVal) {
+    fetchUserDetails()
+  } else {
+    userDetails.value = {}
+    userInitials.value = 'T'
+  }
+})
+
+
+
 watch(isModal, (newVal) => {
   if (newVal) {
     // Save current scroll
@@ -274,7 +285,10 @@ const handleLogout = async () => {
 }
 
 onMounted(() => {
-  fetchUserDetails()
+  const token = Cookies.get('token')
+  if (token) {
+    fetchUserDetails()
+  }
   document.addEventListener('click', handleClickOutside)
 })
 
