@@ -14,7 +14,8 @@
 
         <div
           class="hidden md:flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-        @click="toggleLocationModal">
+          @click="toggleLocationModal"
+        >
           <i class="ri-map-pin-line text-green-600 text-lg"></i>
           <div class="flex flex-col">
             <span class="text-xs text-gray-500">Deliver to</span>
@@ -24,7 +25,12 @@
           </div>
           <i class="ri-arrow-down-s-line text-gray-400"></i>
         </div>
-        <Location v-if="isLocationModal" class="absolute top-[96px]" @update:address="currentLocation = $event" @close="isLocationModal = false"/>
+        <Location
+          v-if="isLocationModal"
+          class="absolute top-[96px]"
+          @update:address="currentLocation = $event"
+          @close="isLocationModal = false"
+        />
       </div>
 
       <!-- Center: Search -->
@@ -145,7 +151,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
-
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
@@ -189,7 +194,6 @@ async function fetchUserDetails() {
     }
   } catch (err) {
     console.error('❌ Failed to fetch user:', err)
-
   }
 }
 const toggleProfileMenu = () => {
@@ -197,7 +201,7 @@ const toggleProfileMenu = () => {
 }
 
 const toggleLocationModal = () => {
-  isLocationModal.value = ! isLocationModal.value
+  isLocationModal.value = !isLocationModal.value
 }
 
 // console.log(useFilter.filterCategory.value)
@@ -255,7 +259,6 @@ const handleClickOutside = (event: Event) => {
   const target = event.target as HTMLElement
   if (!target.closest('.relative')) {
     showProfileMenu.value = false
-
   }
 }
 
@@ -270,8 +273,6 @@ const handleLogout = async () => {
   }, 1200)
 }
 
-
-
 onMounted(() => {
   fetchUserDetails()
   document.addEventListener('click', handleClickOutside)
@@ -280,10 +281,4 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
-
-
-
-
-
-
 </script>

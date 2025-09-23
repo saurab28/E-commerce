@@ -15,14 +15,6 @@
       </div>
 
       <div>
-        <!-- Empty state -->
-        <div
-          v-if="!cart.cartItems.length"
-          class="rounded-2xl bg-white shadow-lg p-10 text-center text-gray-600"
-        >
-          Your cart is empty.
-        </div>
-
         <div>
           <!-- Empty state -->
           <div
