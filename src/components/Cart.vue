@@ -249,7 +249,7 @@ watch(isChecked, (newVal) => {
 <style scoped>
 /* Large and desktop: fixed grid for clean alignment */
 .cart-grid,
-.grid.grid-cols-[1fr_160px_140px_160px_32px] {
+.grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
   display: grid;
   grid-template-columns: 1.5fr 120px 78px 100px 32px;  /* Product, Price, Qty, Total, Remove */
   gap: 10px;
@@ -284,7 +284,7 @@ watch(isChecked, (newVal) => {
     padding: 0 2px;
   }
   .cart-grid,
-  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
     grid-template-columns: 1.3fr 65px 60px 65px 20px;
     gap: 6px;
   }
@@ -292,7 +292,7 @@ watch(isChecked, (newVal) => {
 
 @media (max-width: 700px) {
   .cart-grid,
-  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
     grid-template-columns: 1.3fr 54px 48px; /* Only show product, price, qty on mobile row */
     gap: 3px;
   }
@@ -300,8 +300,8 @@ watch(isChecked, (newVal) => {
   /* Hide total and remove on mobile, you can adjust if needed */
   .cart-grid > div:nth-child(4),
   .cart-grid > div:nth-child(5),
-  .grid.grid-cols-[1fr_160px_140px_160px_32px] > div:nth-child(4),
-  .grid.grid-cols-[1fr_160px_140px_160px_32px] > div:nth-child(5) {
+  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(4),
+  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(5) {
     display: none !important;
   }
 
@@ -332,7 +332,7 @@ watch(isChecked, (newVal) => {
 
 @media (max-width: 420px) {
   .cart-grid,
-  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
     grid-template-columns: 1.2fr 36px 32px;
     gap: 1px;
   }
