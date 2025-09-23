@@ -14,7 +14,7 @@
 
         <div
           class="hidden md:flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-        >
+        @click="toggleLocationModal">
           <i class="ri-map-pin-line text-green-600 text-lg"></i>
           <div class="flex flex-col">
             <span class="text-xs text-gray-500">Deliver to</span>
@@ -24,6 +24,7 @@
           </div>
           <i class="ri-arrow-down-s-line text-gray-400"></i>
         </div>
+        <Location v-if="isLocationModal" class="absolute top-[96px]" @update:address="currentLocation = $event" @close="isLocationModal = false"/>
       </div>
 
       <!-- Center: Location + Search -->
@@ -49,7 +50,7 @@
             <div
               class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
               @click="toggleProfileMenu"
-              >
+            >
               <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
                 <span class="text-white font-semibold text-sm">{{ userInitials }}</span>
               </div>
@@ -61,7 +62,8 @@
             </div>
 
             <!-- Profile Dropdown -->
-            <div v-if="showProfileMenu"
+            <div
+              v-if="showProfileMenu"
               class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
             >
               <div class="px-4 py-2 border-b border-gray-100">
@@ -155,7 +157,7 @@
 
 <script setup lang="ts">
 // No script needed yet; can later connect props or API
-import { watchEffect, ref, computed, watch, onMounted, onUnmounted} from 'vue'
+import { inject, ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
@@ -163,6 +165,7 @@ import LoginRegister from './LoginRegister.vue'
 import authorization from '@/composables/auth'
 import Cookies from 'js-cookie'
 import loginModal from '@/composables/loginmodal'
+import Location from './Location.vue'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
@@ -171,15 +174,19 @@ const cart = useCart()
 const { filterCategory } = filter()
 const { isLoggedIn, checkAuthorization } = authorization()
 const { isModal, toogleModal } = loginModal()
-const currentLocation = ref('Hyderabad, Telangana')
+const currentLocation =  ref('Hyderabad, Telangana')
 const showProfileMenu = ref(false)
+const isLocationModal = ref(false)
 
-const userInitials = ref("S")
+const userInitials = ref('S')
 
 const toggleProfileMenu = () => {
   showProfileMenu.value = !showProfileMenu.value
 }
 
+const toggleLocationModal = () => {
+  isLocationModal.value = ! isLocationModal.value
+}
 
 // console.log(useFilter.filterCategory.value)
 
@@ -252,7 +259,6 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
-
 </script>
 
 
