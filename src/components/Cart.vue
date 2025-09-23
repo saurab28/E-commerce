@@ -24,27 +24,30 @@
             Your cart is empty.
           </div>
 
-          <!-- Main card -->
-          <div v-else class="rounded-2xl bg-white shadow-lg overflow-hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 px-8 py-8">
-              <!-- Left: Items -->
-              <div class="lg:col-span-8">
-                <!-- Table head -->
-                <div
-                  class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
-                >
-                  <div class="text-left">Product</div>
-                  <div class="text-right pr-3">Price</div>
-                  <div class="text-center">Qty</div>
-                  <div class="text-right pl-3">Total</div>
-                  <div></div>
-                </div>
+
+      <!-- Main card -->
+      <div v-else class="rounded-2xl bg-white shadow-lg overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 px-8 py-8">
+          <!-- Left: Items -->
+          <div class="lg:col-span-8">
+            <!-- Table head -->
+            <div
+              class="cart-header grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
+            >
+              <div class="text-left">Product</div>
+              <div class="text-right pr-3 ">Price</div>
+              <div class="text-center">Qty</div>
+              <div class="text-right pl-3">Total</div>
+              <div></div>
+            </div>
+
 
                 <!-- Rows -->
                 <div
                   v-for="eachItem in cart.cartItems"
                   :key="eachItem.id"
-                  class="grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center py-6 border-b border-gray-200 tracking-wider"
+
+                  class="cart-row grid grid-cols-[1fr_160px_140px_160px_32px] gap-4  items-center py-6 border-b border-gray-200 tracking-wider"
                 >
                   <!-- product cell -->
                   <div class="flex items-center gap-4">
@@ -57,8 +60,9 @@
                     <div v-else class="w-16 h-16 rounded-md bg-gray-100"></div>
 
                     <div class="flex items-center gap-2 max-w-[220px] truncate">
-                      <div class="text-gray-900 font-semibold truncate">{{ eachItem.name }}</div>
-                      <div class="text-gray-400 text-sm">{{ eachItem.weight }}</div>
+
+                      <div class="product-name text-gray-900 font-semibold truncate">{{eachItem.name }}</div>
+                      <div class="text-gray-400 text-sm ">{{eachItem.weight }}</div>
                     </div>
                   </div>
 
@@ -322,3 +326,182 @@ watch(isChecked, (newVal) => {
   }
 })
 </script>
+
+
+<style scoped>
+/* Large and desktop: fixed grid for clean alignment */
+.cart-grid,
+.grid.grid-cols-[1fr_160px_140px_160px_32px] {
+  display: grid;
+  grid-template-columns: 1.5fr 120px 78px 100px 32px;  /* Product, Price, Qty, Total, Remove */
+  gap: 10px;
+  align-items: center;
+}
+
+/* Fix text overflow/truncation for product name/weight */
+.flex.items-center.gap-4 {
+  min-width: 0;
+}
+.flex.items-center.gap-2.max-w-\[220px\].truncate > .text-gray-900 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Consistent button and input sizing for qty */
+.inline-flex.items-center.rounded-full.border.border-gray-300.overflow-hidden {
+  min-width: 70px;
+  justify-content: center;
+}
+
+.mx-auto {
+  max-width: 1200px;
+  margin: auto;
+}
+
+@media (max-width: 1024px) {
+  .mx-auto {
+    width: 99%;
+    padding: 0 2px;
+  }
+  .cart-grid,
+  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+    grid-template-columns: 1.3fr 65px 60px 65px 20px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  .cart-grid,
+  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+    grid-template-columns: 1.3fr 54px 48px; /* Only show product, price, qty on mobile row */
+    gap: 3px;
+  }
+
+  /* Hide total and remove on mobile, you can adjust if needed */
+  .cart-grid > div:nth-child(4),
+  .cart-grid > div:nth-child(5),
+  .grid.grid-cols-[1fr_160px_140px_160px_32px] > div:nth-child(4),
+  .grid.grid-cols-[1fr_160px_140px_160px_32px] > div:nth-child(5) {
+    display: none !important;
+  }
+
+  /* Product name overflows ellipsis */
+  .text-gray-900 {
+    max-width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Quantity input/buttons smaller */
+  .inline-flex.items-center.rounded-full.border.border-gray-300.overflow-hidden {
+    min-width: 40px;
+    font-size: 13px;
+    padding: 0;
+  }
+  button {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 22px;
+  }
+  img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .cart-grid,
+  .grid.grid-cols-[1fr_160px_140px_160px_32px] {
+    grid-template-columns: 1.2fr 36px 32px;
+    gap: 1px;
+  }
+  .text-gray-900 {
+    max-width: 40px;
+    font-size: 12px;
+  }
+  img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+}
+
+/* Apply grid layout to header and rows using named classes */
+.cart-header, .cart-row {
+  display: grid;
+  grid-template-columns: 1.5fr 120px 70px 100px 40px; /* Product, Price, Qty, Total, Remove */
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.cart-header {
+  border-bottom: none; /* No border on header */
+}
+
+.cart-header > div {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.cart-row {
+  border-bottom: 1px solid #eee; /* Border on rows */
+}
+
+.cart-row > div {
+  border-bottom: none; /* Remove multiple borders */
+}
+
+.cart-row > div:nth-child(1) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.cart-row .product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+  .cart-header, .cart-row {
+    grid-template-columns: 1.3fr 100px 60px 80px 40px;
+  }
+  .cart-row .product-name {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 700px) {
+  .cart-header, .cart-row {
+    grid-template-columns: 2fr 60px 50px 40px; /* Include remove column on mobile */
+  }
+  .cart-header > div:nth-child(4) {
+    display: none; /* Hide total column */
+  }
+  .cart-row > div:nth-child(4) {
+    display: none; /* Hide total column */
+  }
+  .cart-row .product-name {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-header, .cart-row {
+    grid-template-columns: 1.5fr 50px 45px 40px; /* Mobile widths */
+  }
+  .cart-row .product-name {
+    max-width: 60px;
+    font-size: 0.875rem;
+  }
+}
+
+
+</style>
