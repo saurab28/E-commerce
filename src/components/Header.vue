@@ -14,7 +14,7 @@
 
         <div
           class="hidden md:flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-        >
+        @click="toggleLocationModal">
           <i class="ri-map-pin-line text-green-600 text-lg"></i>
           <div class="flex flex-col">
             <span class="text-xs text-gray-500">Deliver to</span>
@@ -24,6 +24,7 @@
           </div>
           <i class="ri-arrow-down-s-line text-gray-400"></i>
         </div>
+        <Location v-if="isLocationModal" class="absolute top-[96px]" @update:address="currentLocation = $event" @close="isLocationModal = false"/>
       </div>
 
       <!-- Center: Search -->
@@ -143,6 +144,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+
+
 import { useRouter } from 'vue-router'
 import { useCart } from '@/stores/cart'
 import filter from '@/composables/filter.ts'
@@ -150,6 +153,7 @@ import LoginRegister from './LoginRegister.vue'
 import authorization from '@/composables/auth'
 import Cookies from 'js-cookie'
 import loginModal from '@/composables/loginmodal'
+import Location from './Location.vue'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
@@ -157,13 +161,17 @@ const cart = useCart()
 const { filterCategory } = filter()
 const { isLoggedIn, checkAuthorization } = authorization()
 const { isModal, toogleModal } = loginModal()
+
 const scrollY = ref(0)
 const isLoading = ref(false)
 
 const currentLocation = ref('Hyderabad, Telangana')
+
 const showProfileMenu = ref(false)
+const isLocationModal = ref(false)
 
 const userInitials = ref('S')
+
 const userDetails = ref<{ name?: string; email?: string }>({})
 
 // ✅ Fetch current user from backend
@@ -181,23 +189,76 @@ async function fetchUserDetails() {
     }
   } catch (err) {
     console.error('❌ Failed to fetch user:', err)
+
   }
 }
-
-onMounted(() => {
-  fetchUserDetails()
-  document.addEventListener('click', handleClickOutside)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
-
 const toggleProfileMenu = () => {
   showProfileMenu.value = !showProfileMenu.value
 }
 
-// ✅ Logout
+const toggleLocationModal = () => {
+  isLocationModal.value = ! isLocationModal.value
+}
+
+// console.log(useFilter.filterCategory.value)
+
+const handleLogin = () => {
+  router.push('/login')
+}
+
+const handleLogo = () => {
+  router.push('/')
+}
+
+// use whichever your store exposes: itemCount or count
+const cartCount = computed(() => cart.itemCount)
+const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
+const badgeSizeClass = computed(() =>
+  cartCount.value > 9 ? 'min-w-[22px] h-[18px] px-1.5 text-[10px]' : 'w-5 h-5 text-[11px]',
+)
+
+const handleCart = () => {
+  router.push('/cart')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+watch(isModal, (newVal) => {
+  if (newVal) {
+    // Save current scroll
+    scrollY.value = window.scrollY
+
+    // Lock body
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.overflow = 'hidden'
+    document.body.style.width = '100%' // prevent content shift
+  } else {
+    // Unlock body
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.left = ''
+    document.body.style.right = ''
+    document.body.style.overflow = ''
+    document.body.style.width = ''
+
+    // Restore scroll
+    window.scrollTo(0, scrollY.value)
+  }
+})
+
+const handleClickOutside = (event: Event) => {
+  const target = event.target as HTMLElement
+  if (!target.closest('.relative')) {
+    showProfileMenu.value = false
+
+  }
+}
+
 const handleLogout = async () => {
   isLoading.value = true
   Cookies.remove('token')
@@ -209,19 +270,20 @@ const handleLogout = async () => {
   }, 1200)
 }
 
-// other handlers
-const handleLogo = () => router.push('/')
-const handleCart = () => router.push('/cart')
-const handleSearch = () => router.push('/search')
 
-// cart badge
-const cartCount = computed(() => cart.itemCount)
-const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
 
-const handleClickOutside = (event: Event) => {
-  const target = event.target as HTMLElement
-  if (!target.closest('.relative')) {
-    showProfileMenu.value = false
-  }
-}
+onMounted(() => {
+  fetchUserDetails()
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+
+
+
+
+
 </script>
