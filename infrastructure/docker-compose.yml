@@ -21,11 +21,15 @@ services:
 
   authbd:
     build:
-      context: ../services/AuthBD
+      context: ../services/AuthDB
       dockerfile: Dockerfile
     container_name: authbd
     ports:
       - "4000:4000"
+    volumes:
+      - ../services/AuthDB/serviceAccountKey.json:/app/serviceAccountKey.json:ro
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/serviceAccountKey.json
 
   location:
     build:
