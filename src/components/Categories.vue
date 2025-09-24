@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full bg-white py-6">
+  <div class="relative  bg-white py-6 container mx-auto px-[104px]">
     <!-- Title -->
     <div class="text-center pb-5">
       <h1 class="font-bold text-2xl sm:text-3xl">Our Categories</h1>
@@ -19,7 +19,7 @@
       <div
         ref="carousel"
 
-        class="flex gap-12 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 "
+        class="flex  gap-6 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar px-12 pt-3 "
 
       >
         <div
@@ -28,7 +28,7 @@
 
           class="flex-shrink-0 w-37 flex flex-col items-center text-center cursor-pointer group "
         >
-          
+
            <RouterLink  :to="{ name: 'products', params: { title: item.title } }">
 
              <img
@@ -38,7 +38,7 @@
              />
            </RouterLink>
 
-          
+
 
         </div>
       </div>
@@ -86,13 +86,144 @@ const scrollRight = () => {
 }
 </script>
 
-<style scoped>
-/* Hide scrollbar but keep scroll functionality */
+
+
+
+ <!-- <style scoped>
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 20px;
+  }
+  img {
+    width: 120px;
+    height: auto;
+  }
+  .flex.gap-12 {
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 18px;
+  }
+  img {
+    width: 100px;
+  }
+  .flex.gap-12 {
+    gap: 1.2rem;
+    padding: 0 1rem;
+  }
+}
+</style> -->
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Responsive tweaks for tablets and laptops (unchanged) */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 20px;
+  }
+  img {
+    width: 120px;
+    height: auto;
+  }
+  .flex.gap-12 {
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+}
+
+/* Phone responsive adjustments */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 18px;
+  }
+  img {
+    width: 100px;
+  }
+  .flex.gap-12 {
+    gap: 1.2rem;
+    padding: 0 1rem;
+  }
+
+  /* Adjust container padding for small phones */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Reduce size of arrows to fit better */
+  button.absolute {
+    padding: 0.5rem !important;
+  }
+
+  /* Prevent images from being too large inside flex-shrink container */
+  .flex-shrink-0.w-37 {
+    width: 120px !important;
+  }
+
+  /* Reduce carousel padding inside scrollable for better fit */
+  .flex.gap-6.px-12.pt-3 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* @media (max-width: 400px) {
+  .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .flex.gap-6.px-12.pt-3 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 370px) {
+  .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .flex.gap-6.px-12.pt-3,
+  .flex.gap-12,
+  .flex.gap-6 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: 0.4rem !important;
+  }
+  .flex-shrink-0.w-37 {
+    width: 94px !important;
+    max-width: 100%;
+  }
+  button.absolute {
+    padding: 0.3rem !important;
+    min-width: 2rem !important;
+    min-height: 2rem !important;
+  }
+  img {
+    width: 85px !important;
+    height: auto;
+  }
+} */
+
+
 </style>
