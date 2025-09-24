@@ -63,11 +63,11 @@ const loading = ref(true)
     </div>
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
-  <div class="container mx-auto px-[104px]">
+  <div class="container mx-auto ">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <ProductCard
         v-for="eachProductcard in allProducts"
-        class="grid gap-6 grid-cols-6"
+
         :key="eachProductcard.id"
         :products="eachProductcard"
       />
@@ -79,8 +79,8 @@ const loading = ref(true)
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
 }
 
@@ -92,7 +92,7 @@ const loading = ref(true)
 }
 
 /* Tablets: 3 columns */
-@media (max-width: 1024px) {
+@media (max-width: 1104px) {
   .container {
     padding-left: 24px;
     padding-right: 24px;
@@ -100,6 +100,7 @@ const loading = ref(true)
   .grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    justify-items:center;
   }
 }
 
@@ -110,20 +111,22 @@ const loading = ref(true)
     padding-right: 16px;
   }
   .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items:center;
   }
 }
 
 /* Small phones */
-@media (max-width: 480px) {
+@media (max-width: 540px) {
   .container {
     padding-left: 12px;
     padding-right: 12px;
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
+    justify-items:center;
   }
 }
 </style>

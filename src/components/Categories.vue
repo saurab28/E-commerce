@@ -1,5 +1,5 @@
 <template>
-  <div class="relative  bg-white py-6 container mx-auto px-[104px]">
+  <div class="relative  bg-white py-6 container mx-auto px-[104px] ">
     <!-- Title -->
     <div class="text-center pb-5">
       <h1 class="font-bold text-2xl sm:text-3xl">Our Categories</h1>
@@ -89,43 +89,6 @@ const scrollRight = () => {
 
 
 
- <!-- <style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 20px;
-  }
-  img {
-    width: 120px;
-    height: auto;
-  }
-  .flex.gap-12 {
-    gap: 2rem;
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 18px;
-  }
-  img {
-    width: 100px;
-  }
-  .flex.gap-12 {
-    gap: 1.2rem;
-    padding: 0 1rem;
-  }
-}
-</style> -->
 
 <style scoped>
 .no-scrollbar::-webkit-scrollbar {
@@ -137,7 +100,7 @@ const scrollRight = () => {
 }
 
 /* Responsive tweaks for tablets and laptops (unchanged) */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   h1 {
     font-size: 20px;
   }
@@ -149,10 +112,14 @@ const scrollRight = () => {
     gap: 2rem;
     padding: 0 2rem;
   }
+   .container {
+    padding-left: 0.8rem !important;
+    padding-right: 0.8rem !important;
+  }
 }
 
 /* Phone responsive adjustments */
-@media (max-width: 480px) {
+@media (max-width: 560px) {
   h1 {
     font-size: 18px;
   }
@@ -177,7 +144,7 @@ const scrollRight = () => {
 
   /* Prevent images from being too large inside flex-shrink container */
   .flex-shrink-0.w-37 {
-    width: 120px !important;
+    width: 160px !important;
   }
 
   /* Reduce carousel padding inside scrollable for better fit */

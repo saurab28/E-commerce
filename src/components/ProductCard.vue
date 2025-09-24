@@ -86,7 +86,7 @@ function addToCart() {
 </script>
 
 <template>
-  <div class="w-56 rounded-lg bg-white shadow-xl overflow-hidden">
+  <div class="w-56 rounded-lg bg-white shadow-xl overflow-hidden self-center">
     <!-- Image (blank area if missing) -->
     <img
       :src="props.products.image"
