@@ -60,6 +60,10 @@
         </div>
       </div>
 
+      <!-- Center: Location + Search -->
+      
+
+
       <!-- Right: Profile + Cart -->
       <div class="flex items-center gap-4">
         <!-- Profile Section -->
@@ -135,11 +139,33 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
+        <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
           <i class="ri-menu-line text-2xl text-gray-700"></i>
-        </button>
+        </button> -->
       </div>
     </div>
+
+
+    <!-- Mobile Location (only visible on small screens) -->
+    <!-- <div class="block md:hidden px-4 pb-2">
+      <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
+        <i class="ri-map-pin-line text-green-600"></i>
+        <span class="text-sm text-gray-600">Deliver to: Hyderbad</span>
+      </div>
+    </div> -->
+
+    <!-- Mobile Search (only visible on small screens) --> 
+    <!-- <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
+      <div class="w-full relative">
+        <input
+          type="text"
+          placeholder="Search for products..."
+          class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:border-green-500 text-sm"
+        />
+        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
+      </div>
+    </div> -->
+>
   </nav>
 
   <!-- Modal -->
@@ -296,3 +322,243 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+
+
+
+
+
+<style scoped>
+::-webkit-scrollbar {
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #a855f7;
+  border-radius: 10px;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.badge-pop {
+  animation: pop 0.15s ease-out;
+}
+
+.header-bar {
+  width: 100%;
+  background: linear-gradient(to bottom, #d8b4fe, #f3e8ff 80%);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+/* Left: logo group */
+.header-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-logo {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+}
+.header-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #374151;
+  margin-left: 4px;
+}
+
+/* Center: search bar */
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.header-search {
+  position: relative;
+  width: 480px;
+  max-width: 100%;
+}
+.header-search input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 18px;
+  color: #222;
+  box-sizing: border-box;
+}
+.header-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: #222;
+}
+
+/* Right: actions group */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.header-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.header-icon {
+  font-size: 24px;
+}
+.header-cart-badge {
+  background: #fff;
+  color: #222;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-left: 2px;
+  padding: 2px 7px;
+  font-weight: bold;
+  display: inline-block;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Always hide hamburger/menu */
+.header-menu-btn {
+  display: none !important;
+}
+
+/* Responsive adjustments for laptop/tablet */
+@media (max-width: 1024px) {
+  .header-bar {
+    padding: 0 16px;
+  }
+  .header-logo {
+    height: 38px;
+    width: 38px;
+  }
+  .header-title {
+    font-size: 22px;
+  }
+  .header-search {
+    width: 340px;
+  }
+  .header-search input {
+    font-size: 16px;
+    padding-left: 38px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .header-icon {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Give space below header */
+  nav {
+    margin-bottom: 20px;
+  }
+
+  /* Top bar layout: keep logo + cart + menu only */
+  .header-bar {
+    min-height: 44px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: nowrap;
+    background: linear-gradient(to bottom, #d8b4fe, #f3e8ff 80%);
+  }
+
+  .header-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-logo {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .header-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #374151;
+    flex-shrink: 1;
+  }
+
+  .header-center {
+    display: none; /* Hide inline search from top bar */
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-icon {
+    font-size: 20px;
+  }
+  .header-cart-badge {
+    font-size: 10px;
+    padding: 2px 4px;
+    min-width: 16px;
+  }
+
+  /* Move mobile search bar below the nav */
+    .mobile-search-bar {
+    display: block;
+    padding: 8px 12px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+  }
+
+  .mobile-search-bar input {
+    width: 100%;
+    padding: 10px 12px 10px 36px; /* enough space for icon */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-sizing: border-box;
+    outline: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mobile-search-bar i {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #666;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+
+
+}
+
+
+
+</style>
+

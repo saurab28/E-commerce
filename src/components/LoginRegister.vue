@@ -159,3 +159,63 @@ async function handleGoogleLogin() {
   }
 }
 </script>
+
+<style scoped>
+/* Tablet screens */
+@media (max-width: 800px) {
+  .max-w-md {
+    max-width: 96vw;
+  }
+  .p-8 {
+    padding: 1.2rem !important;
+  }
+  .text-3xl {
+    font-size: 1.7rem !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 500px) {
+  .max-w-md {
+    max-width: 99vw !important;
+  }
+  .p-8 {
+    padding: 0.75rem !important;
+  }
+  .rounded-2xl {
+    border-radius: 11px !important;
+  }
+  .text-3xl {
+    font-size: 1.2rem !important;
+  }
+  .py-2 {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+  .px-4 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .gap-2 {
+    gap: 0.4rem !important;
+  }
+}
+
+/* Smallest phones */
+@media (max-width: 350px) {
+  .max-w-md {
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+  }
+  .p-8 {
+    padding: 0.35rem !important;
+  }
+  .text-3xl {
+    font-size: 1rem !important;
+  }
+  .rounded-2xl {
+    border-radius: 7px !important;
+  }
+}
+</style>
+

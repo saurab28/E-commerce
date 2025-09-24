@@ -52,3 +52,37 @@ const categories = ref([
   </div>
 </template>
 
+
+
+<style scoped>
+/* Base styling */
+h2 {
+  font-size: 18px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+label {
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 16px;
+  }
+  label {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 15px;
+  }
+  label {
+    font-size: 12px;
+  }
+}
+</style>
