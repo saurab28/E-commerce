@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "5000:3000"
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  authbd:
+    build:
+      context: ../services/AuthBD
+      dockerfile: Dockerfile
+    container_name: authbd
+    ports:
+      - "4000:4000"
+
+  location:
+    build:
+      context: ../services/Location
+      dockerfile: Dockerfile
+    container_name: location
+    ports:
+      - "4001:4001"

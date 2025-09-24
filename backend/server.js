@@ -72,11 +72,11 @@ app.post('/verify-payment', (req, res) => {
   }
 });
 
-app.listen(5002, () =>
-  console.log('✅ Backend running on http://localhost:5002')
-);
 
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
 
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Server running on port 3000');
+});
