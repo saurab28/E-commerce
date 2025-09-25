@@ -138,6 +138,19 @@
           </div>
         </div>
 
+        <!-- Orders -->
+        <div class="relative" @click="handleOrders">
+          <div
+            class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
+          >
+            <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
+            <div class="hidden sm:flex flex-col">
+              <span class="text-xs text-gray-500">My</span>
+              <span class="text-sm font-semibold text-gray-800">Orders</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Mobile Menu Button -->
         <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
           <i class="ri-menu-line text-2xl text-gray-700"></i>
@@ -251,6 +264,10 @@ const handleCart = () => {
 
 const handleSearch = () => {
   router.push('/search') 
+}
+
+const handleOrders = () => {
+  router.push('/orders')
 }
 
 watch(isModal, (newVal) => {
