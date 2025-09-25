@@ -2,105 +2,112 @@
   <div
     v-if="isModal"
     @click.self="toggleModal"
-    class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
   >
-    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-2xl p-6 relative flex gap-4">
+    <div
+      class="w-full max-w-5xl bg-white shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn"
+    >
       <!-- Close Button -->
       <button
         @click.stop="toggleModal"
-        class="absolute top-2 right-2 text-black bg-gray-50 rounded-full p-2 hover:text-gray-700"
+        class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition-colors duration-200 rounded-full p-2 bg-gray-100 hover:bg-gray-200"
       >
         ✕
       </button>
 
       <!-- Left Panel -->
-      <div class="w-[350px] flex flex-col gap-3 z-20">
-        <div class="flex items-center gap-2 mb-2">
+      <div class="w-full md:w-[380px] bg-gray-50 border-r p-6 flex flex-col gap-4">
+        <!-- Header -->
+        <div class="flex items-center gap-2 mb-1">
           <img
             class="w-6 h-6"
             src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg"
             alt="icon"
           />
-          <span class="font-medium text-gray-800">Delivery Address Selection</span>
+          <span class="font-semibold text-lg text-gray-800">Delivery Address</span>
         </div>
 
-        <input
-          v-model="form.location"
-          type="text"
-          placeholder="Search address"
-          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
-          @input="searchPlaces(form.location)"
-        />
+        <!-- Input Fields -->
+        <div class="flex flex-col gap-3">
+          <input
+            v-model="form.location"
+            type="text"
+            placeholder="Search address"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
+            @input="searchPlaces(form.location)"
+          />
 
-        <!-- Suggestions -->
-        <ul
-          v-if="suggestions.length"
-          class="mt-1 border rounded-md max-h-40 overflow-y-auto bg-white shadow"
-        >
-          <li
-            v-for="s in suggestions"
-            :key="s.place_id"
-            class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
-            @click="selectSuggestion(s)"
+          <!-- Suggestions -->
+          <ul
+            v-if="suggestions.length"
+            class="border rounded-md max-h-40 overflow-y-auto bg-white shadow-md divide-y"
           >
-            {{ s.description }}
-          </li>
-        </ul>
+            <li
+              v-for="s in suggestions"
+              :key="s.place_id"
+              class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+              @click="selectSuggestion(s)"
+            >
+              {{ s.description }}
+            </li>
+          </ul>
 
-        <input
-          v-model="form.apt"
-          type="text"
-          placeholder="Apt, Suite, etc (optional)"
-          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
-        />
-        <input
-          v-model="form.locality"
-          type="text"
-          placeholder="City"
-          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
-        />
-
-        <div class="flex gap-3">
           <input
-            v-model="form.state"
+            v-model="form.apt"
             type="text"
-            placeholder="State/Province"
-            class="flex-1 border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
+            placeholder="Apt, Suite, etc (optional)"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
           />
           <input
-            v-model="form.postalCode"
+            v-model="form.locality"
             type="text"
-            placeholder="Zip/Postal code"
-            class="flex-1 border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
+            placeholder="City"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
+          />
+
+          <div class="flex gap-3">
+            <input
+              v-model="form.state"
+              type="text"
+              placeholder="State/Province"
+              class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
+            />
+            <input
+              v-model="form.postalCode"
+              type="text"
+              placeholder="Zip/Postal code"
+              class="flex-1 border border-gray-300 rounded-md px-3 w-0.5 py-3 gap-1 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
+            />
+          </div>
+
+          <input
+            v-model="form.country"
+            type="text"
+            placeholder="Country"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
           />
         </div>
 
-        <input
-          v-model="form.country"
-          type="text"
-          placeholder="Country"
-          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
-        />
-
-        <div class="flex justify-between mt-4">
+        <!-- Buttons -->
+        <div class="flex justify-between mt-6">
           <button
             @click="useCurrentLocation"
-            class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+            class="px-3 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200"
           >
             📍 Use My Location
           </button>
           <button
             @click="checkout"
-            class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm"
+            class="px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md transition-all duration-200"
           >
             Checkout
           </button>
         </div>
       </div>
 
-      <!-- Map -->
-      <div class="flex-1">
-        <div id="map" class="w-full h-[400px] rounded-lg"></div>
+      <!-- Map Panel -->
+      <div class="flex-1 min-h-[400px]">
+        <div id="map" class="w-full h-full"></div>
       </div>
     </div>
   </div>
@@ -329,5 +336,10 @@ const verifyPayment = async (response: any) => {
 onMounted(async () => {
   await loadGoogleMaps()
   initMap()
+   localStorage.setItem('cartItems', JSON.stringify(cart.cartItems))
+
+  // Optional: restore cart if previously saved
+  // const savedCart = localStorage.getItem('cartItems')
+  // if (savedCart) cart.setCartItems(JSON.parse(savedCart))
 })
 </script>

@@ -61,8 +61,6 @@
       </div>
 
       <!-- Center: Location + Search -->
-      
-
 
       <!-- Right: Profile + Cart -->
       <div class="flex items-center gap-4">
@@ -145,7 +143,6 @@
       </div>
     </div>
 
-
     <!-- Mobile Location (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-2">
       <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
@@ -154,7 +151,7 @@
       </div>
     </div> -->
 
-    <!-- Mobile Search (only visible on small screens) --> 
+    <!-- Mobile Search (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
       <div class="w-full relative">
         <input
@@ -165,7 +162,6 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
->
   </nav>
 
   <!-- Modal -->
@@ -214,8 +210,8 @@ async function fetchUserDetails() {
       headers: { Authorization: `Bearer ${token}` },
     })
     const data = await res.json()
-    if (data.user) {
-      userDetails.value = data.user
+    if (data?.user) {
+      userDetails.value = data?.user
       userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
     }
   } catch (err) {
@@ -260,11 +256,9 @@ watch(isLoggedIn, (newVal) => {
     fetchUserDetails()
   } else {
     userDetails.value = {}
-    userInitials.value = 'T'
+    userInitials.value = 'U'
   }
 })
-
-
 
 watch(isModal, (newVal) => {
   if (newVal) {
@@ -322,10 +316,6 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
-
-
-
 
 <style scoped>
 ::-webkit-scrollbar {
@@ -521,7 +511,7 @@ onUnmounted(() => {
   }
 
   /* Move mobile search bar below the nav */
-    .mobile-search-bar {
+  .mobile-search-bar {
     display: block;
     padding: 8px 12px;
     background: #ffffff;
@@ -553,12 +543,5 @@ onUnmounted(() => {
     z-index: 2;
     pointer-events: none;
   }
-
-
-
 }
-
-
-
 </style>
-
