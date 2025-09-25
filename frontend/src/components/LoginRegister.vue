@@ -114,7 +114,7 @@ const isLogin = ref(true)
 const form = ref({ name: '', username: '', email: '', password: '' })
 const user = ref(null)
 
-const API_URL = 'http://localhost:5001'
+const API_URL = 'http://localhost:4000'
 
 // 📌 Register
 async function handleRegister() {

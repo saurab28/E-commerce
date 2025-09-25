@@ -28,12 +28,12 @@ const detectLocation = () => {
       try {
         // Try new endpoint first
         // let res = await fetch(
-        //   `http://localhost:5003/api/reverse-geocode?lat=${latitude}&lng=${longitude}`
+        //   `http://localhost:4001/api/reverse-geocode?lat=${latitude}&lng=${longitude}`
         // );
 
 
         const res = await fetch(
-            `http://localhost:5003/api/geocode?lat=${latitude}&lng=${longitude}`
+            `http://localhost:4001/api/geocode?lat=${latitude}&lng=${longitude}`
           );
 
 
@@ -72,7 +72,7 @@ const searchPlaces = async (input: string) => {
 
   try {
     const res = await fetch(
-      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(
+      `http://localhost:4001/api/autocomplete?input=${encodeURIComponent(
         input
       )}`
     );
@@ -90,7 +90,7 @@ const searchPlaces = async (input: string) => {
 const selectPlace = async (placeId: string, description: string) => {
   try {
     const res = await fetch(
-      `http://localhost:5003/api/place-details?placeId=${placeId}`
+      `http://localhost:4001/api/place-details?placeId=${placeId}`
     );
     if (!res.ok) throw new Error("Place details API error");
 

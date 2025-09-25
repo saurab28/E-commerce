@@ -176,7 +176,7 @@ async function searchPlaces(input: string) {
   if (!input) return (suggestions.value = [])
   try {
     const res = await fetch(
-      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(input)}`
+      `http://localhost:4001/api/autocomplete?input=${encodeURIComponent(input)}`
     )
     const data = await res.json()
     suggestions.value = data.predictions || []
@@ -190,7 +190,7 @@ async function selectSuggestion(s: { description: string; place_id: string }) {
   suggestions.value = []
   try {
     const res = await fetch(
-      `http://localhost:5003/api/place-details?placeId=${s.place_id}`
+      `http://localhost:4001/api/place-details?placeId=${s.place_id}`
     )
     const data = await res.json()
 
@@ -220,7 +220,7 @@ async function useCurrentLocation() {
 
     try {
       const res = await fetch(
-        `http://localhost:5003/api/geocode?lat=${coords.lat}&lng=${coords.lng}`
+        `http://localhost:4001/api/geocode?lat=${coords.lat}&lng=${coords.lng}`
       )
       const data = await res.json()
       if (data.results && data.results[0]) {
@@ -268,7 +268,7 @@ function toggleModal() {
 const startPayment = async () => {
   try {
     // 1. Create order on backend with cart items
-    const res = await fetch('http://localhost:5002/create-order', {
+    const res = await fetch('http://localhost:5000/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cartItems: cart.cartItems }),
@@ -308,7 +308,7 @@ const startPayment = async () => {
 
 // Verify payment
 const verifyPayment = async (response: any) => {
-  const res = await fetch('http://localhost:5002/verify-payment', {
+  const res = await fetch('http://localhost:5000/verify-payment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

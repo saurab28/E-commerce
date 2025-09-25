@@ -17,7 +17,7 @@ admin.initializeApp({
 })
 
 const db = admin.firestore()
-db.settings({ ignoreUndefinedProperties: true }) // prevents crashes if frontend misses a field
+db.settings({ ignoreUndefinedProperties: true })
 
 // ----------------------------
 // REGISTER (create user)
@@ -30,14 +30,12 @@ app.post('/register', async (req, res) => {
   }
 
   try {
-    // Create user in Firebase Auth
     const userRecord = await admin.auth().createUser({
       email,
       password,
       displayName: name,
     })
 
-    // Save extra info in Firestore
     await db.collection('users').doc(userRecord.uid).set({
       name,
       username,
@@ -68,7 +66,7 @@ const checkValidity = async (req, res, next) => {
 }
 
 // ----------------------------
-// GET ALL USERS (debug only)
+// GET ALL USERS
 // ----------------------------
 app.get('/users', checkValidity, async (req, res) => {
   try {
@@ -103,6 +101,15 @@ app.get('/me', checkValidity, async (req, res) => {
 // ----------------------------
 app.get('/ping', (req, res) => res.send('Server alive ✅'))
 
-app.listen(5001, () => {
-  console.log('🔥 Firebase Auth Server running on 5001')
+// ----------------------------
+// ROOT route (fix for "Cannot GET /")
+// ----------------------------
+app.get('/', (req, res) => res.send('🔑 Auth service is running'))
+
+// ----------------------------
+// Start server
+// ----------------------------
+const PORT = 4000
+app.listen(PORT, () => {
+  console.log(`🔥 Firebase Auth Server running on port ${PORT}`)
 })

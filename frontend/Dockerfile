@@ -1,21 +1,19 @@
-# Stage 1: Build
-FROM node:18-bullseye-slim AS build
+# Use Node 22 for development
+FROM node:22-bullseye-slim AS development
 
 WORKDIR /app
 
+# Copy package.json and package-lock.json first to leverage caching
 COPY package*.json ./
-RUN npm ci
 
+# Install dependencies (devDependencies included)
+RUN npm install --legacy-peer-deps
+
+# Copy all source files
 COPY . .
-RUN npm run build-only  # Vite + TypeScript build
 
-# Stage 2: Production
-FROM nginx:1.25-alpine
-
-RUN rm -rf /usr/share/nginx/html/*
-
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
+# Expose Vite's default dev server port
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Start development server with hot-reloading
+CMD ["npm", "run", "dev"]

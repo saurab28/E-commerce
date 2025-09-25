@@ -7,22 +7,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Your Razorpay credentials
+// ✅ Razorpay credentials
 const razorpay = new Razorpay({
   key_id: 'rzp_test_RGeGMOEnLzUqYw',
   key_secret: 'napLniZkPKSCZSKFXKWXvDle',
 });
 
-// ✅ Create order route (with cart calculation)
+// ✅ Create order route
 app.post('/create-order', async (req, res) => {
   try {
-    const { cartItems } = req.body; // [{ name, price, qty }]
+    const { cartItems } = req.body;
 
     if (!cartItems || !Array.isArray(cartItems)) {
       return res.status(400).json({ error: 'Invalid cart items' });
     }
 
-    // 🔥 Calculate total securely
     let totalAmount = 0;
     cartItems.forEach((item) => {
       const price = Number(item.price) || 0;
@@ -31,9 +30,7 @@ app.post('/create-order', async (req, res) => {
     });
 
     if (totalAmount <= 0) {
-      return res
-        .status(400)
-        .json({ error: 'Cart total must be greater than 0' });
+      return res.status(400).json({ error: 'Cart total must be greater than 0' });
     }
 
     const options = {
@@ -53,8 +50,7 @@ app.post('/create-order', async (req, res) => {
 
 // ✅ Verify payment route
 app.post('/verify-payment', (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-    req.body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
   try {
     const hmac = crypto.createHmac('sha256', razorpay.key_secret);
@@ -72,11 +68,18 @@ app.post('/verify-payment', (req, res) => {
   }
 });
 
-
+// ✅ Health check route
 app.get('/health', (req, res) => {
-    res.status(200).send('OK');
+  res.status(200).send('OK');
 });
 
-app.listen(3000, '0.0.0.0', () => {
-  console.log('Server running on port 3000');
+// ✅ Root route (fixes "Cannot GET /")
+app.get('/', (req, res) => {
+  res.send('🚀 Backend service is running!');
+});
+
+// Start server
+const PORT = 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend running on port ${PORT}`);
 });

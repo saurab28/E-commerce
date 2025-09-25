@@ -1,25 +1,18 @@
 {
   "name": "authbd",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "ts-node src/index.ts",
-  "build": "tsc"
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "firebase-admin": "^13.5.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.10",
     "path": "^0.12.7",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "firebase-admin": "^11.10.0"  // install this
   }
 }
