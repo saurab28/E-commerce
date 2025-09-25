@@ -5,6 +5,7 @@ import Cart from '@/components/Cart.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 import Search from '@/views/Search.vue';
 import ProductDetails from '@/components/ProductDetails.vue';
+import Orders from '@/components/Orders.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path:'/search',
       name:"search",
       component: Search
+    },
+    {
+      path:'/orders',
+      name:"orders",
+      component: Orders
     }
   ],
   scrollBehavior(to, from, savedPosition) {
