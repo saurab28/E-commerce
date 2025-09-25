@@ -88,7 +88,7 @@ onMounted(() => {
 .carousel {
   position: relative;
 
-  width: 85%;
+  width: 80%;
   height: 60vh;
   overflow: hidden;
   border-radius:40px;
