@@ -250,7 +250,7 @@ const handleCart = () => {
 }
 
 const handleSearch = () => {
-  router.push('/search')
+  router.push('/search') 
 }
 
 watch(isModal, (newVal) => {

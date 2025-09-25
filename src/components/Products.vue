@@ -66,9 +66,9 @@ onMounted(async () => {
   <div class="container mx-auto">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <div  v-for="eachProductcard in allProducts">
-        <RouterLink :to="{name:'product',params:{id:eachProductcard.id}}">
+
             <ProductCard :key="eachProductcard.id" :products="eachProductcard"/>
-        </RouterLink>
+        
       </div>
     </div>
   </div>
