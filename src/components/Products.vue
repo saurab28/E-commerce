@@ -51,7 +51,7 @@ onMounted(async () => {
     allProducts.value = cartProducts.slice(0, 30)
   }
 })
-const loading = ref(true)
+// const loading = ref(true)
 </script>
 
 <template>
@@ -63,14 +63,13 @@ const loading = ref(true)
     </div>
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
-  <div class="container mx-auto ">
+  <div class="container mx-auto">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-      <ProductCard
-        v-for="eachProductcard in allProducts"
-
-        :key="eachProductcard.id"
-        :products="eachProductcard"
-      />
+      <div  v-for="eachProductcard in allProducts">
+        <RouterLink :to="{name:'product',params:{id:eachProductcard.id}}">
+            <ProductCard :key="eachProductcard.id" :products="eachProductcard"/>
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
@@ -100,7 +99,7 @@ const loading = ref(true)
   .grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    justify-items:center;
+    justify-items: center;
   }
 }
 
@@ -113,7 +112,7 @@ const loading = ref(true)
   .grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    justify-items:center;
+    justify-items: center;
   }
 }
 
@@ -126,7 +125,7 @@ const loading = ref(true)
   .grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    justify-items:center;
+    justify-items: center;
   }
 }
 </style>
