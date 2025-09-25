@@ -35,7 +35,7 @@
 
       <!-- Center: Search -->
       <div class="flex-1 flex items-center justify-center max-w-2xl mx-4">
-        <div class="w-full relative" v-if="!props.param">
+        <div class="w-full relative hidden lg:block" v-if="!props.param">
           <input
             type="text"
             placeholder="Search what you want"
@@ -47,7 +47,7 @@
             class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
           ></i>
         </div>
-        <div class="w-full relative" v-else-if="props.param === '/search'">
+        <div class="w-full relative hidden lg:block" v-else-if="props.param === '/search'">
           <input
             type="text"
             placeholder="Search what you want"
@@ -61,7 +61,7 @@
       </div>
 
       <!-- Center: Location + Search -->
-      
+
 
 
       <!-- Right: Profile + Cart -->
@@ -138,6 +138,19 @@
           </div>
         </div>
 
+        <!-- Orders -->
+        <div class="relative" @click="handleOrders">
+          <div
+            class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
+          >
+            <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
+            <div class="hidden sm:flex flex-col">
+              <span class="text-xs text-gray-500">My</span>
+              <span class="text-sm font-semibold text-gray-800">Orders</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Mobile Menu Button -->
         <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
           <i class="ri-menu-line text-2xl text-gray-700"></i>
@@ -154,7 +167,7 @@
       </div>
     </div> -->
 
-    <!-- Mobile Search (only visible on small screens) --> 
+    <!-- Mobile Search (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
       <div class="w-full relative">
         <input
@@ -165,7 +178,7 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
->
+
   </nav>
 
   <!-- Modal -->
@@ -218,6 +231,7 @@ async function fetchUserDetails() {
       userDetails.value = data.user
       userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
     }
+    console.log(userDetails.value,userInitials.value)
   } catch (err) {
     console.error('❌ Failed to fetch user:', err)
   }
@@ -232,9 +246,6 @@ const toggleLocationModal = () => {
 
 // console.log(useFilter.filterCategory.value)
 
-const handleLogin = () => {
-  router.push('/login')
-}
 
 const handleLogo = () => {
   router.push('/')
@@ -253,6 +264,10 @@ const handleCart = () => {
 
 const handleSearch = () => {
   router.push('/search')
+}
+
+const handleOrders = () => {
+  router.push('/orders')
 }
 
 watch(isModal, (newVal) => {
@@ -287,6 +302,15 @@ const handleClickOutside = (event: Event) => {
     showProfileMenu.value = false
   }
 }
+
+watch(isLoggedIn, (newVal) => {
+  if (newVal) {
+    fetchUserDetails()
+  } else {
+    userDetails.value = {}
+    userInitials.value = 'T'
+  }
+})
 
 const handleLogout = async () => {
   isLoading.value = true

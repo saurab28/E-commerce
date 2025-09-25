@@ -22,13 +22,11 @@ coverage
 !.vscode/extensions.json
 .idea
 *.suo
-*.ntvs*
+*.ntvs
 *.njsproj
 *.sln
 *.sw?
-services/AuthDB/serviceAccountKey.json
-
+.env
 *.tsbuildinfo
-.vscode/*
-!.vscode/extensions.json
-.idea/
+backend/serviceAccountKey.json
+
