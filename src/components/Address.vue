@@ -251,10 +251,10 @@ function checkout() {
     return
   }
   console.log("Checkout with:", form, selectedLocation.value)
-  
+
   // Save order to localStorage before payment
   saveOrderToLocalStorage()
-  
+
   toggleModal()
   startPayment()
 }
@@ -288,10 +288,10 @@ function saveOrderToLocalStorage() {
 
   // Get existing orders
   const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-  
+
   // Add new order
   existingOrders.push(order)
-  
+
   // Save back to localStorage
   localStorage.setItem('orders', JSON.stringify(existingOrders))
 }
@@ -367,10 +367,10 @@ const verifyPayment = async (response: any) => {
   const data = await res.json()
   if (data.success) {
     alert('✅ Payment Verified! Thank you for shopping 🛒')
-    
+
     // Update order status to 'Delivered' after successful payment
-    updateOrderStatus('Delivered')
-    
+    // updateOrderStatus('Delivered')
+
     cart.clearCart() // optional: empty cart after payment
   } else {
     alert(' Payment Verification Failed')
@@ -382,7 +382,7 @@ onMounted(async () => {
 })
 </script>
 
-// --- Update Order Status ---
+<!-- // --- Update Order Status ---
 function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
   const orders = JSON.parse(localStorage.getItem('orders') || '[]')
   if (orders.length > 0) {
@@ -390,4 +390,4 @@ function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Can
     orders[orders.length - 1].status = status
     localStorage.setItem('orders', JSON.stringify(orders))
   }
-}
+} -->
