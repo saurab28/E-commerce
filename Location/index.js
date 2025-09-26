@@ -67,33 +67,33 @@ app.get("/api/geocode", async (req, res) => {
 });
 
 // --- Explicit Reverse Geocode ---
-// app.get("/api/reverse-geocode", async (req, res) => {
-//   const { lat, lng } = req.query;
-//   try {
-//     const response = await fetch(
-//       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
-//     );
-//     const data = await response.json();
-//     res.json(data);
-//   } catch (error) {
-//     res.status(500).json({ error: "Reverse geocoding failed" });
-//   }
-// });
+app.get("/api/reverse-geocode", async (req, res) => {
+  const { lat, lng } = req.query;
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
+    );
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Reverse geocoding failed" });
+  }
+});
 
 // // --- Explicit Forward Geocode ---
-// app.get("/api/forward-geocode", async (req, res) => {
-//   const address = req.query.address;
-//   try {
-//     const response = await fetch(
-//       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-//         address
-//       )}&key=${GOOGLE_API_KEY}`
-//     );
-//     const data = await response.json();
-//     res.json(data);
-//   } catch (error) {
-//     res.status(500).json({ error: "Forward geocoding failed" });
-//   }
-// });
+app.get("/api/forward-geocode", async (req, res) => {
+  const address = req.query.address;
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${GOOGLE_API_KEY}`
+    );
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Forward geocoding failed" });
+  }
+});
 
 app.listen(5003, () => console.log("✅ Server running on port 5003"));
