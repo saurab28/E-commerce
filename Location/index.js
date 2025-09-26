@@ -80,7 +80,9 @@ app.get("/api/reverse-geocode", async (req, res) => {
   }
 });
 
-// // --- Explicit Forward Geocode ---
+
+// --- Explicit Forward Geocode ---
+
 app.get("/api/forward-geocode", async (req, res) => {
   const address = req.query.address;
   try {

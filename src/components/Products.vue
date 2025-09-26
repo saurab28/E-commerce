@@ -51,26 +51,83 @@ onMounted(async () => {
     allProducts.value = cartProducts.slice(0, 30)
   }
 })
-const loading = ref(true)
+// const loading = ref(true)
 </script>
 
 <template>
   <div v-if="Productstore.loading">
-    <div  class="flex justify-center items-center h-64">
+    <div class="flex justify-center items-center h-64">
       <div
         class="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"
       ></div>
     </div>
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
-  <div class="container mx-auto px-[104px]">
-    <div class="grid gap-6 grid-cols-5
-    ">
-      <ProductCard
-        v-for="eachProductcard in allProducts"
-        :key="eachProductcard.id"
-        :products="eachProductcard"
-      />
+
+  <div class="container mx-auto">
+    <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+      <div  v-for="eachProductcard in allProducts">
+
+            <ProductCard :key="eachProductcard.id" :products="eachProductcard"/>
+
+      </div>
+
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns for laptop/desktop */
+  box-sizing: border-box;
+}
+
+/* Tablets: 3 columns */
+@media (max-width: 1104px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+  }
+}
+
+/* Phones: 2 columns */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
+  }
+}
+
+/* Small phones */
+@media (max-width: 540px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-items: center;
+  }
+}
+</style>

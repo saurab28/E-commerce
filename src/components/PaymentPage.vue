@@ -74,3 +74,70 @@ const verifyPayment = async (response) => {
     })
 }
 </script>
+<style scoped>
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.bg-white {
+  background-color: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.text-2xl {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+  margin-bottom: 24px;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+@media (max-width: 768px) {
+  .bg-white {
+    padding: 16px;
+  }
+  .text-2xl {
+    font-size: 20px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .text-2xl {
+    font-size: 18px;
+  }
+  button {
+    width: 100%;
+  }
+}
+</style>

@@ -251,8 +251,54 @@ function checkout() {
     return
   }
   console.log("Checkout with:", form, selectedLocation.value)
+
+  // Save order to localStorage before payment
+  saveOrderToLocalStorage()
+
   toggleModal()
   startPayment()
+}
+
+// --- Save Order to localStorage ---
+function saveOrderToLocalStorage() {
+  const order = {
+    id: generateOrderId(),
+    date: new Date().toISOString(),
+    items: cart.cartItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: item.qty,
+      image: item.image,
+      weight: item.weight
+    })),
+    subtotal: cart.cartTotal,
+    shipping: 0, // Free shipping for pickup
+    total: cart.cartTotal,
+    status: 'Processing' as const,
+    address: {
+      location: form.location,
+      apt: form.apt,
+      locality: form.locality,
+      state: form.state,
+      postalCode: form.postalCode,
+      country: form.country
+    }
+  }
+
+  // Get existing orders
+  const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+
+  // Add new order
+  existingOrders.push(order)
+
+  // Save back to localStorage
+  localStorage.setItem('orders', JSON.stringify(existingOrders))
+}
+
+// --- Generate Order ID ---
+function generateOrderId(): string {
+  return 'ORD' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 4).toUpperCase()
 }
 
 // --- Modal toggle with map resize ---
@@ -321,6 +367,10 @@ const verifyPayment = async (response: any) => {
   const data = await res.json()
   if (data.success) {
     alert('✅ Payment Verified! Thank you for shopping 🛒')
+
+    // Update order status to 'Delivered' after successful payment
+    // updateOrderStatus('Delivered')
+
     cart.clearCart() // optional: empty cart after payment
   } else {
     alert(' Payment Verification Failed')
@@ -331,3 +381,13 @@ onMounted(async () => {
   initMap()
 })
 </script>
+
+<!-- // --- Update Order Status ---
+function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]')
+  if (orders.length > 0) {
+    // Update the most recent order (last in array)
+    orders[orders.length - 1].status = status
+    localStorage.setItem('orders', JSON.stringify(orders))
+  }
+} -->
