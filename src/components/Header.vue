@@ -177,10 +177,6 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
-<<<<<<< HEAD
-=======
-
->>>>>>> main
   </nav>
 
   <!-- Modal -->
