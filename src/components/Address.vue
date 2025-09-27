@@ -369,7 +369,7 @@ const verifyPayment = async (response: any) => {
     alert('✅ Payment Verified! Thank you for shopping 🛒')
     
     // Update order status to 'Delivered' after successful payment
-    updateOrderStatus('Delivered')
+    // updateOrderStatus('Delivered')
     
     cart.clearCart() // optional: empty cart after payment
   } else {
@@ -382,12 +382,11 @@ onMounted(async () => {
 })
 </script>
 
-// --- Update Order Status ---
-function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
+<!-- function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
   const orders = JSON.parse(localStorage.getItem('orders') || '[]')
   if (orders.length > 0) {
     // Update the most recent order (last in array)
     orders[orders.length - 1].status = status
     localStorage.setItem('orders', JSON.stringify(orders))
   }
-}
+} -->
