@@ -63,13 +63,15 @@ onMounted(async () => {
     </div>
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
+
   <div class="container mx-auto">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <div  v-for="eachProductcard in allProducts">
 
             <ProductCard :key="eachProductcard.id" :products="eachProductcard"/>
-        
+
       </div>
+
     </div>
   </div>
 </template>

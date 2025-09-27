@@ -51,30 +51,42 @@ const totalSlides = ref<number>(4) // real slides count
 const isTransitioning = ref<boolean>(true) // controls smooth/instant jumps
 
 const nextSlide = (): void => {
-
-  // isTransitioning.value = true;
+  isTransitioning.value = true;  // always enable smooth transition before move
   currentSlide.value++;
 };
 
 const prevSlide = (): void => {
-  // isTransitioning.value = true;
+  isTransitioning.value = true;
   currentSlide.value--;
 };
-
 
 const handleTransitionEnd = (): void => {
   // if we moved past the last clone, reset to first real
   if (currentSlide.value === totalSlides.value + 1) {
-
-    currentSlide.value = 1;
     isTransitioning.value = false;
+    currentSlide.value = 1;
+
+    // wait for DOM update then re-enable transition
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isTransitioning.value = true;
+      });
+    });
   }
+
   // if we moved before the first clone, reset to last real
   if (currentSlide.value === 0) {
-    currentSlide.value = totalSlides.value;
     isTransitioning.value = false;
+    currentSlide.value = totalSlides.value;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isTransitioning.value = true;
+      });
+    });
   }
-}
+};
+
 
 onMounted(() => {
   setInterval(() => {

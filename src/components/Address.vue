@@ -5,7 +5,7 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
   >
     <div
-      class="w-full max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
+      class="w-[60%] sm:w-full  max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
     >
       <!-- Close Button -->
       <button
@@ -16,7 +16,7 @@
       </button>
 
       <!-- Left Panel -->
-      <div class="w-full md:w-[380px] bg-gradient-to-b from-gray-50 to-gray-100 border-r p-6 flex flex-col gap-5">
+      <div class="w-full sm:w-[350px] bg-gradient-to-b from-gray-50 to-gray-100 border-r p-6 flex flex-col gap-5">
         <!-- Header -->
         <div class="flex items-center gap-2 mb-2">
           <img
@@ -65,7 +65,7 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
 
-          <div class="flex gap-3">
+          <div class="sm:flex space-y-3 sm:space-y-0 gap-3">
             <input
               v-model="form.state"
               type="text"
@@ -88,8 +88,14 @@
           />
         </div>
 
-        <!-- Buttons -->
-        <div class="flex justify-between mt-6 gap-3">
+        <input
+          v-model="form.country"
+          type="text"
+          placeholder="Country"
+          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
+        />
+
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:justify-between mt-4">
           <button
             @click="useCurrentLocation"
             class="flex-1 px-3 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
@@ -105,9 +111,9 @@
         </div>
       </div>
 
-      <!-- Map Panel -->
-      <div class="flex-1 min-h-[400px]">
-        <div id="map" class="w-full h-full"></div>
+      <!-- Map -->
+      <div class="flex-1 hidden sm:flex">
+        <div id="map" class="w-full h-[400px] rounded-lg"></div>
       </div>
     </div>
   </div>
@@ -287,10 +293,10 @@ function checkout() {
     return
   }
   console.log("Checkout with:", form, selectedLocation.value)
-  
+
   // Save order to localStorage before payment
   saveOrderToLocalStorage()
-  
+
   toggleModal()
   startPayment()
 }
@@ -324,10 +330,10 @@ function saveOrderToLocalStorage() {
 
   // Get existing orders
   const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-  
+
   // Add new order
   existingOrders.push(order)
-  
+
   // Save back to localStorage
   localStorage.setItem('orders', JSON.stringify(existingOrders))
 }
@@ -403,10 +409,9 @@ const verifyPayment = async (response: any) => {
   const data = await res.json()
   if (data.success) {
     alert('✅ Payment Verified! Thank you for shopping 🛒')
-    
+
     // Update order status to 'Delivered' after successful payment
     // updateOrderStatus('Delivered')
-    
     cart.clearCart() // optional: empty cart after payment
   } else {
     alert(' Payment Verification Failed')
@@ -423,3 +428,12 @@ onMounted(async () => {
 })
 </script>
 
+<!-- // --- Update Order Status ---
+function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]')
+  if (orders.length > 0) {
+    // Update the most recent order (last in array)
+    orders[orders.length - 1].status = status
+    localStorage.setItem('orders', JSON.stringify(orders))
+  }
+} -->
