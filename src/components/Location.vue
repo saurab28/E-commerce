@@ -1,119 +1,143 @@
 <script setup lang="ts">
-import { ref,provide } from "vue";
+import { ref, provide, onMounted } from 'vue'
 
 interface Location {
-  lat: number;
-  lng: number;
-  address: string;
+  lat: number
+  lng: number
+  address: string
 }
 
-const location = ref<Location | null>(null);
-const query = ref("");
-const suggestions = ref<{ description: string; place_id: string }[]>([]);
-const loading = ref(false);
-const emit = defineEmits(['update:address','close'])
-// provide('Address',location.value?.address)
-// Detect my location (via backend proxy)
+const location = ref<Location | null>(null)
+const query = ref('')
+const suggestions = ref<{ description: string; place_id: string }[]>([])
+const loading = ref(false)
+
+const emit = defineEmits(['update:address', 'close'])
+
+// Provide location globally (optional)
+provide('Address', location)
+
+// --- Detect my location ---
 const detectLocation = () => {
   if (!navigator.geolocation) {
-    alert("Geolocation not supported.");
-    return;
+    alert('Geolocation not supported.')
+    return
   }
 
-  loading.value = true;
+  loading.value = true
+
   navigator.geolocation.getCurrentPosition(
     async (pos) => {
-      const { latitude, longitude } = pos.coords;
+      const { latitude, longitude } = pos.coords
 
       try {
-        // Try new endpoint first
-        // let res = await fetch(
-        //   `http://localhost:5003/api/reverse-geocode?lat=${latitude}&lng=${longitude}`
-        // );
-
-
         const res = await fetch(
-            `http://localhost:5003/api/geocode?lat=${latitude}&lng=${longitude}`
-          );
+          `http://localhost:5003/api/geocode?lat=${latitude}&lng=${longitude}`,
+        )
 
+        if (!res.ok) throw new Error('Geocode API error')
 
-        if (!res.ok) throw new Error("Geocode API error");
+        const data = await res.json()
 
-        const data = await res.json();
         if (data.results && data.results[0]) {
           location.value = {
             lat: latitude,
             lng: longitude,
             address: data.results[0].formatted_address,
-          };
+          }
 
+          // Store in sessionStorage
+          sessionStorage.setItem('address', location.value.address)
+
+          // Emit to parent
+          emit('update:address', location.value.address)
         }
-        emit('update:address', location.value?.address)
       } catch (err) {
-        console.error("Geocoding failed:", err);
+        console.error('Geocoding failed:', err)
       } finally {
-        loading.value = false;
+        loading.value = false
       }
     },
     (err) => {
-      console.error("Geolocation error:", err);
-      loading.value = false;
-    }
-  );
-};
+      console.error('Geolocation error:', err)
+      loading.value = false
+    },
+  )
+}
 
-// Search places (via backend proxy)
+// --- Search places ---
 const searchPlaces = async (input: string) => {
-  query.value = input;
+  query.value = input
+
   if (!input) {
-    suggestions.value = [];
-    return;
+    suggestions.value = []
+    return
   }
 
   try {
     const res = await fetch(
-      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(
-        input
-      )}`
-    );
-    if (!res.ok) throw new Error("Autocomplete API error");
+      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(input)}`,
+    )
 
-    const data = await res.json();
-    suggestions.value = data.predictions || [];
+    if (!res.ok) throw new Error('Autocomplete API error')
+
+    const data = await res.json()
+    suggestions.value = data.predictions || []
   } catch (err) {
-    console.error("Autocomplete failed:", err);
-    suggestions.value = [];
+    console.error('Autocomplete failed:', err)
+    suggestions.value = []
   }
-};
+}
 
-// Select place (via backend proxy)
+// --- Select place ---
 const selectPlace = async (placeId: string, description: string) => {
   try {
-    const res = await fetch(
-      `http://localhost:5003/api/place-details?placeId=${placeId}`
-    );
-    if (!res.ok) throw new Error("Place details API error");
+    const res = await fetch(`http://localhost:5003/api/place-details?placeId=${placeId}`)
 
-    const data = await res.json();
+    if (!res.ok) throw new Error('Place details API error')
+
+    const data = await res.json()
+
     if (data.result) {
-      const loc = data.result.geometry.location;
+      const loc = data.result.geometry.location
       location.value = {
         lat: loc.lat,
         lng: loc.lng,
         address: data.result.formatted_address,
-      };
-      query.value = description;
-      suggestions.value = [];
-      emit('update:address', location.value?.address)
+      }
+
+      query.value = description
+      suggestions.value = []
+
+      // Store in sessionStorage
+      sessionStorage.setItem('address', location.value.address)
+
+      // Emit to parent
+      emit('update:address', location.value.address)
     }
   } catch (err) {
-    console.error("Place details failed:", err);
+    console.error('Place details failed:', err)
   }
-};
+}
 
+// --- Close modal ---
 const close = () => {
   emit('close')
 }
+
+// --- Load saved address from sessionStorage on mount ---
+onMounted(() => {
+  const savedAddress = sessionStorage.getItem('address')
+  if (savedAddress) {
+    location.value = {
+      lat: 0, // fallback, can later store actual lat/lng
+      lng: 0,
+      address: savedAddress,
+    }
+    query.value = savedAddress
+    emit('update:address', savedAddress)
+  }
+})
 </script>
 
 <template>
@@ -131,7 +155,7 @@ const close = () => {
         class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:opacity-50"
         :disabled="loading"
       >
-        {{ loading ? "Detecting..." : "Detect my location" }}
+        {{ loading ? 'Detecting...' : 'Detect my location' }}
       </button>
 
       <span class="text-gray-400">OR</span>
@@ -163,7 +187,6 @@ const close = () => {
     <!-- Selected Location -->
     <div v-if="location" class="mt-3 text-sm text-gray-600">
       <p><strong>Delivery Address:</strong> {{ location.address }}</p>
-
     </div>
   </div>
 </template>

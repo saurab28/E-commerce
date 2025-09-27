@@ -158,7 +158,6 @@
       </div>
     </div>
 
-
     <!-- Mobile Location (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-2">
       <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
@@ -178,7 +177,6 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
-
   </nav>
 
   <!-- Modal -->
@@ -227,8 +225,8 @@ async function fetchUserDetails() {
       headers: { Authorization: `Bearer ${token}` },
     })
     const data = await res.json()
-    if (data.user) {
-      userDetails.value = data.user
+    if (data?.user) {
+      userDetails.value = data?.user
       userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
     }
     console.log(userDetails.value,userInitials.value)
@@ -269,6 +267,15 @@ const handleSearch = () => {
 const handleOrders = () => {
   router.push('/orders')
 }
+
+watch(isLoggedIn, (newVal) => {
+  if (newVal) {
+    fetchUserDetails()
+  } else {
+    userDetails.value = {}
+    userInitials.value = 'U'
+  }
+})
 
 watch(isModal, (newVal) => {
   if (newVal) {
@@ -324,7 +331,10 @@ const handleLogout = async () => {
 }
 
 onMounted(() => {
-  fetchUserDetails()
+  const token = Cookies.get('token')
+  if (token) {
+    fetchUserDetails()
+  }
   document.addEventListener('click', handleClickOutside)
 })
 
@@ -332,10 +342,6 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
-
-
-
 
 <style scoped>
 ::-webkit-scrollbar {
@@ -531,7 +537,7 @@ onUnmounted(() => {
   }
 
   /* Move mobile search bar below the nav */
-    .mobile-search-bar {
+  .mobile-search-bar {
     display: block;
     padding: 8px 12px;
     background: #ffffff;
@@ -563,12 +569,5 @@ onUnmounted(() => {
     z-index: 2;
     pointer-events: none;
   }
-
-
-
 }
-
-
-
 </style>
-
