@@ -27,15 +27,10 @@ watch(
 
     <!-- Products Section -->
     <div class="flex-1">
-      <Products  class="grid grid-cols-5" :selectedCategory="selectedCategory as string" />
+      <Products class="grid grid-cols-5" :selectedCategory="selectedCategory as string" />
     </div>
   </div>
-
-  
-
-  
 </template>
-
 
 <style scoped>
 .container {
@@ -68,24 +63,24 @@ watch(
 /* Tablet (<= 1024px) */
 @media (max-width: 1100px) {
   .container {
-    padding-left: 0;  
-    padding-right: 0; 
+    padding-left: 0;
+    padding-right: 0;
   }
   .flex {
     flex-direction: column;
-    flex-wrap:nowrap;
+    flex-wrap: nowrap;
     gap: 12px;
     padding: 12px;
   }
 
   .w-64 {
     width: 100%;
-    margin-bottom:12px;
-    position:static;     
+    margin-bottom: 12px;
+    position: static;
   }
   .flex-1 {
-    width:100%;
-    padding: 6px 0;  
+    width: 100%;
+    padding: 6px 0;
   }
 }
 
@@ -95,12 +90,12 @@ watch(
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 12px;
-    padding: 12px;     
+    padding: 12px;
   }
   .w-64 {
     width: 100%;
     margin-bottom: 6px;
-    position: static; 
+    position: static;
   }
   .flex-1 {
     width: 100%;
@@ -108,4 +103,3 @@ watch(
   }
 }
 </style>
-
