@@ -40,6 +40,7 @@ const detectLocation = () => {
         if (!res.ok) throw new Error("Geocode API error");
 
         const data = await res.json();
+        console.log(data)
         if (data.results && data.results[0]) {
           location.value = {
             lat: latitude,
@@ -95,6 +96,7 @@ const selectPlace = async (placeId: string, description: string) => {
     if (!res.ok) throw new Error("Place details API error");
 
     const data = await res.json();
+
     if (data.result) {
       const loc = data.result.geometry.location;
       location.value = {
