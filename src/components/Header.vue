@@ -228,8 +228,8 @@ async function fetchUserDetails() {
       headers: { Authorization: `Bearer ${token}` },
     })
     const data = await res.json()
-    if (data.user) {
-      userDetails.value = data.user
+    if (data?.user) {
+      userDetails.value = data?.user
       userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
     }
     console.log(userDetails.value, userInitials.value)
@@ -269,6 +269,15 @@ const handleSearch = () => {
 const handleOrders = () => {
   router.push('/orders')
 }
+
+watch(isLoggedIn, (newVal) => {
+  if (newVal) {
+    fetchUserDetails()
+  } else {
+    userDetails.value = {}
+    userInitials.value = 'U'
+  }
+})
 
 watch(isModal, (newVal) => {
   if (newVal) {
@@ -324,7 +333,10 @@ const handleLogout = async () => {
 }
 
 onMounted(() => {
-  fetchUserDetails()
+  const token = Cookies.get('token')
+  if (token) {
+    fetchUserDetails()
+  }
   document.addEventListener('click', handleClickOutside)
 })
 

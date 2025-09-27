@@ -19,7 +19,6 @@
             {{ isLogin ? 'Login to your account' : 'Create a new account' }}
           </p>
         </div>
-
       </div>
 
       <!-- Form -->
@@ -46,7 +45,7 @@
           />
         </div>
 
-        <!-- Email (only for register) -->
+        <!-- Email -->
         <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -55,6 +54,9 @@
             required
             class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
+          <p v-if="form.email && !gmailRegex.test(form.email)" class="text-red-500 text-xs mt-1">
+            Must be a Gmail address (e.g., name@gmail.com)
+          </p>
         </div>
 
         <!-- Password -->
@@ -66,6 +68,9 @@
             required
             class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
+          <p v-if="form.password && form.password.length <= 6" class="text-red-500 text-xs mt-1">
+            Password must be at least 6 characters long
+          </p>
         </div>
 
         <button
@@ -116,9 +121,22 @@ const user = ref(null)
 
 const API_URL = 'http://localhost:5001'
 
+// 📌 Regex for Gmail check
+const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/
+
 // 📌 Register
 async function handleRegister() {
   try {
+    if (form.value.password.length <= 5) {
+      alert('❌ Password must be at least 6 characters long')
+      return
+    }
+
+    if (!gmailRegex.test(form.value.email)) {
+      alert('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
+      return
+    }
+
     const res = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -135,6 +153,16 @@ async function handleRegister() {
 // 📌 Login (via Firebase SDK)
 async function handleLogin() {
   try {
+    if (form.value.password.length <= 5) {
+      alert('❌ Password must be at least 6 characters long')
+      return
+    }
+
+    if (!gmailRegex.test(form.value.email)) {
+      alert('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
+      return
+    }
+
     const userCred = await signInWithEmailAndPassword(auth, form.value.email, form.value.password)
     const token = await userCred.user.getIdToken()
     Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
@@ -218,4 +246,3 @@ async function handleGoogleLogin() {
   }
 }
 </style>
-
