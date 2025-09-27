@@ -4,7 +4,7 @@
     @click.self="toggleModal"
     class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
   >
-    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-2xl p-6 relative flex gap-4">
+    <div class="w-[60%] sm:w-full max-w-4xl bg-white shadow-2xl rounded-2xl p-6 relative flex gap-4">
       <!-- Close Button -->
       <button
         @click.stop="toggleModal"
@@ -14,7 +14,7 @@
       </button>
 
       <!-- Left Panel -->
-      <div class="w-[350px] flex flex-col gap-3 z-20">
+      <div class="w-full sm:w-[350px] flex flex-col gap-3 z-20">
         <div class="flex items-center gap-2 mb-2">
           <img
             class="w-6 h-6"
@@ -60,7 +60,7 @@
           class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
         />
 
-        <div class="flex gap-3">
+        <div class="sm:flex space-y-3 sm:space-y-0 gap-3">
           <input
             v-model="form.state"
             type="text"
@@ -82,7 +82,7 @@
           class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
         />
 
-        <div class="flex justify-between mt-4">
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:justify-between mt-4">
           <button
             @click="useCurrentLocation"
             class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Map -->
-      <div class="flex-1">
+      <div class="flex-1 hidden sm:flex">
         <div id="map" class="w-full h-[400px] rounded-lg"></div>
       </div>
     </div>

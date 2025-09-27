@@ -3,13 +3,13 @@
     :class="$attrs.class"
     class="w-full sticky h-[93px] top-0 z-[999] bg-white p-2 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
   >
-    <!-- Top Row -->
+
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
-      <!-- Left: Logo -->
+
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-2 cursor-pointer" @click="handleLogo">
-          <img src="./../assets/logo.png" alt="Zepto" class="h-15 border-0 rounded-full" />
-          <span class="text-2xl font-extrabold text-gray-700 px-2 py-1 rounded-lg">pickzy</span>
+          <img src="./../assets/logo.png" alt="Zepto" class="h-8 sm:h-14 border-0 rounded-full" />
+          <span class=" text-md sm:text-2xl font-extrabold text-gray-700 px-2  sm:py-1 rounded-lg">pickzy</span>
         </div>
 
         <div
@@ -33,7 +33,7 @@
         />
       </div>
 
-      <!-- Center: Search -->
+
       <div class="flex-1 flex items-center justify-center max-w-2xl mx-4">
         <div class="w-full relative hidden lg:block" v-if="!props.param">
           <input
@@ -60,13 +60,8 @@
         </div>
       </div>
 
-      <!-- Center: Location + Search -->
+      <div class="flex items-center gap-2 sm:gap-4">
 
-
-
-      <!-- Right: Profile + Cart -->
-      <div class="flex items-center gap-4">
-        <!-- Profile Section -->
         <div class="relative">
           <div
             v-if="!isLoggedIn"
@@ -107,17 +102,25 @@
               </div>
               <hr class="my-2" />
               <button
+                @click="handleOrders"
+                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600 flex items-center gap-2"
+              >
+                <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
+                My Order
+              </button>
+              <button
                 @click="handleLogout"
                 class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600 flex items-center gap-2"
               >
                 <i class="ri-logout-box-line"></i>
                 Logout
               </button>
+
             </div>
           </div>
         </div>
 
-        <!-- Cart -->
+
         <div class="relative" @click="handleCart">
           <div
             class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
@@ -138,18 +141,18 @@
           </div>
         </div>
 
-        <!-- Orders -->
-        <div class="relative" @click="handleOrders">
+
+        <!-- <div class="relative" @click="handleOrders">
           <div
             class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
           >
-            <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
+
             <div class="hidden sm:flex flex-col">
               <span class="text-xs text-gray-500">My</span>
               <span class="text-sm font-semibold text-gray-800">Orders</span>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Mobile Menu Button -->
         <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
@@ -157,7 +160,6 @@
         </button> -->
       </div>
     </div>
-
 
     <!-- Mobile Location (only visible on small screens) -->
     <!-- <div class="block md:hidden px-4 pb-2">
@@ -178,7 +180,6 @@
         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
       </div>
     </div> -->
-
   </nav>
 
   <!-- Modal -->
@@ -231,7 +232,7 @@ async function fetchUserDetails() {
       userDetails.value = data.user
       userInitials.value = data.user.name ? data.user.name.charAt(0).toUpperCase() : 'U'
     }
-    console.log(userDetails.value,userInitials.value)
+    console.log(userDetails.value, userInitials.value)
   } catch (err) {
     console.error('❌ Failed to fetch user:', err)
   }
@@ -245,7 +246,6 @@ const toggleLocationModal = () => {
 }
 
 // console.log(useFilter.filterCategory.value)
-
 
 const handleLogo = () => {
   router.push('/')
@@ -263,7 +263,7 @@ const handleCart = () => {
 }
 
 const handleSearch = () => {
-  router.push('/search') 
+  router.push('/search')
 }
 
 const handleOrders = () => {
@@ -332,10 +332,6 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
-
-
-
 
 <style scoped>
 ::-webkit-scrollbar {
@@ -531,7 +527,7 @@ onUnmounted(() => {
   }
 
   /* Move mobile search bar below the nav */
-    .mobile-search-bar {
+  .mobile-search-bar {
     display: block;
     padding: 8px 12px;
     background: #ffffff;
@@ -563,12 +559,5 @@ onUnmounted(() => {
     z-index: 2;
     pointer-events: none;
   }
-
-
-
 }
-
-
-
 </style>
-

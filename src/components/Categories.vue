@@ -124,27 +124,26 @@ const scrollRight = () => {
     font-size: 18px;
   }
   img {
-    width: 100px;
+    width: 80px;
   }
-  .flex.gap-12 {
-    gap: 1.2rem;
+  .flex.gap-6 {
+    gap: 0.5rem;
     padding: 0 1rem;
   }
 
-  /* Adjust container padding for small phones */
   .container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
 
-  /* Reduce size of arrows to fit better */
+
   button.absolute {
     padding: 0.5rem !important;
   }
 
   /* Prevent images from being too large inside flex-shrink container */
   .flex-shrink-0.w-37 {
-    width: 160px !important;
+    width: 100px !important;
   }
 
   /* Reduce carousel padding inside scrollable for better fit */

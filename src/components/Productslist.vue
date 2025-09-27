@@ -27,7 +27,7 @@ watch(
 
     <!-- Products Section -->
     <div class="flex-1">
-      <Products class="grid grid-cols-5" :selectedCategory="selectedCategory as string" />
+      <Products  :selectedCategory="selectedCategory as string" />
     </div>
   </div>
 </template>
