@@ -88,12 +88,10 @@
           />
         </div>
 
-
-
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:justify-between mt-4">
           <button
             @click="useCurrentLocation"
-            class="flex-1 px-3 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
+            class="flex-1 px-3 mr-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
           >
             📍 Use My Location
           </button>
@@ -108,12 +106,11 @@
 
       <!-- Map -->
       <div class="flex-1 hidden sm:flex">
-        <div id="map" class="w-full  rounded-lg"></div>
+        <div id="map" class="w-full rounded-lg"></div>
       </div>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 @keyframes fadeIn {
@@ -130,7 +127,6 @@
   animation: fadeIn 0.25s ease-in-out;
 }
 
-/* Custom Scrollbar for suggestions */
 ul::-webkit-scrollbar {
   width: 6px;
 }
@@ -144,11 +140,15 @@ ul::-webkit-scrollbar-thumb:hover {
 </style>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from "vue"
+import { ref, reactive, onMounted } from "vue"
 import { useCart } from "@/stores/cart"
+import { useToast } from "vue-toastification"
+import Checkmark from "@/components/Checkmark.vue"
 
+const toast = useToast()
 const isModal = ref(true)
 const cart = useCart()
+
 interface AddressForm {
   location: string
   apt: string
@@ -247,7 +247,7 @@ async function selectSuggestion(s: { description: string; place_id: string }) {
 
 // --- Current Location ---
 async function useCurrentLocation() {
-  if (!navigator.geolocation) return alert("Geolocation not supported.")
+  if (!navigator.geolocation) return toast.error("❌ Geolocation not supported.")
 
   navigator.geolocation.getCurrentPosition(async (pos) => {
     const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
@@ -284,14 +284,12 @@ function fillAddressComponents(components: any[]) {
 // --- Checkout ---
 function checkout() {
   if (!selectedLocation.value) {
-    alert("Please select a location first.")
+    toast.warning("⚠️ Please select a location first.")
     return
   }
   console.log("Checkout with:", form, selectedLocation.value)
 
-  // Save order to localStorage before payment
   saveOrderToLocalStorage()
-
   toggleModal()
   startPayment()
 }
@@ -310,7 +308,7 @@ function saveOrderToLocalStorage() {
       weight: item.weight
     })),
     subtotal: cart.cartTotal,
-    shipping: 0, // Free shipping for pickup
+    shipping: 0,
     total: cart.cartTotal,
     status: 'Processing' as const,
     address: {
@@ -323,13 +321,8 @@ function saveOrderToLocalStorage() {
     }
   }
 
-  // Get existing orders
   const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-
-  // Add new order
   existingOrders.push(order)
-
-  // Save back to localStorage
   localStorage.setItem('orders', JSON.stringify(existingOrders))
 }
 
@@ -338,7 +331,7 @@ function generateOrderId(): string {
   return 'ORD' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 4).toUpperCase()
 }
 
-// --- Modal toggle with map resize ---
+// --- Modal toggle ---
 function toggleModal() {
   isModal.value = !isModal.value
   if (isModal.value && map.value) {
@@ -348,9 +341,10 @@ function toggleModal() {
     }, 300)
   }
 }
+
+// --- Payment ---
 const startPayment = async () => {
   try {
-    // 1. Create order on backend with cart items
     const res = await fetch('http://localhost:5002/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -360,16 +354,14 @@ const startPayment = async () => {
     const order = await res.json()
     console.log('✅ Order:', order)
 
-    // 2. Razorpay checkout options
     const options = {
-      key: 'rzp_test_RGeGMOEnLzUqYw', // Your Razorpay Key ID
-      amount: order.amount, // from backend
+      key: 'rzp_test_RGeGMOEnLzUqYw',
+      amount: order.amount,
       currency: order.currency,
       name: 'Grocery Store',
       description: 'Cart Checkout',
-      order_id: order.id, // order id from backend
+      order_id: order.id,
       handler: function (response: any) {
-        // 3. Verify payment with backend
         verifyPayment(response)
       },
       prefill: {
@@ -378,7 +370,7 @@ const startPayment = async () => {
         contact: '6301168711',
       },
       theme: {
-        color: '#F43F5E', // rose-500
+        color: '#F43F5E',
       },
     }
 
@@ -389,7 +381,7 @@ const startPayment = async () => {
   }
 }
 
-// Verify payment
+// --- Verify payment ---
 const verifyPayment = async (response: any) => {
   const res = await fetch('http://localhost:5002/verify-payment', {
     method: 'POST',
@@ -403,32 +395,16 @@ const verifyPayment = async (response: any) => {
 
   const data = await res.json()
   if (data.success) {
-    alert('✅ Payment Verified! Thank you for shopping 🛒')
-
-    // Update order status to 'Delivered' after successful payment
-    // updateOrderStatus('Delivered')
-    cart.clearCart() // optional: empty cart after payment
+    toast.success(" Payment Verified! Thank you for shopping with us. ")
+    cart.clearCart()
   } else {
-    alert(' Payment Verification Failed')
+    toast.error("❌ Payment Verification Failed")
   }
 }
+
 onMounted(async () => {
   await loadGoogleMaps()
   initMap()
-   localStorage.setItem('cartItems', JSON.stringify(cart.cartItems))
-
-  // Optional: restore cart if previously saved
-  // const savedCart = localStorage.getItem('cartItems')
-  // if (savedCart) cart.setCartItems(JSON.parse(savedCart))
+  localStorage.setItem('cartItems', JSON.stringify(cart.cartItems))
 })
 </script>
-
-<!-- // --- Update Order Status ---
-function updateOrderStatus(status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled') {
-  const orders = JSON.parse(localStorage.getItem('orders') || '[]')
-  if (orders.length > 0) {
-    // Update the most recent order (last in array)
-    orders[orders.length - 1].status = status
-    localStorage.setItem('orders', JSON.stringify(orders))
-  }
-} -->
