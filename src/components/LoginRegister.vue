@@ -110,6 +110,7 @@ import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
 import Cookies from 'js-cookie'
 import authorization from '@/composables/auth'
 import loginModal from '@/composables/loginmodal'
+import { useToast } from 'vue-toastification'
 
 const { checkAuthorization } = authorization()
 const Modal = loginModal()
@@ -124,16 +125,18 @@ const API_URL = 'http://localhost:5001'
 // 📌 Regex for Gmail check
 const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/
 
+const toast = useToast()
+
 // 📌 Register
 async function handleRegister() {
   try {
     if (form.value.password.length <= 5) {
-      alert('❌ Password must be at least 6 characters long')
+      toast.error('❌ Password must be at least 6 characters long')
       return
     }
 
     if (!gmailRegex.test(form.value.email)) {
-      alert('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
+      toast.error('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
       return
     }
 
@@ -143,10 +146,10 @@ async function handleRegister() {
       body: JSON.stringify(form.value),
     })
     if (!res.ok) throw new Error(await res.text())
-    alert('✅ Registered successfully! Now login.')
+    toast.success('✅ Registered successfully! Now login.')
     isLogin.value = true
   } catch (err) {
-    alert('❌ ' + err.message)
+    toast.error('❌ ' + err.message)
   }
 }
 
@@ -154,12 +157,12 @@ async function handleRegister() {
 async function handleLogin() {
   try {
     if (form.value.password.length <= 5) {
-      alert('❌ Password must be at least 6 characters long')
+      toast.error('❌ Password must be at least 6 characters long')
       return
     }
 
     if (!gmailRegex.test(form.value.email)) {
-      alert('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
+      toast.error('❌ Email must be a valid Gmail address (e.g., name@gmail.com)')
       return
     }
 
@@ -168,8 +171,9 @@ async function handleLogin() {
     Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
     toogleModal()
     checkAuthorization()
+    toast.success(`Successfully logged in`)
   } catch (err) {
-    alert('❌ ' + err.message)
+    toast.error('❌ ' + err.message)
   }
 }
 
@@ -182,8 +186,9 @@ async function handleGoogleLogin() {
     user.value = { username: result.user.displayName, email: result.user.email }
     toogleModal()
     checkAuthorization()
+    toast.success(` Logged in as ${result.user.displayName || result.user.email}`)
   } catch (err) {
-    alert('❌ Google Login Failed: ' + err.message)
+    toast.error('❌ Google Login Failed: ' + err.message)
   }
 }
 </script>

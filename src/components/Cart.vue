@@ -271,7 +271,9 @@ function incrementQuantity(id: string | number) {
 function decrementQuantity(id: string | number) {
   cart.decrementQuantity(id)
   const item = cart.cartItems.find((i) => i.id === id)
+
   if (item && item.qty > 0) {
+    // Still has qty, sync with DB
     syncItem({
       productId: item.id,
       name: item.name,
@@ -279,9 +281,12 @@ function decrementQuantity(id: string | number) {
       quantity: item.qty,
     })
   } else {
+    // Remove from local store + DB
+    cart.removeItem(id)
     removeFromDB(id)
   }
 }
+
 
 function removeItem(id: string | number) {
   cart.removeItem(id)

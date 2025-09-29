@@ -103,10 +103,10 @@
               <hr class="my-2" />
               <button
                 @click="handleOrders"
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600 flex items-center gap-2"
+                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-black-600 flex items-center gap-2"
               >
                 <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
-                My Order
+                My Orders
               </button>
               <button
                 @click="handleLogout"
@@ -199,6 +199,7 @@ import authorization from '@/composables/auth'
 import Cookies from 'js-cookie'
 import loginModal from '@/composables/loginmodal'
 import Location from './Location.vue'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter()
 const props = defineProps<{ param?: string }>()
@@ -218,6 +219,8 @@ const isLocationModal = ref(false)
 const userInitials = ref('S')
 
 const userDetails = ref<{ name?: string; email?: string }>({})
+
+const toast = useToast()
 
 // ✅ Fetch current user from backend
 async function fetchUserDetails() {
@@ -326,10 +329,13 @@ const handleLogout = async () => {
   Cookies.remove('token')
   checkAuthorization()
 
+  toast.error('Successfully logged out')
   setTimeout(() => {
     isLoading.value = false
     router.push('/')
   }, 1200)
+
+
 }
 
 onMounted(() => {
