@@ -168,6 +168,7 @@ async function handleLogin() {
     Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' })
     toogleModal()
     checkAuthorization()
+    alert('✅ Successfully logged in !.')
   } catch (err) {
     alert('❌ ' + err.message)
   }
@@ -182,6 +183,7 @@ async function handleGoogleLogin() {
     user.value = { username: result.user.displayName, email: result.user.email }
     toogleModal()
     checkAuthorization()
+    alert('✅ Successfully logged in !.')
   } catch (err) {
     alert('❌ Google Login Failed: ' + err.message)
   }

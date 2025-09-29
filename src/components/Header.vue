@@ -103,14 +103,14 @@
               <hr class="my-2" />
               <button
                 @click="handleOrders"
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600 flex items-center gap-2"
+                class="w-full text-left px-4 py-2 hover:bg-gray-50  flex items-center gap-2"
               >
                 <i class="ri-file-list-3-line text-2xl text-gray-700"></i>
                 My Order
               </button>
               <button
                 @click="handleLogout"
-                class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600 flex items-center gap-2"
+                class="w-full text-left px-4 py-2 hover:bg-gray-50  flex items-center gap-2"
               >
                 <i class="ri-logout-box-line"></i>
                 Logout

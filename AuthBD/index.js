@@ -50,9 +50,7 @@ app.post('/register', async (req, res) => {
   }
 })
 
-// ----------------------------
-// VERIFY TOKEN (middleware)
-// ----------------------------
+
 const checkValidity = async (req, res, next) => {
   const authHeader = req.headers['authorization']
   if (!authHeader) return res.status(401).json({ error: 'No token provided' })
@@ -67,9 +65,7 @@ const checkValidity = async (req, res, next) => {
   }
 }
 
-// ----------------------------
-// GET ALL USERS (debug only)
-// ----------------------------
+
 app.get('/users', checkValidity, async (req, res) => {
   try {
     const snapshot = await db.collection('users').get()

@@ -80,7 +80,7 @@ export const useCart = defineStore('cart', () => {
     cartItems.value = []
   }
 
-  // 🔥 NEW: Replace entire cart (used when syncing from Firestore)
+  
   function setCart(newCart: CartItem[]) {
     cartItems.value = [...newCart]
   }

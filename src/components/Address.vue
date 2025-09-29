@@ -88,12 +88,7 @@
           />
         </div>
 
-        <input
-          v-model="form.country"
-          type="text"
-          placeholder="Country"
-          class="border-b border-gray-400 focus:border-blue-500 outline-none text-sm py-1"
-        />
+
 
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:justify-between mt-4">
           <button
@@ -104,7 +99,7 @@
           </button>
           <button
             @click="checkout"
-            class="flex-1 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition-all duration-200"
+            class="flex-1 px-5 mx-2 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition-all duration-200"
           >
             Checkout
           </button>
@@ -113,7 +108,7 @@
 
       <!-- Map -->
       <div class="flex-1 hidden sm:flex">
-        <div id="map" class="w-full h-[400px] rounded-lg"></div>
+        <div id="map" class="w-full  rounded-lg"></div>
       </div>
     </div>
   </div>
