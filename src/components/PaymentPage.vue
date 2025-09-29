@@ -14,6 +14,9 @@
 </template>
 
 <script setup>
+import { useToast } from "vue-toastification"
+const toast = useToast()
+
 const startPayment = async () => {
   try {
     // 1. Create order from backend
@@ -67,12 +70,15 @@ const verifyPayment = async (response) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        alert('✅ Payment Verified on Server')
+        // ✅ Success toast
+        toast.success("✅ Payment Verified on Server")
       } else {
-        alert('❌ Verification Failed')
+        // ❌ Error toast
+        toast.error("❌ Verification Failed")
       }
     })
 }
+
 </script>
 <style scoped>
 .flex {
