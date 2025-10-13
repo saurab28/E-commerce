@@ -143,7 +143,7 @@ ul::-webkit-scrollbar-thumb:hover {
 import { ref, reactive, onMounted } from "vue"
 import { useCart } from "@/stores/cart"
 import { useToast } from "vue-toastification"
-import Checkmark from "@/components/Checkmark.vue"
+
 
 const toast = useToast()
 const isModal = ref(true)

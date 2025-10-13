@@ -28,5 +28,8 @@ coverage
 *.sw?
 .env
 *.tsbuildinfo
-/backend/serviceAccountKey.json
+/AuthBD/serviceAccountKey.json
+/Location/.env 
+/backend/.env 
+
 

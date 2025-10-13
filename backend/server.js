@@ -13,6 +13,8 @@ const razorpay = new Razorpay({
   key_secret: 'napLniZkPKSCZSKFXKWXvDle',
 });
 
+// key_id: process.env.RAZORPAY_API_KEY_ID,
+  // key_secret: process.env.RAZORPAY_API_SECRET_KEY,
 // ✅ Create order route (with cart calculation)
 app.post('/create-order', async (req, res) => {
   try {
