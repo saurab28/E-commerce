@@ -1,7 +1,5 @@
 <script setup>
-import openTheApp from '@/assets/opentheapp2.png'
-import placeOrder from '@/assets/placeorder2.png'
-import freeDelivery from '@/assets/getfreedelivery2.png'
+
 import {ref} from 'vue'
 import getit from '@/assets/getit.png'
 const categoryList = ref([
@@ -25,7 +23,7 @@ const categoryList = ref([
 
 <template>
 <footer class="footer-root">
-  
+
   <div class="footer-main">
     <div class="container">
       <div class="footer-cols">
@@ -37,7 +35,7 @@ const categoryList = ref([
                     {{ category }}
               </RouterLink>
             </li>
-            
+
           </ul>
         </div>
         <div class="footer-col">
@@ -118,7 +116,7 @@ const categoryList = ref([
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top:30px;
+  /* margin-top:30px; */
 }
 .container {
   width: 100%;

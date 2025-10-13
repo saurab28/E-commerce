@@ -289,7 +289,7 @@ function checkout() {
   }
   console.log("Checkout with:", form, selectedLocation.value)
 
-  saveOrderToLocalStorage()
+
   toggleModal()
   startPayment()
 }
@@ -352,7 +352,7 @@ const startPayment = async () => {
     })
 
     const order = await res.json()
-    console.log('✅ Order:', order)
+    // console.log('✅ Order:', order)
 
     const options = {
       key: 'rzp_test_RGeGMOEnLzUqYw',
@@ -396,6 +396,7 @@ const verifyPayment = async (response: any) => {
   const data = await res.json()
   if (data.success) {
     toast.success(" Payment Verified! Thank you for shopping with us. ")
+    saveOrderToLocalStorage()
     cart.clearCart()
   } else {
     toast.error("❌ Payment Verification Failed")
@@ -405,6 +406,6 @@ const verifyPayment = async (response: any) => {
 onMounted(async () => {
   await loadGoogleMaps()
   initMap()
-  localStorage.setItem('cartItems', JSON.stringify(cart.cartItems))
+  // localStorage.setItem('cartItems', JSON.stringify(cart.cartItems))
 })
 </script>

@@ -83,6 +83,7 @@ onMounted(async () => {
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
+  margin-bottom:30px;
 }
 
 .grid {

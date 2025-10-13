@@ -211,7 +211,7 @@ const { isModal, toogleModal } = loginModal()
 const scrollY = ref(0)
 const isLoading = ref(false)
 
-const currentLocation = ref('Hyderabad, Telangana')
+const currentLocation = ref( sessionStorage.getItem("address") || 'Hyderabad, Telangana')
 
 const showProfileMenu = ref(false)
 const isLocationModal = ref(false)
@@ -493,9 +493,7 @@ onUnmounted(() => {
 
 @media (max-width: 600px) {
   /* Give space below header */
-  nav {
-    margin-bottom: 20px;
-  }
+  
 
   /* Top bar layout: keep logo + cart + menu only */
   .header-bar {

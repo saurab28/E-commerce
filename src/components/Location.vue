@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide, onMounted } from 'vue'
+import { ref } from 'vue'
 
 interface Location {
   lat: number
@@ -14,8 +14,7 @@ const loading = ref(false)
 
 const emit = defineEmits(['update:address', 'close'])
 
-// Provide location globally (optional)
-provide('Address', location)
+
 
 // --- Detect my location ---
 const detectLocation = () => {
@@ -126,18 +125,18 @@ const close = () => {
 }
 
 // --- Load saved address from sessionStorage on mount ---
-onMounted(() => {
-  const savedAddress = sessionStorage.getItem('address')
-  if (savedAddress) {
-    location.value = {
-      lat: 0, // fallback, can later store actual lat/lng
-      lng: 0,
-      address: savedAddress,
-    }
-    query.value = savedAddress
-    emit('update:address', savedAddress)
-  }
-})
+// onMounted(() => {
+//   const savedAddress = sessionStorage.getItem('address')
+//   if (savedAddress) {
+//     location.value = {
+//       lat: 0, // fallback, can later store actual lat/lng
+//       lng: 0,
+//       address: savedAddress,
+//     }
+//     query.value = savedAddress
+//     emit('update:address', savedAddress)
+//   }
+// })
 </script>
 
 <template>
