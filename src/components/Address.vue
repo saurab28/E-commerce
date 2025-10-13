@@ -5,7 +5,7 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
   >
     <div
-      class="w-[60%] sm:w-full  max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
+      class="w-[60%] md:w-full  max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
     >
       <!-- Close Button -->
       <button
@@ -16,7 +16,7 @@
       </button>
 
       <!-- Left Panel -->
-      <div class="w-full sm:w-[350px] bg-gradient-to-b from-gray-50 to-gray-100 border-r p-6 flex flex-col gap-5">
+      <div class=" md:w-[350px] bg-gradient-to-b from-gray-50 to-gray-100 md:border-r p-6 flex flex-col gap-5">
         <!-- Header -->
         <div class="flex items-center gap-2 mb-2">
           <img
@@ -65,7 +65,7 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
 
-          <div class="sm:flex space-y-3 sm:space-y-0 gap-3">
+          <div class=" flex flex-col sm:flex-row  sm:space-y-0 gap-3">
             <input
               v-model="form.state"
               type="text"
@@ -76,7 +76,7 @@
               v-model="form.postalCode"
               type="text"
               placeholder="Zip/Postal code"
-              class="flex-1 border border-gray-300 rounded-lg px-3 w-0.5 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              class="flex-1 border border-gray-300 rounded-lg px-3 sm:w-0.5 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
 
@@ -91,13 +91,13 @@
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:justify-between mt-4">
           <button
             @click="useCurrentLocation"
-            class="flex-1 px-3 mr-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
+            class="flex-1 sm:px-3 sm:mr-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
           >
             📍 Use My Location
           </button>
           <button
             @click="checkout"
-            class="flex-1 px-5 mx-2 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition-all duration-200"
+            class="flex-1 sm:px-5 sm:mx-2 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition-all duration-200"
           >
             Checkout
           </button>
@@ -105,7 +105,7 @@
       </div>
 
       <!-- Map -->
-      <div class="flex-1 hidden sm:flex">
+      <div class="flex-1 hidden md:flex">
         <div id="map" class="w-full rounded-lg"></div>
       </div>
     </div>

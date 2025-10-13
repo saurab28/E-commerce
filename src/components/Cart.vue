@@ -5,7 +5,7 @@
     <div class="mx-auto w-[min(1200px,95%)]">
       <!-- Header -->
       <div class="flex items-center justify-between mb-6 px-5">
-        <h1 class="text-4xl font-extrabold tracking-tight" >My Cart</h1>
+        <h1 class="text-4xl font-extrabold tracking-tight">My Cart</h1>
         <button
           class="px-4 py-2 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer"
           @click="handleProductcartpath"
@@ -15,7 +15,7 @@
       </div>
 
       <div>
-        <div class="flex justify-center ">
+        <div class="flex justify-center">
           <!-- Empty state -->
           <div
             v-if="!cart.cartItems.length"
@@ -25,7 +25,10 @@
           </div>
 
           <!-- Main card -->
-          <div v-else class="rounded-2xl bg-white shadow-lg  w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[960px] xl:max-w-[1240px]">
+          <div
+            v-else
+            class="rounded-2xl bg-white shadow-lg w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[960px] xl:max-w-[1240px]"
+          >
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 px-3 py-4">
               <!-- Left: Items -->
               <div class="lg:col-span-8">
@@ -36,7 +39,7 @@
                   <div class="text-left">Product</div>
                   <div class="text-center">Price</div>
                   <div class="text-center">Qty</div>
-                  <div class="text-center ">Total</div>
+                  <div class="text-center">Total</div>
                   <div></div>
                 </div>
 
@@ -65,7 +68,7 @@
                   </div>
 
                   <!-- price -->
-                  <div class="text-center font-semibold text-gray-900 text-base ">
+                  <div class="text-center font-semibold text-gray-900 text-base">
                     {{ money(eachItem.price as number) }}
                   </div>
 
@@ -130,21 +133,23 @@
                     <span>{{ money(total) }}</span>
                   </div>
 
-                  <button
-                    class="mt-4 w-full max-w-[340px] rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 flex items-center justify-between px-4 cursor-pointer"
-                    v-if="isLoggedIn"
-                    @click="toogleAdressModal"
-                  >
-                    <span>Procceed</span>
-                    <span class="rounded-full px-3 py-1 text-sm">{{ money(total) }}</span>
-                  </button>
-                  <button
-                    class="mt-4 w-full text-center rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 px-4 cursor-pointer"
-                    v-else
-                    @click="toogleModal"
-                  >
-                    Login to Procceed
-                  </button>
+                  <div class="flex justify-center">
+                    <button
+                      class="mt-4 w-full max-w-[340px] rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 flex items-center justify-between px-4 cursor-pointer"
+                      v-if="isLoggedIn"
+                      @click="toogleAdressModal"
+                    >
+                      <span>Procceed</span>
+                      <span class="rounded-full px-3 py-1 text-sm">{{ money(total) }}</span>
+                    </button>
+                    <button
+                      class="mt-4 w-full text-center rounded-full bg-rose-500 text-white font-semibold py-3 shadow hover:bg-rose-600 px-4 cursor-pointer"
+                      v-else
+                      @click="toogleModal"
+                    >
+                      Login to Procceed
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -176,7 +181,7 @@ const route = useRouter()
 const routepath = useRoute()
 const auth = authorization()
 
-const { isLoggedIn, checkAuthorization } = auth
+const { isLoggedIn } = auth
 const { toogleModal } = loginModal()
 const isChecked = ref<boolean>(false)
 const scrollY = ref(0)
@@ -349,8 +354,6 @@ watch(isChecked, (newVal) => {
   white-space: nowrap;
 }
 
-
-
 .cart-header {
   border-bottom: none; /* No border on header */
 }
@@ -383,7 +386,6 @@ watch(isChecked, (newVal) => {
   text-overflow: ellipsis;
 }
 
-
 @media (max-width: 1024px) {
   .mx-auto {
     width: 99%;
@@ -397,14 +399,12 @@ watch(isChecked, (newVal) => {
 }
 
 @media (max-width: 700px) {
-
   .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
     grid-template-columns: 1fr 85px 60px 85px 20px; /* Only show product, price, qty on mobile row */
     gap: 3px;
   }
 
   /* Hide total and remove on mobile, you can adjust if needed */
-
 
   /* .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(4),
   .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(5) {
@@ -438,7 +438,6 @@ watch(isChecked, (newVal) => {
 }
 
 @media (max-width: 420px) {
-
   .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
     grid-template-columns: 1fr 60px 65px 60px 20px;
     gap: 4px;
@@ -452,8 +451,4 @@ watch(isChecked, (newVal) => {
     height: 28px !important;
   }
 }
-
-
-
-
 </style>
