@@ -11,7 +11,6 @@ watch(
   () => route.params.title,
   (newVal) => {
     selectedCategory.value = newVal as string
-    // console.log(selectedCategory.value)
   },
 )
 </script>
@@ -25,7 +24,6 @@ watch(
       </div>
     </div>
 
-    <!-- Products Section -->
     <div class="flex-1">
       <Products  :selectedCategory="selectedCategory as string" />
     </div>
@@ -60,7 +58,6 @@ watch(
   padding: 20px;
 }
 
-/* Tablet (<= 1024px) */
 @media (max-width: 1100px) {
   .container {
     padding-left: 0;
@@ -84,7 +81,6 @@ watch(
   }
 }
 
-/* Mobile (<= 768px) */
 @media (max-width: 768px) {
   .flex {
     flex-direction: column;

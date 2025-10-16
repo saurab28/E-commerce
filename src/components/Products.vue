@@ -44,7 +44,6 @@ onMounted(async () => {
   await Productstore.fetchProductList()
   isLoading.value = false
 
-
   Category.value = Productstore.productList.categories
 
   if (props.selectedCategory) {
@@ -64,12 +63,10 @@ onMounted(async () => {
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
-
 </script>
 
 <template>
   <div v-if="isLoading">
-
     <div class="flex justify-center items-center h-64">
       <div
         class="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"
@@ -100,11 +97,10 @@ function delay(ms: number) {
 .grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns for laptop/desktop */
+  grid-template-columns: repeat(4, 1fr);
   box-sizing: border-box;
 }
 
-/* Tablets: 3 columns */
 @media (max-width: 1104px) {
   .container {
     padding-left: 24px;
@@ -117,7 +113,6 @@ function delay(ms: number) {
   }
 }
 
-/* Phones: 2 columns */
 @media (max-width: 768px) {
   .container {
     padding-left: 16px;
@@ -130,7 +125,6 @@ function delay(ms: number) {
   }
 }
 
-/* Small phones */
 @media (max-width: 540px) {
   .container {
     padding-left: 12px;

@@ -3,7 +3,6 @@
   <Header :param="routepath.path" />
   <div class="min-h-screen bg-gray-100 py-10">
     <div class="mx-auto w-[min(1200px,95%)]">
-      <!-- Header -->
       <div class="flex items-center justify-between mb-6 px-5">
         <h1 class="text-4xl font-extrabold tracking-tight">My Cart</h1>
         <button
@@ -16,7 +15,6 @@
 
       <div>
         <div class="flex justify-center">
-          <!-- Empty state -->
           <div
             v-if="!cart.cartItems.length"
             class="rounded-2xl bg-white shadow-lg p-10 text-center text-gray-600 w-full"
@@ -24,15 +22,12 @@
             Your cart is empty.
           </div>
 
-          <!-- Main card -->
           <div
             v-else
             class="rounded-2xl bg-white shadow-lg w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[960px] xl:max-w-[1240px]"
           >
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 px-3 py-4">
-              <!-- Left: Items -->
               <div class="lg:col-span-8">
-                <!-- Table head -->
                 <div
                   class="cart-header grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center pb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200"
                 >
@@ -43,13 +38,11 @@
                   <div></div>
                 </div>
 
-                <!-- Rows -->
                 <div
                   v-for="eachItem in cart.cartItems"
                   :key="eachItem.id"
                   class="cart-row grid grid-cols-[1fr_160px_140px_160px_32px] gap-4 items-center py-6 border-b border-gray-200 tracking-wider"
                 >
-                  <!-- product cell -->
                   <div class="flex items-center gap-4">
                     <img
                       v-if="eachItem.image"
@@ -67,12 +60,10 @@
                     </div>
                   </div>
 
-                  <!-- price -->
                   <div class="text-center font-semibold text-gray-900 text-base">
                     {{ money(eachItem.price as number) }}
                   </div>
 
-                  <!-- qty -->
                   <div class="flex items-center justify-center">
                     <div
                       class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden min-w-[70px] justify-center"
@@ -95,12 +86,10 @@
                     </div>
                   </div>
 
-                  <!-- total -->
                   <div class="text-center font-semibold text-gray-900">
                     {{ money((eachItem.price as number) * eachItem.qty) }}
                   </div>
 
-                  <!-- remove -->
                   <button
                     class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
                     @click="removeItem(eachItem.id)"
@@ -110,7 +99,6 @@
                 </div>
               </div>
 
-              <!-- Right: Summary -->
               <div class="lg:col-span-4 flex lg:justify-end items-start">
                 <div
                   class="w-full lg:w-[300px] ml-auto rounded-2xl bg-white border border-gray-200 px-8 py-5 shadow-md"
@@ -155,8 +143,6 @@
             </div>
           </div>
         </div>
-
-        <!-- /card -->
       </div>
     </div>
   </div>
@@ -193,11 +179,8 @@ const total = computed(() => Number((subtotal.value + shippingCost.value).toFixe
 
 const API_URL = 'http://localhost:5001'
 
-// ----------------------------------
-// Firestore Cart Sync
-// ----------------------------------
+// Firestore
 
-// 📌 Load cart from backend (when user logs in)
 async function fetchUserCart() {
   try {
     const token = Cookies.get('token')
@@ -208,7 +191,6 @@ async function fetchUserCart() {
     const data = await res.json()
     if (!res.ok) throw new Error(data.error)
 
-    // Replace local cart with Firestore cart
     cart.setCart(
       data.items.map((item: any) => ({
         id: item.id,
@@ -224,7 +206,6 @@ async function fetchUserCart() {
   }
 }
 
-// 📌 Add/update item in Firestore
 async function syncItem(product: any) {
   try {
     const token = Cookies.get('token')
@@ -242,7 +223,6 @@ async function syncItem(product: any) {
   }
 }
 
-// 📌 Remove item in Firestore
 async function removeFromDB(id: string | number) {
   try {
     const token = Cookies.get('token')
@@ -256,9 +236,6 @@ async function removeFromDB(id: string | number) {
   }
 }
 
-// ----------------------------------
-// Cart Actions (local + Firestore)
-// ----------------------------------
 function incrementQuantity(id: string | number) {
   cart.incrementQuantity(id)
   const item = cart.cartItems.find((i) => i.id === id)
@@ -276,7 +253,6 @@ function decrementQuantity(id: string | number) {
   const item = cart.cartItems.find((i) => i.id === id)
 
   if (item && item.qty > 0) {
-    // Still has qty, sync with DB
     syncItem({
       productId: item.id,
       name: item.name,
@@ -284,7 +260,6 @@ function decrementQuantity(id: string | number) {
       quantity: item.qty,
     })
   } else {
-    // Remove from local store + DB
     cart.removeItem(id)
     removeFromDB(id)
   }
@@ -309,10 +284,8 @@ const toogleAdressModal = (): void => {
 
 watch(isChecked, (newVal) => {
   if (newVal) {
-    // Save current scroll
     scrollY.value = window.scrollY
 
-    // Lock body
     document.body.style.position = 'fixed'
     document.body.style.top = `-${scrollY}px`
     document.body.style.left = '0'
@@ -320,7 +293,6 @@ watch(isChecked, (newVal) => {
     document.body.style.overflow = 'hidden'
     document.body.style.width = '100%' // prevent content shift
   } else {
-    // Unlock body
     document.body.style.position = ''
     document.body.style.top = ''
     document.body.style.left = ''
@@ -328,24 +300,19 @@ watch(isChecked, (newVal) => {
     document.body.style.overflow = ''
     document.body.style.width = ''
 
-    // Restore scroll
     window.scrollTo(0, scrollY.value)
   }
 })
 </script>
 
 <style scoped>
-/* Large and desktop: fixed grid for clean alignment */
-
 .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
   display: grid;
-  grid-template-columns: 1.5fr 120px 70px 100px 40px; /* Product, Price, Qty, Total, Remove */
+  grid-template-columns: 1.5fr 120px 70px 100px 40px;
   gap: 12px;
   align-items: center;
   padding: 10px 0;
 }
-
-/* Fix text overflow/truncation for product name/weight */
 
 .product-name {
   min-width: 0;
@@ -355,7 +322,7 @@ watch(isChecked, (newVal) => {
 }
 
 .cart-header {
-  border-bottom: none; /* No border on header */
+  border-bottom: none;
 }
 
 .cart-header > div {
@@ -366,11 +333,11 @@ watch(isChecked, (newVal) => {
 }
 
 .cart-row {
-  border-bottom: 1px solid #eee; /* Border on rows */
+  border-bottom: 1px solid #eee;
 }
 
 .cart-row > div {
-  border-bottom: none; /* Remove multiple borders */
+  border-bottom: none;
 }
 
 .cart-row > div:nth-child(1) {
@@ -400,19 +367,10 @@ watch(isChecked, (newVal) => {
 
 @media (max-width: 700px) {
   .grid.grid-cols-\[1fr_160px_140px_160px_32px\] {
-    grid-template-columns: 1fr 85px 60px 85px 20px; /* Only show product, price, qty on mobile row */
+    grid-template-columns: 1fr 85px 60px 85px 20px;
     gap: 3px;
   }
 
-  /* Hide total and remove on mobile, you can adjust if needed */
-
-  /* .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(4),
-  .grid.grid-cols-\[1fr_160px_140px_160px_32px\] > div:nth-child(5) {
-    display: none !important;
-
-  } */
-
-  /* Product name overflows ellipsis */
   .text-gray-900 {
     max-width: 75px;
     overflow: hidden;
@@ -420,7 +378,6 @@ watch(isChecked, (newVal) => {
     white-space: nowrap;
   }
 
-  /* Quantity input/buttons smaller */
   .inline-flex.items-center.rounded-full.border.border-gray-300.overflow-hidden {
     min-width: 40px;
     font-size: 13px;

@@ -5,9 +5,8 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
   >
     <div
-      class="w-[60%] md:w-full  max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
+      class="w-[60%] md:w-full max-w-5xl bg-white/95 shadow-2xl rounded-2xl relative flex flex-col md:flex-row overflow-hidden animate-fadeIn border border-gray-200"
     >
-      <!-- Close Button -->
       <button
         @click.stop="toggleModal"
         class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition-all duration-200 rounded-full p-2 bg-gray-100 hover:bg-red-100"
@@ -15,9 +14,9 @@
         ✕
       </button>
 
-      <!-- Left Panel -->
-      <div class=" md:w-[350px] bg-gradient-to-b from-gray-50 to-gray-100 md:border-r p-6 flex flex-col gap-5">
-        <!-- Header -->
+      <div
+        class="md:w-[350px] bg-gradient-to-b from-gray-50 to-gray-100 md:border-r p-6 flex flex-col gap-5"
+      >
         <div class="flex items-center gap-2 mb-2">
           <img
             class="w-6 h-6"
@@ -27,7 +26,6 @@
           <span class="font-semibold text-xl text-gray-800">Delivery Address</span>
         </div>
 
-        <!-- Input Fields -->
         <div class="flex flex-col gap-3">
           <input
             v-model="form.location"
@@ -37,7 +35,6 @@
             @input="searchPlaces(form.location)"
           />
 
-          <!-- Suggestions -->
           <ul
             v-if="suggestions.length"
             class="border rounded-lg max-h-40 overflow-y-auto bg-white shadow-lg divide-y animate-fadeIn"
@@ -65,7 +62,7 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
 
-          <div class=" flex flex-col sm:flex-row  sm:space-y-0 gap-3">
+          <div class="flex flex-col sm:flex-row sm:space-y-0 gap-3">
             <input
               v-model="form.state"
               type="text"
@@ -93,7 +90,7 @@
             @click="useCurrentLocation"
             class="flex-1 sm:px-3 sm:mr-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm font-medium transition-all duration-200 shadow-sm"
           >
-            📍 Use My Location
+            Use My Location
           </button>
           <button
             @click="checkout"
@@ -104,7 +101,6 @@
         </div>
       </div>
 
-      <!-- Map -->
       <div class="flex-1 hidden md:flex">
         <div id="map" class="w-full rounded-lg"></div>
       </div>
@@ -140,10 +136,9 @@ ul::-webkit-scrollbar-thumb:hover {
 </style>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue"
-import { useCart } from "@/stores/cart"
-import { useToast } from "vue-toastification"
-
+import { ref, reactive, onMounted } from 'vue'
+import { useCart } from '@/stores/cart'
+import { useToast } from 'vue-toastification'
 
 const toast = useToast()
 const isModal = ref(true)
@@ -159,12 +154,12 @@ interface AddressForm {
 }
 
 const form = reactive<AddressForm>({
-  location: "",
-  apt: "",
-  locality: "",
-  state: "",
-  postalCode: "",
-  country: "",
+  location: '',
+  apt: '',
+  locality: '',
+  state: '',
+  postalCode: '',
+  country: '',
 })
 
 const suggestions = ref<{ description: string; place_id: string }[]>([])
@@ -174,12 +169,11 @@ const selectedLocation = ref<{ lat: number; lng: number } | null>(null)
 
 let googleMapsLoaded = false
 
-// --- Load Google Maps dynamically ---
 const loadGoogleMaps = () => {
   return new Promise<void>((resolve, reject) => {
     if (googleMapsLoaded) return resolve()
 
-    const script = document.createElement("script")
+    const script = document.createElement('script')
     script.src = `https://maps.googleapis.com/maps/api/js?key=${
       import.meta.env.VITE_GOOGLE_MAPS_API_KEY
     }&libraries=places`
@@ -190,15 +184,14 @@ const loadGoogleMaps = () => {
       googleMapsLoaded = true
       resolve()
     }
-    script.onerror = () => reject("Google Maps failed to load")
+    script.onerror = () => reject('Google Maps failed to load')
     document.head.appendChild(script)
   })
 }
 
-// --- Initialize map ---
 const initMap = () => {
   const defaultCenter = { lat: 37.4221, lng: -122.0841 }
-  map.value = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+  map.value = new google.maps.Map(document.getElementById('map') as HTMLElement, {
     center: defaultCenter,
     zoom: 14,
   })
@@ -208,17 +201,16 @@ const initMap = () => {
   })
 }
 
-// --- Search Autocomplete ---
 async function searchPlaces(input: string) {
   if (!input) return (suggestions.value = [])
   try {
     const res = await fetch(
-      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(input)}`
+      `http://localhost:5003/api/autocomplete?input=${encodeURIComponent(input)}`,
     )
     const data = await res.json()
     suggestions.value = data.predictions || []
   } catch (err) {
-    console.error("Autocomplete failed:", err)
+    console.error('Autocomplete failed:', err)
     suggestions.value = []
   }
 }
@@ -226,9 +218,7 @@ async function searchPlaces(input: string) {
 async function selectSuggestion(s: { description: string; place_id: string }) {
   suggestions.value = []
   try {
-    const res = await fetch(
-      `http://localhost:5003/api/place-details?placeId=${s.place_id}`
-    )
+    const res = await fetch(`http://localhost:5003/api/place-details?placeId=${s.place_id}`)
     const data = await res.json()
 
     if (data.result?.geometry?.location) {
@@ -241,13 +231,12 @@ async function selectSuggestion(s: { description: string; place_id: string }) {
     if (data.result?.formatted_address) form.location = data.result.formatted_address
     if (data.result?.address_components) fillAddressComponents(data.result.address_components)
   } catch (err) {
-    console.error("Place details failed:", err)
+    console.error('Place details failed:', err)
   }
 }
 
-// --- Current Location ---
 async function useCurrentLocation() {
-  if (!navigator.geolocation) return toast.error("❌ Geolocation not supported.")
+  if (!navigator.geolocation) return toast.error('❌ Geolocation not supported.')
 
   navigator.geolocation.getCurrentPosition(async (pos) => {
     const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
@@ -257,7 +246,7 @@ async function useCurrentLocation() {
 
     try {
       const res = await fetch(
-        `http://localhost:5003/api/geocode?lat=${coords.lat}&lng=${coords.lng}`
+        `http://localhost:5003/api/geocode?lat=${coords.lat}&lng=${coords.lng}`,
       )
       const data = await res.json()
       if (data.results && data.results[0]) {
@@ -265,47 +254,43 @@ async function useCurrentLocation() {
         fillAddressComponents(data.results[0].address_components)
       }
     } catch (err) {
-      console.error("Geocode failed:", err)
+      console.error('Geocode failed:', err)
     }
   })
 }
 
-// --- Fill form ---
 function fillAddressComponents(components: any[]) {
   const getComp = (type: string) =>
-    components.find((c: any) => c.types.includes(type))?.long_name || ""
+    components.find((c: any) => c.types.includes(type))?.long_name || ''
 
-  form.locality = getComp("locality")
-  form.state = getComp("administrative_area_level_1")
-  form.postalCode = getComp("postal_code")
-  form.country = getComp("country")
+  form.locality = getComp('locality')
+  form.state = getComp('administrative_area_level_1')
+  form.postalCode = getComp('postal_code')
+  form.country = getComp('country')
 }
 
-// --- Checkout ---
 function checkout() {
   if (!selectedLocation.value) {
-    toast.warning("⚠️ Please select a location first.")
+    toast.warning('⚠️ Please select a location first.')
     return
   }
-  console.log("Checkout with:", form, selectedLocation.value)
-
+  console.log('Checkout with:', form, selectedLocation.value)
 
   toggleModal()
   startPayment()
 }
 
-// --- Save Order to localStorage ---
 function saveOrderToLocalStorage() {
   const order = {
     id: generateOrderId(),
     date: new Date().toISOString(),
-    items: cart.cartItems.map(item => ({
+    items: cart.cartItems.map((item) => ({
       id: item.id,
       name: item.name,
       price: item.price,
       qty: item.qty,
       image: item.image,
-      weight: item.weight
+      weight: item.weight,
     })),
     subtotal: cart.cartTotal,
     shipping: 0,
@@ -317,8 +302,8 @@ function saveOrderToLocalStorage() {
       locality: form.locality,
       state: form.state,
       postalCode: form.postalCode,
-      country: form.country
-    }
+      country: form.country,
+    },
   }
 
   const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
@@ -326,23 +311,22 @@ function saveOrderToLocalStorage() {
   localStorage.setItem('orders', JSON.stringify(existingOrders))
 }
 
-// --- Generate Order ID ---
 function generateOrderId(): string {
-  return 'ORD' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 4).toUpperCase()
+  return (
+    'ORD' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 4).toUpperCase()
+  )
 }
 
-// --- Modal toggle ---
 function toggleModal() {
   isModal.value = !isModal.value
   if (isModal.value && map.value) {
     setTimeout(() => {
-      google.maps.event.trigger(map.value!, "resize")
+      google.maps.event.trigger(map.value!, 'resize')
       if (selectedLocation.value) map.value?.setCenter(selectedLocation.value)
     }, 300)
   }
 }
 
-// --- Payment ---
 const startPayment = async () => {
   try {
     const res = await fetch('http://localhost:5002/create-order', {
@@ -352,7 +336,7 @@ const startPayment = async () => {
     })
 
     const order = await res.json()
-    // console.log('✅ Order:', order)
+    // console.log('Order:', order)
 
     const options = {
       key: 'rzp_test_RGeGMOEnLzUqYw',
@@ -381,7 +365,6 @@ const startPayment = async () => {
   }
 }
 
-// --- Verify payment ---
 const verifyPayment = async (response: any) => {
   const res = await fetch('http://localhost:5002/verify-payment', {
     method: 'POST',
@@ -395,11 +378,11 @@ const verifyPayment = async (response: any) => {
 
   const data = await res.json()
   if (data.success) {
-    toast.success(" Payment Verified! Thank you for shopping with us. ")
+    toast.success(' Payment Verified! Thank you for shopping with us. ')
     saveOrderToLocalStorage()
     cart.clearCart()
   } else {
-    toast.error("❌ Payment Verification Failed")
+    toast.error('❌ Payment Verification Failed')
   }
 }
 

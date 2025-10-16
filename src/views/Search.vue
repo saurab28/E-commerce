@@ -8,14 +8,12 @@ import filter from '@/composables/filter.ts'
 const route = useRoute()
 const path = ref<string>(route.path)
 
-const { filterCategory } = filter() // assuming this is reactive search text from your filter composable
+const { filterCategory } = filter()
 </script>
 
 <template>
-  <!-- Header with search bar hidden on mobile -->
   <Header :param="path" class="mb-5" />
 
-  <!-- Mobile-only Search Bar below header -->
   <div class="w-full relative block sm:hidden mb-5">
     <input
       type="text"
@@ -23,9 +21,7 @@ const { filterCategory } = filter() // assuming this is reactive search text fro
       placeholder="Search what you want"
       class="w-full bg-gray-50 border-0 rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition-all"
     />
-    <i
-      class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"
-    ></i>
+    <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
   </div>
 
   <div class="p-5">

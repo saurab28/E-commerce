@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useCart } from '@/stores/cart' // ← IMPORT the store
+import { useCart } from '@/stores/cart'
 import type { ICard } from '@/models/Card'
 import gsap from 'gsap'
 import authorization from '@/composables/auth'
-const cart = useCart() // ← CREATE the store instance
+const cart = useCart()
 const props = defineProps<{ products: ICard }>()
 const auth = authorization()
 
-// Robustly parse prices like "₹507.63", "507,63", etc.
 function parsePrice(p: string): number {
   if (typeof p === 'number') return p
   if (typeof p === 'string') {
-    // keep digits, dots and commas, then unify commas to dots
     const cleaned = p.replace(/[^\d.,]/g, '').replace(/,/g, '.')
     const n = Number(cleaned)
     return n
@@ -20,7 +18,6 @@ function parsePrice(p: string): number {
   return 0
 }
 
-// console.log(props.products)
 const inCartQty = computed(() => {
   const item = cart.cartItems.find((i) => i.id === props.products.id)
   return item ? item.qty : 0
@@ -33,14 +30,6 @@ function decrementQty() {
   cart.decrementQuantity(props.products.id)
 }
 
-// const priceNumber = computed(() => parsePrice(props.products.price as string))
-// const priceDisplay = computed(() =>
-//   priceNumber.value > 0 ? `₹${priceNumber.value.toFixed(2)}` : '—',
-// )
-
-// prefer image → image_url; blank if none
-
-// ✅ Popup logic
 const popup = ref<HTMLElement | null>(null)
 
 function showPopup(message: string) {
@@ -48,14 +37,12 @@ function showPopup(message: string) {
 
   popup.value.innerText = message
 
-  // Animate IN
   gsap.fromTo(
     popup.value,
     { y: 50, opacity: 0, pointerEvents: 'none' },
     { y: 0, opacity: 1, pointerEvents: 'auto', duration: 0.5, ease: 'power3.out' },
   )
 
-  // Animate OUT after 2.5s
   setTimeout(() => {
     gsap.to(popup.value, {
       y: 50,
@@ -68,10 +55,9 @@ function showPopup(message: string) {
 }
 
 function addToCart() {
-  // Ensure you have an id; if your API lacks it, generate one
   cart.addItem(
     {
-      id : props.products.id,
+      id: props.products.id,
       name: props.products.name,
       price: parsePrice(props.products.price as string),
       image: props.products.image,
@@ -80,20 +66,17 @@ function addToCart() {
     1,
   )
 
-  // 🎉 Trigger popup after adding
   showPopup('Product added to cart!')
 }
 </script>
 
 <template>
   <div class="w-56 rounded-lg bg-white shadow-xl overflow-hidden self-center">
-    <!-- Image (blank area if missing) -->
     <img
       :src="props.products.image"
       :alt="props.products.name"
       class="w-full h-60 object-cover bg-gray-50"
     />
-
 
     <div class="p-3">
       <p class="text-xs text-green-600 font-medium mb-1">⏱ 8 MINS</p>
@@ -126,12 +109,11 @@ function addToCart() {
     </div>
   </div>
 
-  <!-- ✅ Popup Notification -->
   <div
     ref="popup"
-    class="fixed bottom-6 right-6 bg-black shadow-xl rounded-xl px-6 py-4 text-md  text-white font-bold opacity-0 pointer-events-none z-50"
+    class="fixed bottom-6 right-6 bg-black shadow-xl rounded-xl px-6 py-4 text-md text-white font-bold opacity-0 pointer-events-none z-50"
   >
-    ✅ Item added to cart!
+    Item added to cart!
   </div>
 </template>
 
@@ -140,7 +122,7 @@ function addToCart() {
   max-width: 224px;
   border-radius: 8px;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -239,11 +221,8 @@ function addToCart() {
   .text-sm {
     font-size: 11px;
   }
-   button {
-    /* min-width: 14px;
-    padding: 3px 5px;
-    font-size: 8px; */
-    min-width: 12px;      /* smallest */
+  button {
+    min-width: 12px;
     padding: 1px 4px;
     font-size: 7px;
   }

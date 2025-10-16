@@ -5,7 +5,6 @@ import router from './router'
 import 'remixicon/fonts/remixicon.css'
 import { createPinia } from 'pinia'
 
-// ✅ Import Toastification
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
@@ -22,7 +21,7 @@ const toastOptions = {
 
 app.use(createPinia())
 app.use(router)
-app.use(Toast, toastOptions) // ✅ register plugin
+app.use(Toast, toastOptions) 
 
 app.mount('#app')
 

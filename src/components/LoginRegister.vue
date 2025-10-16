@@ -4,8 +4,6 @@
     class="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
   >
     <div class="w-full max-w-[300px] sm:max-w-md bg-white shadow-2xl rounded-2xl p-8 relative">
-
-      <!-- Logo / Title -->
       <div>
         <button
           @click.stop="toogleModal"
@@ -21,9 +19,7 @@
         </div>
       </div>
 
-      <!-- Form -->
       <form @submit.prevent="isLogin ? handleLogin() : handleRegister()" class="space-y-4">
-        <!-- Name (only for register) -->
         <div v-if="!isLogin">
           <label class="block text-sm font-medium text-gray-700">Full Name</label>
           <input
@@ -34,7 +30,6 @@
           />
         </div>
 
-        <!-- Username -->
         <div v-if="!isLogin">
           <label class="block text-sm font-medium text-gray-700">Username</label>
           <input
@@ -45,7 +40,6 @@
           />
         </div>
 
-        <!-- Email -->
         <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -59,7 +53,6 @@
           </p>
         </div>
 
-        <!-- Password -->
         <div>
           <label class="block text-sm font-medium text-gray-700">Password</label>
           <input
@@ -83,7 +76,6 @@
 
       <p class="text-center text-lg mt-3 mb-3">---------------or---------------</p>
 
-      <!-- Google Login -->
       <button
         @click="handleGoogleLogin"
         class="w-full flex items-center justify-center gap-2 bg-gray-400 text-white py-2 px-4 rounded-lg mt-3"
@@ -92,7 +84,6 @@
         Sign in with Google
       </button>
 
-      <!-- Switch -->
       <p class="text-center mt-6 text-sm text-gray-600">
         {{ isLogin ? "Don't have an account?" : 'Already have an account?' }}
         <button @click="isLogin = !isLogin" class="text-green-600 font-semibold hover:underline">
@@ -122,12 +113,10 @@ const user = ref(null)
 
 const API_URL = 'http://localhost:5001'
 
-// 📌 Regex for Gmail check
 const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/
 
 const toast = useToast()
 
-// 📌 Register
 async function handleRegister() {
   try {
     if (form.value.password.length <= 5) {
@@ -153,7 +142,6 @@ async function handleRegister() {
   }
 }
 
-// 📌 Login (via Firebase SDK)
 async function handleLogin() {
   try {
     if (form.value.password.length <= 5) {
@@ -177,7 +165,6 @@ async function handleLogin() {
   }
 }
 
-// 📌 Google Login
 async function handleGoogleLogin() {
   try {
     const result = await signInWithPopup(auth, googleProvider)
@@ -194,7 +181,6 @@ async function handleGoogleLogin() {
 </script>
 
 <style scoped>
-/* Tablet screens */
 @media (max-width: 800px) {
   .max-w-md {
     max-width: 96vw;
@@ -207,7 +193,6 @@ async function handleGoogleLogin() {
   }
 }
 
-/* Phones */
 @media (max-width: 500px) {
   .max-w-md {
     max-width: 99vw !important;
@@ -234,7 +219,6 @@ async function handleGoogleLogin() {
   }
 }
 
-/* Smallest phones */
 @media (max-width: 350px) {
   .max-w-md {
     max-width: 100vw !important;

@@ -11,23 +11,9 @@ interface CartItem {
   qty: number
 }
 
-// A product you want to add, without the qty yet
-// type ProductForCart = Omit<CartItem, 'qty'>
-
 export const useCart = defineStore('cart', () => {
   const cartItems = ref<CartItem[]>(JSON.parse(localStorage.getItem('cart') || '[]'))
 
-  // ✅ Load saved cart from localStorage on init
-  // const savedCart = localStorage.getItem('cart')
-  // if (savedCart) {
-  //   try {
-  //     cartItems.value = JSON.parse(savedCart)
-  //   } catch {
-  //     cartItems.value = []
-  //   }
-  // }
-
-  // ✅ Persist cart to localStorage whenever it changes
   watch(
     cartItems,
     (newCart) => {
@@ -37,21 +23,8 @@ export const useCart = defineStore('cart', () => {
   )
 
   function addItem(product: ICard, quantity = 1) {
-    // const existingItem = cartItems.value.find((line) => line.id === product.id)
-    // if (existingItem) {
-    //   existingItem.qty += quantity
-    // } else {
-    //   cartItems.value.push({ ...product, qty: quantity })
-    // }
     cartItems.value.push({ ...product, qty: quantity })
   }
-
-  // function updateQuantity(id: string | number, quantity: number) {
-  //   const item = cartItems.value.find((line) => line.id === id)
-  //   if (!item) return
-  //   if (quantity <= 0) removeItem(id)
-  //   else item.qty = quantity
-  // }
 
   function incrementQuantity(id: string | number) {
     const item = cartItems.value.find((eachItem) => eachItem.id === id)
@@ -60,9 +33,7 @@ export const useCart = defineStore('cart', () => {
 
   function decrementQuantity(id: string | number) {
     const item = cartItems.value.find((eachItem) => eachItem.id === id)
-    // if (!item) return
-    // item.qty -= 1
-    // if (item.qty <= 0) removeItem(id)
+
     if (item) {
       if (item.qty > 0) {
         item.qty -= 1
@@ -80,7 +51,6 @@ export const useCart = defineStore('cart', () => {
     cartItems.value = []
   }
 
-  
   function setCart(newCart: CartItem[]) {
     cartItems.value = [...newCart]
   }

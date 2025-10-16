@@ -3,13 +3,13 @@
     :class="$attrs.class"
     class="w-full sticky h-[93px] top-0 z-[999] bg-white p-2 shadow-sm border-none bg-gradient-to-b from-purple-300 to-purple-0"
   >
-
     <div class="flex items-center justify-between px-4 md:px-6 py-3">
-
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-2 cursor-pointer" @click="handleLogo">
           <img src="./../assets/logo.png" alt="Zepto" class="h-8 sm:h-14 border-0 rounded-full" />
-          <span class=" text-md sm:text-2xl font-extrabold text-gray-700 px-2  sm:py-1 rounded-lg">pickzy</span>
+          <span class="text-md sm:text-2xl font-extrabold text-gray-700 px-2 sm:py-1 rounded-lg"
+            >pickzy</span
+          >
         </div>
 
         <div
@@ -32,7 +32,6 @@
           @close="isLocationModal = false"
         />
       </div>
-
 
       <div class="flex-1 flex items-center justify-center max-w-2xl mx-4">
         <div class="w-full relative hidden lg:block" v-if="!props.param">
@@ -61,7 +60,6 @@
       </div>
 
       <div class="flex items-center gap-2 sm:gap-4">
-
         <div class="relative">
           <div
             v-if="!isLoggedIn"
@@ -91,7 +89,6 @@
               <i class="ri-arrow-down-s-line text-gray-400"></i>
             </div>
 
-            <!-- Profile Dropdown -->
             <div
               v-if="showProfileMenu"
               class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
@@ -110,16 +107,14 @@
               </button>
               <button
                 @click="handleLogout"
-                class="w-full text-left px-4 py-2 hover:bg-gray-50  flex items-center gap-2"
+                class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2"
               >
                 <i class="ri-logout-box-line"></i>
                 Logout
               </button>
-
             </div>
           </div>
         </div>
-
 
         <div class="relative" @click="handleCart">
           <div
@@ -140,49 +135,10 @@
             </div>
           </div>
         </div>
-
-
-        <!-- <div class="relative" @click="handleOrders">
-          <div
-            class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
-          >
-
-            <div class="hidden sm:flex flex-col">
-              <span class="text-xs text-gray-500">My</span>
-              <span class="text-sm font-semibold text-gray-800">Orders</span>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- Mobile Menu Button -->
-        <!-- <button class="sm:hidden flex items-center justify-center p-2 rounded-lg hover:bg-gray-50">
-          <i class="ri-menu-line text-2xl text-gray-700"></i>
-        </button> -->
       </div>
     </div>
-
-    <!-- Mobile Location (only visible on small screens) -->
-    <!-- <div class="block md:hidden px-4 pb-2">
-      <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
-        <i class="ri-map-pin-line text-green-600"></i>
-        <span class="text-sm text-gray-600">Deliver to: Hyderbad</span>
-      </div>
-    </div> -->
-
-    <!-- Mobile Search (only visible on small screens) -->
-    <!-- <div class="block md:hidden px-4 pb-3 mobile-search-bar" >
-      <div class="w-full relative">
-        <input
-          type="text"
-          placeholder="Search for products..."
-          class="w-full bg-gray-50 border-2 border-gray-200 rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:border-green-500 text-sm"
-        />
-        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-black text-lg"></i>
-      </div>
-    </div> -->
   </nav>
 
-  <!-- Modal -->
   <Teleport to="body">
     <LoginRegister v-if="isModal" />
   </Teleport>
@@ -211,7 +167,7 @@ const { isModal, toogleModal } = loginModal()
 const scrollY = ref(0)
 const isLoading = ref(false)
 
-const currentLocation = ref( sessionStorage.getItem("address") || 'Hyderabad, Telangana')
+const currentLocation = ref(sessionStorage.getItem('address') || 'Hyderabad, Telangana')
 
 const showProfileMenu = ref(false)
 const isLocationModal = ref(false)
@@ -222,7 +178,6 @@ const userDetails = ref<{ name?: string; email?: string }>({})
 
 const toast = useToast()
 
-// ✅ Fetch current user from backend
 async function fetchUserDetails() {
   const token = Cookies.get('token')
   if (!token) return
@@ -248,13 +203,10 @@ const toggleLocationModal = () => {
   isLocationModal.value = !isLocationModal.value
 }
 
-// console.log(useFilter.filterCategory.value)
-
 const handleLogo = () => {
   router.push('/')
 }
 
-// use whichever your store exposes: itemCount or count
 const cartCount = computed(() => cart.itemCount)
 const badgeText = computed(() => (cartCount.value > 99 ? '99+' : String(cartCount.value)))
 const badgeSizeClass = computed(() =>
@@ -284,18 +236,15 @@ watch(isLoggedIn, (newVal) => {
 
 watch(isModal, (newVal) => {
   if (newVal) {
-    // Save current scroll
     scrollY.value = window.scrollY
 
-    // Lock body
     document.body.style.position = 'fixed'
     document.body.style.top = `-${scrollY}px`
     document.body.style.left = '0'
     document.body.style.right = '0'
     document.body.style.overflow = 'hidden'
-    document.body.style.width = '100%' // prevent content shift
+    document.body.style.width = '100%'
   } else {
-    // Unlock body
     document.body.style.position = ''
     document.body.style.top = ''
     document.body.style.left = ''
@@ -303,7 +252,6 @@ watch(isModal, (newVal) => {
     document.body.style.overflow = ''
     document.body.style.width = ''
 
-    // Restore scroll
     window.scrollTo(0, scrollY.value)
   }
 })
@@ -334,8 +282,6 @@ const handleLogout = async () => {
     isLoading.value = false
     router.push('/')
   }, 1200)
-
-
 }
 
 onMounted(() => {
@@ -383,7 +329,6 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* Left: logo group */
 .header-logo-group {
   display: flex;
   align-items: center;
@@ -401,7 +346,6 @@ onUnmounted(() => {
   margin-left: 4px;
 }
 
-/* Center: search bar */
 .header-center {
   flex: 1;
   display: flex;
@@ -431,7 +375,6 @@ onUnmounted(() => {
   color: #222;
 }
 
-/* Right: actions group */
 .header-actions {
   display: flex;
   align-items: center;
@@ -460,12 +403,10 @@ onUnmounted(() => {
   text-align: center;
 }
 
-/* Always hide hamburger/menu */
 .header-menu-btn {
   display: none !important;
 }
 
-/* Responsive adjustments for laptop/tablet */
 @media (max-width: 1024px) {
   .header-bar {
     padding: 0 16px;
@@ -492,10 +433,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 600px) {
-  /* Give space below header */
-  
-
-  /* Top bar layout: keep logo + cart + menu only */
   .header-bar {
     min-height: 44px;
     padding: 6px 8px;
@@ -525,7 +462,7 @@ onUnmounted(() => {
   }
 
   .header-center {
-    display: none; /* Hide inline search from top bar */
+    display: none;
   }
 
   .header-actions {
@@ -542,7 +479,6 @@ onUnmounted(() => {
     min-width: 16px;
   }
 
-  /* Move mobile search bar below the nav */
   .mobile-search-bar {
     display: block;
     padding: 8px 12px;
@@ -554,7 +490,7 @@ onUnmounted(() => {
 
   .mobile-search-bar input {
     width: 100%;
-    padding: 10px 12px 10px 36px; /* enough space for icon */
+    padding: 10px 12px 10px 36px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 8px;

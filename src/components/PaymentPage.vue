@@ -14,12 +14,11 @@
 </template>
 
 <script setup>
-import { useToast } from "vue-toastification"
+import { useToast } from 'vue-toastification'
 const toast = useToast()
 
 const startPayment = async () => {
   try {
-    // 1. Create order from backend
     const order = await fetch('http://localhost:5000/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,16 +26,14 @@ const startPayment = async () => {
     const response = await order.json()
     console.log(response)
 
-    // 2. Razorpay options
     const options = {
-      key: 'rzp_test_RGeGMOEnLzUqYw', // only Key ID here
+      key: 'rzp_test_RGeGMOEnLzUqYw',
       amount: response.amount,
       currency: response.currency,
       name: 'My Vue Website',
       description: 'Test Transaction',
       order_id: response.id,
       handler: function (response) {
-        // ✅ After payment success, verify on backend
         verifyPayment(response)
       },
       prefill: {
@@ -56,7 +53,6 @@ const startPayment = async () => {
   }
 }
 
-// 3. Verify payment with backend
 const verifyPayment = async (response) => {
   await fetch('http://localhost:4000/verify-payment', {
     method: 'POST',
@@ -70,15 +66,12 @@ const verifyPayment = async (response) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
-        // ✅ Success toast
-        toast.success("✅ Payment Verified on Server")
+        toast.success('✅ Payment Verified on Server')
       } else {
-        // ❌ Error toast
-        toast.error("❌ Verification Failed")
+        toast.error('❌ Verification Failed')
       }
     })
 }
-
 </script>
 <style scoped>
 .flex {

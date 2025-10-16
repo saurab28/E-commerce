@@ -1,21 +1,17 @@
-// stores/googleMaps.ts
-import { defineStore } from "pinia"
-import { ref } from "vue"
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 let googleMapsScriptLoading: Promise<void> | null = null
 
-export const useGoogleMapsStore = defineStore("googleMaps", () => {
-  // --- state ---
+export const useGoogleMapsStore = defineStore('googleMaps', () => {
   const isLoading = ref(false)
   const isLoaded = ref(false)
   const error = ref<string | null>(null)
 
-  // --- actions ---
   async function loadApi(): Promise<void> {
     if (isLoaded.value) return
 
-    // If already available on window
-    if (typeof window !== "undefined" && window.google && window.google.maps) {
+    if (typeof window !== 'undefined' && window.google && window.google.maps) {
       isLoaded.value = true
       return
     }
@@ -24,7 +20,7 @@ export const useGoogleMapsStore = defineStore("googleMaps", () => {
       isLoading.value = true
 
       googleMapsScriptLoading = new Promise<void>((resolve, reject) => {
-        const script = document.createElement("script")
+        const script = document.createElement('script')
         script.src = `https://maps.googleapis.com/maps/api/js?key=${
           import.meta.env.VITE_GOOGLE_MAPS_API_KEY
         }&libraries=places`
@@ -39,7 +35,7 @@ export const useGoogleMapsStore = defineStore("googleMaps", () => {
 
         script.onerror = () => {
           isLoading.value = false
-          error.value = "Google Maps failed to load"
+          error.value = 'Google Maps failed to load'
           reject(error.value)
         }
 
@@ -51,11 +47,9 @@ export const useGoogleMapsStore = defineStore("googleMaps", () => {
   }
 
   return {
-    // state
     isLoading,
     isLoaded,
     error,
-    // actions
     loadApi,
   }
 })

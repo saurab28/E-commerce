@@ -14,9 +14,6 @@ const loading = ref(false)
 
 const emit = defineEmits(['update:address', 'close'])
 
-
-
-// --- Detect my location ---
 const detectLocation = () => {
   if (!navigator.geolocation) {
     alert('Geolocation not supported.')
@@ -45,10 +42,8 @@ const detectLocation = () => {
             address: data.results[0].formatted_address,
           }
 
-          // Store in sessionStorage
           sessionStorage.setItem('address', location.value.address)
 
-          // Emit to parent
           emit('update:address', location.value.address)
         }
       } catch (err) {
@@ -64,7 +59,6 @@ const detectLocation = () => {
   )
 }
 
-// --- Search places ---
 const searchPlaces = async (input: string) => {
   query.value = input
 
@@ -88,7 +82,6 @@ const searchPlaces = async (input: string) => {
   }
 }
 
-// --- Select place ---
 const selectPlace = async (placeId: string, description: string) => {
   try {
     const res = await fetch(`http://localhost:5003/api/place-details?placeId=${placeId}`)
@@ -108,10 +101,8 @@ const selectPlace = async (placeId: string, description: string) => {
       query.value = description
       suggestions.value = []
 
-      // Store in sessionStorage
       sessionStorage.setItem('address', location.value.address)
 
-      // Emit to parent
       emit('update:address', location.value.address)
     }
   } catch (err) {
@@ -119,35 +110,18 @@ const selectPlace = async (placeId: string, description: string) => {
   }
 }
 
-// --- Close modal ---
 const close = () => {
   emit('close')
 }
-
-// --- Load saved address from sessionStorage on mount ---
-// onMounted(() => {
-//   const savedAddress = sessionStorage.getItem('address')
-//   if (savedAddress) {
-//     location.value = {
-//       lat: 0, // fallback, can later store actual lat/lng
-//       lng: 0,
-//       address: savedAddress,
-//     }
-//     query.value = savedAddress
-//     emit('update:address', savedAddress)
-//   }
-// })
 </script>
 
 <template>
   <div class="p-4 max-w-lg mx-auto bg-white shadow rounded-md">
-    <!-- Header -->
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-gray-700 font-semibold">Change Location</h2>
       <button class="text-gray-500 hover:text-gray-700 text-xl" @click="close">&times;</button>
     </div>
 
-    <!-- Detect or Search -->
     <div class="flex items-center gap-2">
       <button
         @click="detectLocation"
@@ -168,7 +142,6 @@ const close = () => {
       />
     </div>
 
-    <!-- Suggestions -->
     <ul
       v-if="suggestions.length"
       class="mt-2 border rounded-md max-h-40 overflow-y-auto bg-white shadow"
@@ -183,7 +156,6 @@ const close = () => {
       </li>
     </ul>
 
-    <!-- Selected Location -->
     <div v-if="location" class="mt-3 text-sm text-gray-600">
       <p><strong>Delivery Address:</strong> {{ location.address }}</p>
     </div>
