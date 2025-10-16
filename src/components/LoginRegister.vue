@@ -68,7 +68,7 @@
             required
             class="mt-1 w-full px-4 py-2 border rounded-lg"
           />
-          <p v-if="form.password && form.password.length <= 6" class="text-red-500 text-xs mt-1">
+          <p v-if="form.password && form.password.length <= 5" class="text-red-500 text-xs mt-1">
             Password must be at least 6 characters long
           </p>
         </div>
