@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 const model = defineModel<string>()
 
 const categories = ref([
@@ -30,19 +31,18 @@ const categories = ref([
     <h2 class="font-bold mb-2 text-lg">Categories</h2>
     <ul>
       <li v-for="(category, index) in categories" :key="index" class="mb-2">
-          <!-- checkbox -->
-          <!-- router link -->
-
-          <div class="flex items-center gap-2 font-sans text-lg">
-            <label>
-            <input
-            type="checkbox"
-            :checked="model === category.name"
-            @change="model = category.name"
-            />
-            {{ category.name }}
-            </label>
-          </div>
+          <router-link :to="{name:'products',params:{title:category.name}}">
+            <div class="flex items-center gap-2 font-sans text-lg">
+              <label>
+              <input
+              type="checkbox"
+              :checked="model === category.name"
+              @change="model = category.name"
+              />
+              {{ category.name }}
+              </label>
+            </div>
+          </router-link>
 
 
       </li>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ICategorycard } from '@/models/Categorycard'
 import { useProductStore } from '@/stores/products'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, onBeforeUpdate, onUpdated } from 'vue'
 import ProductCard from './ProductCard.vue'
 import filter from '@/composables/filter.ts'
 const { filterCategory } = filter()
@@ -10,10 +10,12 @@ const Productstore = useProductStore()
 const Category = ref<ICategorycard[]>([])
 const allProducts = ref<ICard[]>([])
 const props = defineProps<{ selectedCategory?: string }>()
+const isLoading = ref(true)
 watch(
   () => props.selectedCategory,
   () => {
     const filterProducts = Category.value.filter((eachCategory: ICategorycard) => {
+      console.log(props.selectedCategory)
       if (props.selectedCategory === 'Sweet Tooth') {
         return eachCategory.name === 'Chocolates & Candies' || eachCategory.name === 'Indian Mithai'
       } else if (props.selectedCategory === 'All Categories') {
@@ -22,7 +24,11 @@ watch(
         return eachCategory.name === props.selectedCategory
       }
     })
-    allProducts.value = filterProducts.flatMap((category) => category.products ?? [])
+    isLoading.value = true
+    setTimeout(() => {
+      isLoading.value = false
+      allProducts.value = filterProducts.flatMap((category) => category.products ?? [])
+    }, 1000)
   },
 )
 watch(filterCategory, () => {
@@ -34,7 +40,11 @@ watch(filterCategory, () => {
   allProducts.value = filterhomeProducts
 })
 onMounted(async () => {
+  await delay(2000)
   await Productstore.fetchProductList()
+  isLoading.value = false
+
+
   Category.value = Productstore.productList.categories
 
   if (props.selectedCategory) {
@@ -51,11 +61,15 @@ onMounted(async () => {
     allProducts.value = cartProducts.slice(0, 30)
   }
 })
-// const loading = ref(true)
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 </script>
 
 <template>
-  <div v-if="Productstore.loading">
+  <div v-if="isLoading">
+
     <div class="flex justify-center items-center h-64">
       <div
         class="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"
@@ -64,14 +78,11 @@ onMounted(async () => {
   </div>
   <div v-else-if="Productstore.error">{{ Productstore.error }}</div>
 
-  <div class="container mx-auto">
+  <div v-else class="container mx-auto">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-      <div  v-for="eachProductcard in allProducts">
-
-            <ProductCard :key="eachProductcard.id" :products="eachProductcard"/>
-
+      <div v-for="eachProductcard in allProducts">
+        <ProductCard :key="eachProductcard.id" :products="eachProductcard" />
       </div>
-
     </div>
   </div>
 </template>
@@ -83,7 +94,7 @@ onMounted(async () => {
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .grid {
