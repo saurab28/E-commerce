@@ -1,24 +1,35 @@
-import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
-import pluginOxlint from 'eslint-plugin-oxlint'
+import * as pluginVue from 'eslint-plugin-vue'
+// import * as pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
-
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
+import { globalIgnores } from 'eslint/config'
+import js from '@eslint/js'
+import globals from 'globals'
 
 export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
-
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+      },
+    },
+  },
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
-
+  js.configs.recommended,
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  ...pluginOxlint.configs['flat/recommended'],
+  {
+    rules: {
+      'oxlint/no-console': 'warn',
+      'oxlint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
   skipFormatting,
 )

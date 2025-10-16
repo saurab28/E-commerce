@@ -10,7 +10,6 @@ app.use(cors());
 
 const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
-// --- Autocomplete ---
 app.get("/api/autocomplete", async (req, res) => {
   const input = req.query.input;
   const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
@@ -26,7 +25,6 @@ app.get("/api/autocomplete", async (req, res) => {
   }
 });
 
-// --- Place Details ---
 app.get("/api/place-details", async (req, res) => {
   const placeId = req.query.placeId;
   try {
@@ -40,16 +38,13 @@ app.get("/api/place-details", async (req, res) => {
   }
 });
 
-// --- Geocode (supports both forward & reverse) ---
 app.get("/api/geocode", async (req, res) => {
   const { lat, lng, address } = req.query;
   let url = "";
 
   if (lat && lng) {
-    // Reverse geocode (lat,lng → address)
     url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`;
   } else if (address) {
-    // Forward geocode (address → lat,lng)
     url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
     )}&key=${GOOGLE_API_KEY}`;
@@ -66,7 +61,6 @@ app.get("/api/geocode", async (req, res) => {
   }
 });
 
-// --- Explicit Reverse Geocode ---
 app.get("/api/reverse-geocode", async (req, res) => {
   const { lat, lng } = req.query;
   try {
@@ -81,7 +75,6 @@ app.get("/api/reverse-geocode", async (req, res) => {
 });
 
 
-// --- Explicit Forward Geocode ---
 
 app.get("/api/forward-geocode", async (req, res) => {
   const address = req.query.address;
@@ -98,4 +91,4 @@ app.get("/api/forward-geocode", async (req, res) => {
   }
 });
 
-app.listen(5003, () => console.log("✅ Server running on port 5003"));
+app.listen(5003, () => console.log("Server running on port 5003"));

@@ -4,24 +4,20 @@ import admin from 'firebase-admin'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
-// 🔑 Load service account key
 const serviceAccount = require('./serviceAccountKey.json')
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 
-// ✅ Initialize Firebase Admin
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 })
 
 const db = admin.firestore()
-db.settings({ ignoreUndefinedProperties: true }) // prevents crashes if frontend misses a field
+db.settings({ ignoreUndefinedProperties: true }) 
 
-// ----------------------------
-// REGISTER (create user)
-// ----------------------------
+
 app.post('/register', async (req, res) => {
   const { name, username, email, password } = req.body
 
@@ -30,14 +26,12 @@ app.post('/register', async (req, res) => {
   }
 
   try {
-    // Create user in Firebase Auth
     const userRecord = await admin.auth().createUser({
       email,
       password,
       displayName: name,
     })
 
-    // Save extra info in Firestore
     await db.collection('users').doc(userRecord.uid).set({
       name,
       username,
@@ -49,7 +43,6 @@ app.post('/register', async (req, res) => {
     res.status(400).json({ error: err.message })
   }
 })
-
 
 const checkValidity = async (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -65,7 +58,6 @@ const checkValidity = async (req, res, next) => {
   }
 }
 
-
 app.get('/users', checkValidity, async (req, res) => {
   try {
     const snapshot = await db.collection('users').get()
@@ -76,9 +68,7 @@ app.get('/users', checkValidity, async (req, res) => {
   }
 })
 
-// ----------------------------
 // GET CURRENT USER
-// ----------------------------
 app.get('/me', checkValidity, async (req, res) => {
   try {
     const userId = req.user.uid
@@ -94,11 +84,8 @@ app.get('/me', checkValidity, async (req, res) => {
   }
 })
 
-// ----------------------------
-// PING (test route)
-// ----------------------------
 app.get('/ping', (req, res) => res.send('Server alive ✅'))
 
 app.listen(5001, () => {
-  console.log('🔥 Firebase Auth Server running on 5001')
+  console.log('Firebase Auth Server running on 5001')
 })
