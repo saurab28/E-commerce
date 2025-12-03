@@ -192,7 +192,7 @@ async function fetchUserDetails() {
     }
     console.log(userDetails.value, userInitials.value)
   } catch (err) {
-    console.error('❌ Failed to fetch user:', err)
+    console.error('Failed to fetch user:', err)
   }
 }
 const toggleProfileMenu = () => {
